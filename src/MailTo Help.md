@@ -52,6 +52,7 @@ The following apps definitely work:
 All the code I wrote is in the public domain. However, the Workflow also contains the following:
 
 * [alfred.py](https://github.com/nikipore/alfred-python), the author of which has indicated no licensing terms that I'm smart enough to find.
+* [docopt](http://docopt.org/) is released under the MIT licence.
 * Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html).
 * Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html).
 * Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html).

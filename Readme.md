@@ -20,6 +20,8 @@ You can add multiple recipients by adding a comma between them.
 
 All code by me in the public domain. No idea about the included [alfred.py](https://github.com/nikipore/alfred-python).
 
+[docopt](http://docopt.org/) is released under the MIT licence.
+
 ### Icons ###
 
 * Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html)
