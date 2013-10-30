@@ -41,7 +41,9 @@ def iter_addressbooks(limit=MAX_DB_COUNT):
         if os.path.exists(dbpath):
             paths.append((os.stat(dbpath).st_mtime, dbpath))
     paths.sort(reverse=True)  # newest first
-    for i in range(limit - 1):
+    for i, path in enumerate(paths):
+        if i == limit - 1:
+            break
         yield paths[i][1]
 
 
