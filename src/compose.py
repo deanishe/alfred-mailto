@@ -24,7 +24,7 @@ from mailto import MailApps
 def main():
     args = alfred.args()
     if len(args):
-        recipients = args[0].strip()
+        recipients = args[0].strip(u', ')
     else:
         recipients = u''
     recipients = recipients.replace(u', ', u',')
