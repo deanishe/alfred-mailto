@@ -15,19 +15,31 @@ from subprocess import check_call
 
 import alfred
 from mailto import MailApps
+from contacts import get_contacts
 
 # import logging
-# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'log.log'),
+# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'debug.log'),
 #                     level=logging.DEBUG)
 # log = logging.getLogger(u'compose')
 
+
+
+
 def main():
     args = alfred.args()
+    recipients = []
     if len(args):
-        recipients = args[0].strip(u', ')
+        emails = [s.strip() for s in args[0].split(u',') if s.strip()]
+        contacts = dict(get_contacts())  # email : name
+        for email in emails:
+            name = contacts.get(email)
+            if name and name != email:
+                recipients.append(u'{} <{}>'.format(name, email))
+            else:
+                recipients.append(email)
+        recipients = u','.join(recipients)
     else:
         recipients = u''
-    recipients = recipients.replace(u', ', u',')
     # log.debug(u'args : {}  recipients : {}'.format(args, recipients))
     # build and execute command
     url = u'mailto:{}'.format(recipients)

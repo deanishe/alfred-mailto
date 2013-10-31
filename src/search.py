@@ -21,7 +21,7 @@ import alfred
 from mailto import MailApps
 
 # import logging
-# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'log.log'),
+# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'debug.log'),
 #                     level=logging.DEBUG)
 # log = logging.getLogger(u'search')
 

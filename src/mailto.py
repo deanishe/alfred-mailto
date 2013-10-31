@@ -45,7 +45,7 @@ import alfred
 
 
 # import logging
-# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'log.log'),
+# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'debug.log'),
 #                     level=logging.DEBUG)
 # log = logging.getLogger(u'mailto')
 
