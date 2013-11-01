@@ -114,6 +114,10 @@ def main():
 
         # search in
 
+        # groups
+        for name, email in groups:
+            if q in name.lower() and (name, email) not in hits:
+                hits.append((name, email))
         # contact names
         for name, emails in name_to_email:
             if q in name.lower():
@@ -123,10 +127,6 @@ def main():
         # email addresses
         for email, name in email_to_name:
             if q in email.lower() and (name, email) not in hits:
-                hits.append((name, email))
-        # groups (lowest priority this time)
-        for name, email in groups:
-            if q in name.lower() and (name, email) not in hits:
                 hits.append((name, email))
 
 
