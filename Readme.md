@@ -4,7 +4,7 @@ Alfred-MailTo
 
 ![](img/screenshot-2.png)
 
-A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose from your Mac contacts (or enter email addresses manually) and compose a message using the email app of your choice.
+A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.
 
 Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [nikipore](https://github.com/nikipore).
 
@@ -12,7 +12,7 @@ Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [
 
 Open Alfred, type `mailto` (the default keyword) then either hit `ENTER` to open an entirely blank message or start typing the name or email address you'd like to send a mail to.
 
-Addresses will be suggested from matching contacts in your Mac address book. Hit `TAB` to autocomplete the recipient list from the selected result, or `ENTER` or `⌘+NUM` to add the address and start composing a mail.
+Addresses will be suggested from matching contacts and groups in your Mac address book. Hit `TAB` to autocomplete the recipient list from the selected result, or `ENTER` or `⌘+NUM` to add the address and start composing a mail.
 
 You can add multiple recipients by adding a comma between them.
 

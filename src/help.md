@@ -14,7 +14,7 @@ Alfred-MailTo Help
 
 To start a new mail without recipients, hit `ENTER` on the `Write new email` result.
 
-To add recipients, type `mailto ` (there's a space at the end there!) and start typing the name or email address of someone in your Contacts or an email address that isn't.
+To add recipients, type `mailto ` (there's a space at the end there!) and start typing the name or email address of someone in your Contacts or an email address that isn't. You can also send mails to Groups.
 
 Selecting a result and hitting `TAB` will add that email address to the list of recipients, hitting `ENTER` on a result will add that email address to the list of recipients and open a new email in your selected client (i.e. closing Alfred's window).
 
