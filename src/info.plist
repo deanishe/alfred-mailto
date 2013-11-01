@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>net.deanishe.alfred-compose</string>
+	<string>net.deanishe.alfred-mailto</string>
 	<key>connections</key>
 	<dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
@@ -78,7 +78,7 @@
 	<key>createdby</key>
 	<string>Dean Jackson</string>
 	<key>description</key>
-	<string>Send mail to recipients from your Address Book</string>
+	<string>Send mail to contacts and groups from your Address Book</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
