@@ -33,7 +33,7 @@ If you want to change the email client you've set, you can use `mailto setdefaul
 
 ## Technical details ##
 
-The various components that comprise this Workflow use a couple of tricks. Notably, with the official AppleScript access to your Contacts being both broken and *slooooooow*, it tries to find the database files that Contacts/iCloud uses and open them directly for puma-like speed.
+The various components that comprise this Workflow use a questionable hack: with the official AppleScript access to your Contacts being both broken and *slooooooow*, it tries to find and directly access the database files that Contacts/iCloud uses for puma-like speed.
 
 This may not always work, but it will always be fast. And I ask you, what self-respecting coder would not favour 1000x faster over correct?
 
@@ -45,14 +45,19 @@ The following apps definitely work:
 * Sparrow
 * MailMate
 * Unibox
+* Airmail
+* Thunderbird
 * Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
 
-## Copyright etc. ##
+The following do **not** work:
 
-All the code I wrote is in the public domain. However, the Workflow also contains the following:
+* Safari (it will open your default mail client instead)
 
+## Copyright, licensing etc. ##
+
+* All the code I wrote is released under the [MIT licence](http://opensource.org/licenses/MIT).
 * [alfred.py](https://github.com/nikipore/alfred-python), the author of which has indicated no licensing terms that I'm smart enough to find.
-* [docopt](http://docopt.org/) is released under the MIT licence.
+* [docopt](http://docopt.org/) is released under the [MIT licence](http://opensource.org/licenses/MIT).
 * Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html).
 * Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html).
 * Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html).

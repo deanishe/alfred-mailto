@@ -16,11 +16,32 @@ Addresses will be suggested from matching contacts and groups in your Mac addres
 
 You can add multiple recipients by adding a comma between them.
 
-## Copyright etc. ##
+## Supported applications ##
 
-All code by me in the public domain. No idea about the included [alfred.py](https://github.com/nikipore/alfred-python).
+The Workflow uses the `mailto:` protocol and as such should work with pretty much any email client.
 
-[docopt](http://docopt.org/) is released under the MIT licence.
+The following apps definitely work:
+
+* Mail.app
+* Sparrow
+* MailMate
+* Unibox
+* Airmail
+* Thunderbird
+* Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
+
+The following do **not** work:
+
+* Safari (it will open your default mail client instead)
+
+## Copyright, licensing etc. ##
+
+* All the code I wrote is released under the [MIT licence](http://opensource.org/licenses/MIT).
+* [alfred.py](https://github.com/nikipore/alfred-python), the author of which has indicated no licensing terms that I'm smart enough to find.
+* [docopt](http://docopt.org/) is released under the [MIT licence](http://opensource.org/licenses/MIT).
+* Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html).
+* Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html).
+* Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html).
 
 ### Icons ###
 

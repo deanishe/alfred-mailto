@@ -44,7 +44,7 @@ If you want to change the email client you&#8217;ve set, you can use <code>mailt
 
 <h2 id="technicaldetails">Technical details</h2>
 
-<p>The various components that comprise this Workflow use a couple of tricks. Notably, with the official AppleScript access to your Contacts being both broken and <em>slooooooow</em>, it tries to find the database files that Contacts/iCloud uses and open them directly for puma-like speed.</p>
+<p>The various components that comprise this Workflow use a questionable hack: with the official AppleScript access to your Contacts being both broken and <em>slooooooow</em>, it tries to find and directly access the database files that Contacts/iCloud uses for puma-like speed.</p>
 
 <p>This may not always work, but it will always be fast. And I ask you, what self-respecting coder would not favour 1000x faster over correct?</p>
 
@@ -57,16 +57,23 @@ If you want to change the email client you&#8217;ve set, you can use <code>mailt
 <li>Sparrow</li>
 <li>MailMate</li>
 <li>Unibox</li>
+<li>Airmail</li>
+<li>Thunderbird</li>
 <li>Google Chrome (if you&#8217;ve <a href="https://support.google.com/chrome/answer/1382847?hl=en">set a handler</a>)</li>
 </ul>
 
-<h2 id="copyrightetc.">Copyright etc.</h2>
-
-<p>All the code I wrote is in the public domain. However, the Workflow also contains the following:</p>
+<p>The following do <strong>not</strong> work:</p>
 
 <ul>
+<li>Safari (it will open your default mail client instead)</li>
+</ul>
+
+<h2 id="copyrightlicensingetc.">Copyright, licensing etc.</h2>
+
+<ul>
+<li>All the code I wrote is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
 <li><a href="https://github.com/nikipore/alfred-python">alfred.py</a>, the author of which has indicated no licensing terms that I&#8217;m smart enough to find.</li>
-<li><a href="http://docopt.org/">docopt</a> is released under the MIT licence.</li>
+<li><a href="http://docopt.org/">docopt</a> is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
 <li>Email icon from <a href="http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html">Icon Archive</a>.</li>
 <li>Original info icon from <a href="http://www.iconsdb.com/royal-blue-icons/info-icon.html">IconsDB</a>.</li>
 <li>Original warning icon also from <a href="http://www.iconsdb.com/orange-icons/warning-icon.html">IconsDB</a>.</li>
