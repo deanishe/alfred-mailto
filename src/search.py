@@ -84,13 +84,21 @@ def main():
 
     if q != u'':
         # Find matching contacts
-        contacts = get_contacts()
+        contacts, groups = get_contacts()
 
+        # startswith
+        for name, email in groups:
+            if name.lower().startswith(q) and (name, email) not in hits:
+                hits.append((name, email))
         for email, name in contacts:
             if name.lower().startswith(q):
                 hits.append((name, email))
         for email, name in contacts:
             if email.lower().startswith(q) and (name, email) not in hits:
+                hits.append((name, email))
+        # search in
+        for name, email in groups:
+            if q in name.lower() and (name, email) not in hits:
                 hits.append((name, email))
         for email, name in contacts:
             if q in name.lower() and (name, email) not in hits:
@@ -148,6 +156,10 @@ def main():
     for name, email in hits:
         if email in addresses:
             continue
+        if u', ' in email:  # is a group
+            icon = u'group.png'
+        else:
+            icon = u'icon.png'
         recipients = existing + email + u', '
         item = alfred.Item(
             {u'valid':u'yes',
@@ -155,7 +167,7 @@ def main():
             u'autocomplete':recipients},
             name,
             email,
-            icon=u'icon.png'
+            icon=icon
         )
         items.append(item)
 

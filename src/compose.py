@@ -30,12 +30,13 @@ def main():
     recipients = []
     if len(args):
         emails = [s.strip() for s in args[0].split(u',') if s.strip()]
-        contacts = dict(get_contacts())  # email : name
+        contacts = dict(get_contacts()[0])  # email : name
         for email in emails:
             name = contacts.get(email)
             if name and name != email:
                 recipients.append(u'{} <{}>'.format(name, email))
             else:
+                log.debug(u'Not found : {}'.format(email))
                 recipients.append(email)
         recipients = u','.join(recipients)
     else:
