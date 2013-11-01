@@ -342,7 +342,7 @@
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Send a new email message with the email client of your choice to none, one or more recipients from your Mac contacts or manually-entered email addresses.</string>
+	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
 	<key>uidata</key>
 	<dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
