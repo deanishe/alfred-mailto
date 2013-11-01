@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#
+# Copyright © 2013 deanishe@deanishe.net.
+#
+# MIT Licence. See http://opensource.org/licenses/MIT
+#
+# Created on 2013-11-01
+#
 
 """
 Compose new email to specified recipients (if any) in selected client.
