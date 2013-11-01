@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#
+# Copyright © 2013 deanishe@deanishe.net.
+#
+# MIT Licence. See http://opensource.org/licenses/MIT
+#
+# Created on 2013-11-01
+#
 
 """
 Load list of (email, name) contacts from local Contacts/AddressBook
@@ -48,51 +55,14 @@ def iter_addressbooks(limit=MAX_DB_COUNT):
         yield paths[i][1]
 
 
-def load_from_db_old(dbpath):
-    """Return set of tuples (email, name) from specified DB
-
-    `name` may be an empty string.
-    """
-    contacts = {}  # email : name where name may be u''
-    id_name_map = {}
-    conn = sqlite3.connect(dbpath)
-    c = conn.cursor()
-
-    # Get contact names and IDs
-    rows = c.execute(u'SELECT z_pk,zfirstname,zlastname,zorganization,zdisplayflags FROM ZABCDRECORD').fetchall()
-    for row in rows:
-        id_, firstname, lastname, org, isorg = row
-        if firstname is None:
-            firstname = u''
-        if lastname is None:
-            lastname = u''
-        if isorg == 1:  # Is a company, not a person
-            name = org
-        else:
-            name = u'{} {}'.format(firstname, lastname).strip()
-        if name:
-            id_name_map[id_] = name
-
-    # Get email addresses
-    rows = c.execute(u'SELECT zaddressnormalized,zowner FROM ZABCDEMAILADDRESS').fetchall()
-    for row in rows:
-        email, owner = row
-        name = id_name_map.get(owner, None)
-        if not name and email not in contacts:
-            # print(email)
-            contacts[email] = u''
-        else:
-            # print(u'{} <{}>'.format(name, email).encode(u'utf-8'))
-            contacts[email] = name
-
-    return contacts
-
 def load_from_db(dbpath):
     """Load contacts and groups from specified DB
 
     Returns:
-        tuple (contacts, groups)
-        contacts : dict(email=name)
+        tuple (email_to_name, name_to_email, groupname_to_email)
+        email_to_name : dict[email] = name
+        name_to_email : dict[name] = [(primary, order, email), ...]
+        groupname_to_email : dict[name] = email
         groups : dict(name=emails_string)
     """
     conn = sqlite3.connect(dbpath)
@@ -100,10 +70,11 @@ def load_from_db(dbpath):
 
     # people
     email_id_address_map = {}
+    email_name_map = {}
+    name_emails_map = defaultdict(list)
     person_id_email_map = defaultdict(list)
 
     rows = c.execute("SELECT ZABCDEMAILADDRESS.z_pk, zaddressnormalized, zisprimary, zorderingindex, ZABCDRECORD.z_pk, zfirstname, zlastname FROM ZABCDRECORD, ZABCDEMAILADDRESS WHERE ZABCDRECORD.z_ent = 19 AND ZABCDRECORD.z_pk = ZABCDEMAILADDRESS.zowner AND zaddressnormalized != ''").fetchall()
-    contacts = {}
     for row in rows:
         email_id, email, primary, order, person_id, first, last = row
         email_id_address_map[email_id] = email
@@ -119,7 +90,8 @@ def load_from_db(dbpath):
         name = u'{} {}'.format(first, last).strip()
         if not name:
             name = email
-        contacts[email] = name
+        email_name_map[email] = name
+        name_emails_map[name].append((primary, order, email))
 
     groups = defaultdict(list)
     group_person_email_map = {}
@@ -147,12 +119,12 @@ def load_from_db(dbpath):
             if emails:
                 groups[group_id].append(emails[0][2])
 
-    groups2 = {}
+    groupname_email_map = {}
     for group_id, emails in groups.items():
         name = group_id_name_map[group_id]
-        groups2[name] = u', '.join(emails)
+        groupname_email_map[name] = u', '.join(emails)
 
-    return contacts, groups2
+    return email_name_map, name_emails_map, groupname_email_map
 
 
 def get_contacts():
@@ -169,19 +141,34 @@ def get_contacts():
     if os.path.exists(CACHEPATH) and (time() - os.stat(CACHEPATH).st_mtime) < MAX_CACHE_AGE:
         with open(CACHEPATH) as file:
             data = json.load(file)
-            return data[u'contacts'], data[u'groups']
-    contacts = {}
+            return data[u'emails'], data[u'names'], data[u'groups']
+    emails = {}
+    names = defaultdict(list)
+    name_emails_map = defaultdict(set)
     groups = {}
     for dbpath in iter_addressbooks():
-        contacts1, groups1 = load_from_db(dbpath)
-        for email in contacts1:
-            if contacts.get(email, u'') == u'':
-                contacts[email] = contacts1[email]
-        for name in groups1:
+        email_to_name, name_to_emails, groupname_to_email = load_from_db(dbpath)
+        for email in email_to_name:
+            if emails.get(email, u'') == u'':
+                emails[email] = email_to_name[email]
+
+        for name, addrs in name_to_emails.items():
+            existing = name_emails_map[name]
+            for addr in addrs:
+                if addr[2] not in existing:
+                    name_emails_map[name].add(addr[2])
+                    names[name].append(addr)
+
+        for name in groupname_to_email:
             if groups.get(name, u'') == u'':
-                groups[name] = groups1[name]
-    contacts = sorted(contacts.items())
+                groups[name] = groupname_to_email[name]
+
+    emails = sorted(emails.items())
     groups = sorted(groups.items())
+    for name, addresses in names.items():
+        names[name] = [t[2] for t in sorted(addresses)]
+    names = sorted(names.items())
+
     with open(CACHEPATH, u'wb') as file:
-        json.dump(dict(contacts=contacts, groups=groups), file)
-    return contacts, groups
+        json.dump(dict(emails=emails, names=names, groups=groups), file)
+    return emails, names, groups

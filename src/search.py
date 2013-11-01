@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#
+# Copyright © 2013 deanishe@deanishe.net.
+#
+# MIT Licence. See http://opensource.org/licenses/MIT
+#
+# Created on 2013-11-01
+#
 
 """
 Select email addresses from your contacts/enter them manually and send
@@ -84,27 +91,42 @@ def main():
 
     if q != u'':
         # Find matching contacts
-        contacts, groups = get_contacts()
+        email_to_name, name_to_email, groups = get_contacts()
 
         # startswith
+        # group names
         for name, email in groups:
             if name.lower().startswith(q) and (name, email) not in hits:
                 hits.append((name, email))
-        for email, name in contacts:
+        # contact names
+        for name, emails in name_to_email:
             if name.lower().startswith(q):
-                hits.append((name, email))
-        for email, name in contacts:
+                for email in emails:
+                    if (name, email) not in hits:
+                        hits.append((name, email))
+        # for email, name in email_to_name:
+        #     if name.lower().startswith(q):
+        #         hits.append((name, email))
+        # email addresses
+        for email, name in email_to_name:
             if email.lower().startswith(q) and (name, email) not in hits:
                 hits.append((name, email))
+
         # search in
+
+        # contact names
+        for name, emails in name_to_email:
+            if q in name.lower():
+                for email in emails:
+                    if (name, email) not in hits:
+                        hits.append((name, email))
+        # email addresses
+        for email, name in email_to_name:
+            if q in email.lower() and (name, email) not in hits:
+                hits.append((name, email))
+        # groups (lowest priority this time)
         for name, email in groups:
             if q in name.lower() and (name, email) not in hits:
-                hits.append((name, email))
-        for email, name in contacts:
-            if q in name.lower() and (name, email) not in hits:
-                hits.append((name, email))
-        for email, name in contacts:
-            if q in email.lower() and (name, email) not in hits:
                 hits.append((name, email))
 
 
@@ -171,8 +193,7 @@ def main():
         )
         items.append(item)
 
-    # all results are in existing recipients, compose message to nobody
-    if not len(items):
+    if not len(items):  # all results are in existing recipients, compose message to nobody
         recipients = existing + email + u', '
         item = alfred.Item(
             {u'valid':u'yes',
