@@ -6,6 +6,28 @@
 	<string>net.deanishe.alfred-mailto</string>
 	<key>connections</key>
 	<dict>
+		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<array/>
 		<key>5D6AA2D2-8D66-41D5-A31D-63E74D017117</key>
@@ -245,7 +267,7 @@
 				<key>sticky</key>
 				<false/>
 				<key>text</key>
-				<string>Default system email client will be used</string>
+				<string>{query}</string>
 				<key>title</key>
 				<string>MailTo default client reset</string>
 			</dict>
@@ -340,11 +362,92 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>MailTo Address Format</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>mailto usename</string>
+				<key>runningsubtext</key>
+				<string>Loading options …</string>
+				<key>script</key>
+				<string>python mailto.py usename</string>
+				<key>subtext</key>
+				<string>"Bob Dole &lt;bob.dole@aol.com&gt;" or "bob.dole@aol.com"</string>
+				<key>title</key>
+				<string>Choose Contact Format Sent to Mail Client</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>166BA839-49F9-4A96-A846-9CD85DDF4B9B</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>python mailto.py usename "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
 	<key>uidata</key>
 	<dict>
+		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
+		<dict>
+			<key>ypos</key>
+			<real>610</real>
+		</dict>
+		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
+		<dict>
+			<key>ypos</key>
+			<real>610</real>
+		</dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<dict>
 			<key>ypos</key>
@@ -389,6 +492,11 @@
 		<dict>
 			<key>ypos</key>
 			<real>130</real>
+		</dict>
+		<key>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</key>
+		<dict>
+			<key>ypos</key>
+			<real>610</real>
 		</dict>
 		<key>F274FEBE-0532-4448-8527-AE311EACA373</key>
 		<dict>

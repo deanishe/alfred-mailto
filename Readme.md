@@ -4,9 +4,9 @@ Alfred-MailTo
 
 ![](img/screenshot-2.png)
 
-A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.
+A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose recipients from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.
 
-Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [nikipore](https://github.com/nikipore).
+Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [nikipore](https://github.com/nikipore) and [docopt](http://docopt.org/).
 
 ## Usage ##
 
@@ -37,17 +37,11 @@ The following do **not** work:
 ## Copyright, licensing etc. ##
 
 * All the code I wrote is released under the [MIT licence](http://opensource.org/licenses/MIT).
-* [alfred.py](https://github.com/nikipore/alfred-python), the author of which has indicated no licensing terms that I'm smart enough to find.
+* [alfred.py](https://github.com/nikipore/alfred-python)'s author has indicated no licensing terms that I'm smart enough to find.
 * [docopt](http://docopt.org/) is released under the [MIT licence](http://opensource.org/licenses/MIT).
-* Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html).
-* Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html).
-* Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html).
-
-### Icons ###
-
-* Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html)
-* Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html)
-* Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html)
+* Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html) is free for personal use.
+* Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html) is CC0 1.0 public domain.
+* Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html) as above.
 
 ## Screenshots ##
 
@@ -72,3 +66,7 @@ Handle unknown recipients and invalid addresses intelligently:
 ![](img/screenshot-6.png "No mails to invalid addresses")
 
 ![](img/screenshot-7.png "Mail only valid addresses")
+
+## Further information ##
+
+For more information, please see the included help file. `mailto help` will open it from within Alfred.

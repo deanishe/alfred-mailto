@@ -25,15 +25,16 @@ import re
 
 from contacts import get_contacts
 import alfred
-from mailto import MailApps
+from mailto import MailTo
 
 # import logging
-# logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), u'debug.log'),
+# logging.basicConfig(filename=os.path.join(alfred.work(True), u'debug.log'),
 #                     level=logging.DEBUG)
 # log = logging.getLogger(u'search')
 
 MAX_RESULTS = 50
-KEYWORDS = [u'getdefault', u'setdefault', u'cleardefault', u'help']
+KEYWORDS = [u'getdefault', u'setdefault', u'cleardefault', u'help',
+            u'format', u'usename']
 
 valid_email = re.compile(r'[^@]+@[^@]+\.[^@]+').match
 
@@ -186,6 +187,7 @@ def main():
         item = alfred.Item(
             {u'valid':u'yes',
             u'arg':recipients,
+            u'uid':recipients,
             u'autocomplete':recipients},
             name,
             email,

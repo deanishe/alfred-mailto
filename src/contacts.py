@@ -134,8 +134,9 @@ def get_contacts():
     MAX_CACHE_AGE seconds ago.
 
     Returns:
-        tuple (contacts, groups)
-        contacts : list of tuples (email, name)
+        tuple (emails, names, groups)
+        emails : list of tuples (email, name)
+        names : list of tuples (name, list(emails))
         groups : list of tuples (name, emails_string)
     """
     if os.path.exists(CACHEPATH) and (time() - os.stat(CACHEPATH).st_mtime) < MAX_CACHE_AGE:
