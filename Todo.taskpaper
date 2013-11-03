@@ -1,4 +1,7 @@
 
+Improvements:
+	- Show current client when setting client @done (13-11-03 17:35)
+
 Better config keywords:
 	- Change keywords to unique ones @done (13-11-03 17:18)
 		- client -> mailtoclient @done (13-11-03 17:18)

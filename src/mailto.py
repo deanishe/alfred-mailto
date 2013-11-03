@@ -301,18 +301,32 @@ def choose_client(query):
     log.debug(u'choose_client : {!r}'.format(query))
     query = query.lower()
     mt = MailTo()
-    current_app = mt.default_app[0]
+    current_app, current_path = mt.default_app
     apps = mt.all_apps
     hits = []
     items = []
+    if query == u'':  # Show current setting
+        if not current_app:
+            appname = u'System Default'
+            path = u''
+        else:
+            appname = current_app
+            path = current_path
+        items.append( alfred.Item(
+            {u'valid':u'no'},
+             u'Current Email Client: {}'.format(appname),
+             path,
+             icon=u'icon.png')
+        )
+    # Show other options
     if current_app is not None:
         items.append(alfred.Item(
             {u'valid':u'yes',
              u'arg':u'',
              u'autocomplete':u'System Default',
             },
-            u'Use System Default Email Client',
-            u'',
+            u'System Default Email Client',
+            u'Use system default email client with MailTo',
             icon=u'icon.png')
         )
     for appname, path in apps:
@@ -331,10 +345,10 @@ def choose_client(query):
             {u'valid':u'yes',
              u'arg':path,
              u'autocomplete':appname,
-             u'uid':path
+             # u'uid':path
             },
-            u'Use {}'.format(appname),
-            u'',
+            appname,
+            path,
             icon=(path, {u'type':u'fileicon'}))
         )
     print(alfred.xml(items))
