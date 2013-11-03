@@ -16,9 +16,11 @@ Addresses will be suggested from matching contacts and groups in your Mac addres
 
 You can add multiple recipients by adding a comma between them.
 
+Use `mailtoconf` to view/change settings.
+
 ## Supported applications ##
 
-The Workflow uses the `mailto:` protocol and as such should work with pretty much any email client.
+**MailTo** uses the `mailto:` protocol and as such should work with pretty much any email client.
 
 The following apps definitely work:
 
@@ -69,4 +71,4 @@ Handle unknown recipients and invalid addresses intelligently:
 
 ## Further information ##
 
-For more information, please see the included help file. `mailto help` will open it from within Alfred.
+For more information, please see the included help file. `mailtohelp` will open it from within Alfred.

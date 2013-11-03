@@ -16,8 +16,9 @@ Alfred-MailTo Help
 - [Usage](#usage)
 	- [Prioritising email addresses](#prioritisingemailaddresses)
 	- [Groups/Distribution Lists](#groupsdistributionlists)
-	- [Selecting and email client](#selectinganemailclient)
-	- [Name/address formatting](#nameaddressformatting)
+	- [Configuration](#configuration)
+		- [Selecting and email client](#selectinganemailclient)
+		- [Name/address formatting](#nameaddressformatting)
 - [Supported clients](#supportedclients)
 - [Copyright, licensing etc.](#copyrightlicensingetc)
 - [Feedback](#feedback)
@@ -45,19 +46,23 @@ This has the additional benefit of having the same effect in Mail.app (unfortuna
 
 By default, **MailTo** will use the primary or first-listed email address on a contact's card when sending an email to a Group. If you'd prefer to use another email address, open Contacts and use `Edit > Edit Distribution List…` to assign an email address to use when mailing a specific Group.
 
-### Selecting an email client ###
+### Configuration ###
 
-By default, the Workflow uses your system email client, but you can set any client you want using `mailto setdefault APPNAME` (where `APPNAME` is the name of the application, obviously). Just start typing and **MailTo** will show you a list of your apps.
+By default, **MailTo** uses your system default email client and the email format `Bob Smith <bob.smith@example.com>` with clients that support it.
 
-**Note:** you're perfectly free to set an app that doesn't send emails, or does, but doesn't support the `mailto:` protocol. If you do that, you can use choose another app or use `mailto cleardefault` to go back to your system default.
+You can view and change your settings with `mailtoconf`.
 
-`mailto getdefault` will show you which app you currently have set.
+#### Selecting an email client ####
 
-### Name/address formatting ###
+Change **MailTo**'s email client using `mailtoconf` and select `Change Client …` or directly with `mailtoclient`. Just start typing the name of your preferred client and select it from the list.
+
+**Note:** you're perfectly free to set an app that doesn't send emails, or does, but doesn't support the `mailto:` protocol. If you do that, you choose another app as above.
+
+#### Name/address formatting ####
 
 By default, **MailTo** sends recipients to your email client with the format `Bob Smith <bob.smith@example.com>`. Some clients can't handle this format, and they will just receive the email address.
 
-Currently, Airmail is the only "blacklisted" client, but if your preferred client also doesn't like the name + email format, you can use `mailto usename` to change the default settings.
+Currently, Airmail is the only "blacklisted" client, but if your preferred client also doesn't like the name + email format, you can use `mailtoconf` and the `Change Format …` option or `mailtoformat` to change the default settings.
 
 ## Supported clients ##
 
@@ -101,11 +106,10 @@ As a result, **MailTo** might break at any time, though the database format has 
 
 ## TL;DR ##
 
-|        Command        |                    Function                    |
-| --------------------- | ---------------------------------------------- |
-| `mailto `             | Search names, emails, groups                   |
-| `mailto getdefault`   | Display currently selected email client        |
-| `mailto setdefault`   | Choose email client to use                     |
-| `mailto cleardefault` | Use system default email client                |
-| `mailto usename`      | Set name/address format to send to your client |
-| `mailto help`         | Open this file                                 |
+|    Command     |                    Function                    |
+| -------------- | ---------------------------------------------- |
+| `mailto `      | Search names, emails, groups                   |
+| `mailtoconf`   | Display and change settings                    |
+| `mailtoclient` | Choose email client to use                     |
+| `mailtoformat` | Set name/address format to send to your client |
+| `mailtohelp`   | See brief help or open this file               |

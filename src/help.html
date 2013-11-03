@@ -113,7 +113,8 @@ h3 {
 h4 {
 	font-size: 20px;
 	line-height: 26px;
-	padding: 14px 0 4px;
+	padding: 14px 0 4px 0;
+	margin-bottom: 8px;
 	font-weight: bold;
 	/*text-transform: uppercase*/
 }
@@ -749,8 +750,12 @@ td::selection,th::selection,caption::selection {
 <ul>
 <li><a href="#prioritisingemailaddresses">Prioritising email addresses</a></li>
 <li><a href="#groupsdistributionlists">Groups/Distribution Lists</a></li>
+<li><a href="#configuration">Configuration</a>
+
+<ul>
 <li><a href="#selectinganemailclient">Selecting and email client</a></li>
 <li><a href="#nameaddressformatting">Name/address formatting</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#supportedclients">Supported clients</a></li>
 <li><a href="#copyrightlicensingetc">Copyright, licensing etc.</a></li>
@@ -780,19 +785,23 @@ td::selection,th::selection,caption::selection {
 
 <p>By default, <strong>MailTo</strong> will use the primary or first-listed email address on a contact&#8217;s card when sending an email to a Group. If you&#8217;d prefer to use another email address, open Contacts and use <code>Edit &gt; Edit Distribution List…</code> to assign an email address to use when mailing a specific Group.</p>
 
-<h3 id="selectinganemailclient">Selecting an email client</h3>
+<h3 id="configuration">Configuration</h3>
 
-<p>By default, the Workflow uses your system email client, but you can set any client you want using <code>mailto setdefault APPNAME</code> (where <code>APPNAME</code> is the name of the application, obviously). Just start typing and <strong>MailTo</strong> will show you a list of your apps.</p>
+<p>By default, <strong>MailTo</strong> uses your system default email client and the email format <code>Bob Smith &lt;bob.smith@example.com&gt;</code> with clients that support it.</p>
 
-<p><strong>Note:</strong> you&#8217;re perfectly free to set an app that doesn&#8217;t send emails, or does, but doesn&#8217;t support the <code>mailto:</code> protocol. If you do that, you can use choose another app or use <code>mailto cleardefault</code> to go back to your system default.</p>
+<p>You can view and change your settings with <code>mailtoconf</code>.</p>
 
-<p><code>mailto getdefault</code> will show you which app you currently have set.</p>
+<h4 id="selectinganemailclient">Selecting an email client</h4>
 
-<h3 id="nameaddressformatting">Name/address formatting</h3>
+<p>Change <strong>MailTo</strong>&#8217;s email client using <code>mailtoconf</code> and select <code>Change Client …</code> or directly with <code>mailtoclient</code>. Just start typing the name of your preferred client and select it from the list.</p>
+
+<p><strong>Note:</strong> you&#8217;re perfectly free to set an app that doesn&#8217;t send emails, or does, but doesn&#8217;t support the <code>mailto:</code> protocol. If you do that, you choose another app as above.</p>
+
+<h4 id="nameaddressformatting">Name/address formatting</h4>
 
 <p>By default, <strong>MailTo</strong> sends recipients to your email client with the format <code>Bob Smith &lt;bob.smith@example.com&gt;</code>. Some clients can&#8217;t handle this format, and they will just receive the email address.</p>
 
-<p>Currently, Airmail is the only &#8220;blacklisted&#8221; client, but if your preferred client also doesn&#8217;t like the name + email format, you can use <code>mailto usename</code> to change the default settings.</p>
+<p>Currently, Airmail is the only &#8220;blacklisted&#8221; client, but if your preferred client also doesn&#8217;t like the name + email format, you can use <code>mailtoconf</code> and the <code>Change Format …</code> option or <code>mailtoformat</code> to change the default settings.</p>
 
 <h2 id="supportedclients">Supported clients</h2>
 
@@ -863,24 +872,20 @@ td::selection,th::selection,caption::selection {
 	<td style="text-align:left;">Search names, emails, groups</td>
 </tr>
 <tr>
-	<td style="text-align:left;"><code>mailto getdefault</code></td>
-	<td style="text-align:left;">Display currently selected email client</td>
+	<td style="text-align:left;"><code>mailtoconf</code></td>
+	<td style="text-align:left;">Display and change settings</td>
 </tr>
 <tr>
-	<td style="text-align:left;"><code>mailto setdefault</code></td>
+	<td style="text-align:left;"><code>mailtoclient</code></td>
 	<td style="text-align:left;">Choose email client to use</td>
 </tr>
 <tr>
-	<td style="text-align:left;"><code>mailto cleardefault</code></td>
-	<td style="text-align:left;">Use system default email client</td>
-</tr>
-<tr>
-	<td style="text-align:left;"><code>mailto usename</code></td>
+	<td style="text-align:left;"><code>mailtoformat</code></td>
 	<td style="text-align:left;">Set name/address format to send to your client</td>
 </tr>
 <tr>
-	<td style="text-align:left;"><code>mailto help</code></td>
-	<td style="text-align:left;">Open this file</td>
+	<td style="text-align:left;"><code>mailtohelp</code></td>
+	<td style="text-align:left;">See brief help or open this file</td>
 </tr>
 </tbody>
 </table>
