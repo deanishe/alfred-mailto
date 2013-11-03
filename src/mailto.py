@@ -341,16 +341,26 @@ def choose_client(query):
     if not hits and not items:
         return
     for appname, path in hits:
-        items.append(alfred.Item(
-            {u'valid':u'yes',
-             u'arg':path,
-             u'autocomplete':appname,
-             # u'uid':path
-            },
-            appname,
-            path,
-            icon=(path, {u'type':u'fileicon'}))
-        )
+        if path == current_path:
+            items.append(alfred.Item(
+                {u'valid':u'no'
+                 # u'uid':path
+                },
+                u'{} (current client)'.format(appname),
+                path,
+                icon=(path, {u'type':u'fileicon'}))
+            )
+        else:
+            items.append(alfred.Item(
+                {u'valid':u'yes',
+                 u'arg':path,
+                 u'autocomplete':appname,
+                 # u'uid':path
+                },
+                appname,
+                path,
+                icon=(path, {u'type':u'fileicon'}))
+            )
     print(alfred.xml(items))
 
 
