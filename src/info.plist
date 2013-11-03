@@ -74,6 +74,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E6588C80-3408-4D93-AB00-2E030943369C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Dean Jackson</string>
@@ -139,7 +150,7 @@
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>keyword</key>
-				<string>mailto help</string>
+				<string>mailtohelp</string>
 				<key>runningsubtext</key>
 				<string>Loading help …</string>
 				<key>script</key>
@@ -180,6 +191,86 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>mailtoconf</string>
+				<key>runningsubtext</key>
+				<string>Loading settings …</string>
+				<key>script</key>
+				<string>python mailto.py config</string>
+				<key>subtext</key>
+				<string>View and alter your MailTo settings</string>
+				<key>title</key>
+				<string>MailTo Configuration</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>CF6D257B-1578-4C99-A089-2DBAA53E61F4</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>set theArg to "{query}"
+if theArg is "client" then
+	tell application "Alfred 2" to search "mailtoclient "
+else if theArg is "format" then
+	tell application "Alfred 2" to search "mailtoformat"
+end if</string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>E6588C80-3408-4D93-AB00-2E030943369C</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>mailtoclient</string>
+				<key>runningsubtext</key>
+				<string>Loading settings …</string>
+				<key>script</key>
+				<string>python mailto.py client "{query}"</string>
+				<key>subtext</key>
+				<string>Change the default email client for MailTo</string>
+				<key>title</key>
+				<string>Choose MailTo Email Client</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>2244D761-CFF6-43C4-B38B-03C03B8D9C43</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -193,7 +284,49 @@
 				<key>text</key>
 				<string>{query}</string>
 				<key>title</key>
-				<string>MailTo Address Format</string>
+				<string>Set MailTo Email Client</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>python mailto.py setclient "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Set MailTo Address Format</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.notification</string>
@@ -210,11 +343,11 @@
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>keyword</key>
-				<string>mailto usename</string>
+				<string>mailtoformat</string>
 				<key>runningsubtext</key>
 				<string>Loading options …</string>
 				<key>script</key>
-				<string>python mailto.py usename</string>
+				<string>python mailto.py format</string>
 				<key>subtext</key>
 				<string>"Bob Dole &lt;bob.dole@aol.com&gt;" or "bob.dole@aol.com"</string>
 				<key>title</key>
@@ -237,7 +370,7 @@
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>script</key>
-				<string>python mailto.py usename "{query}"</string>
+				<string>python mailto.py setformat "{query}"</string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -245,77 +378,6 @@
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>output</key>
-				<integer>0</integer>
-				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
-				<key>title</key>
-				<string>Set Default MailTo Email Client</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>keyword</key>
-				<string>mailto client</string>
-				<key>runningsubtext</key>
-				<string>Loading settings …</string>
-				<key>script</key>
-				<string>python mailto.py client "{query}"</string>
-				<key>subtext</key>
-				<string>View and change the default email client for MailTo</string>
-				<key>title</key>
-				<string>MailTo Email Client Settings</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>2244D761-CFF6-43C4-B38B-03C03B8D9C43</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>script</key>
-				<string>python mailto.py set "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -327,17 +389,17 @@
 		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
 		<dict>
 			<key>ypos</key>
-			<real>260</real>
+			<real>530</real>
 		</dict>
 		<key>2244D761-CFF6-43C4-B38B-03C03B8D9C43</key>
 		<dict>
 			<key>ypos</key>
-			<real>380</real>
+			<real>390</real>
 		</dict>
 		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
 		<dict>
 			<key>ypos</key>
-			<real>260</real>
+			<real>530</real>
 		</dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<dict>
@@ -357,22 +419,32 @@
 		<key>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</key>
 		<dict>
 			<key>ypos</key>
-			<real>380</real>
+			<real>390</real>
 		</dict>
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
 			<key>ypos</key>
 			<real>130</real>
 		</dict>
+		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
+		<key>E6588C80-3408-4D93-AB00-2E030943369C</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
 		<key>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</key>
 		<dict>
 			<key>ypos</key>
-			<real>380</real>
+			<real>390</real>
 		</dict>
 		<key>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</key>
 		<dict>
 			<key>ypos</key>
-			<real>260</real>
+			<real>530</real>
 		</dict>
 	</dict>
 	<key>webaddress</key>
