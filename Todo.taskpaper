@@ -1,0 +1,5 @@
+General:
+	- Change keywords to unique ones
+		- client -> mailtoclient
+		- usename -> mailtoformat
+		- mailtoconfig/mailtoconf for both?

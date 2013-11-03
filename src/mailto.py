@@ -5,19 +5,16 @@
 Manage default email client and display help.
 
 Usage:
-    mailto.py <action> [<path> | <query>]
+    mailto.py <action> [<path>|<query>]
 
 Possible actions:
 
-select <query>
-    Display a list of candidate apps matching query
+client [<query>]
+    Show/choose email client
 
 set <path>
     Set the email client to use to application at <path>.
     Called when an option in the above call is selected
-
-get
-    Display (in Alfred) the currently-selected email client
 
 help
     Display brief help (in Alfred)
@@ -25,12 +22,14 @@ help
 openhelp
     Open the help.html file in the default application
 
-clear
-    Delete the selected email client (i.e. revert to system default email client)
+usename
+    Set format of recipients sent to email client
 
 delcache
-    Delete the cache file containing the settings. Mostly for me when I fuck 
+    Delete the cache file containing the settings. Mostly for me when I fuck
     stuff up.
+dellog
+    Delete the logfile.
 """
 
 from __future__ import print_function
@@ -43,23 +42,20 @@ from time import time
 
 import alfred
 from contacts import get_contacts
+from log import logger
 
-import logging
-logging.basicConfig(filename=os.path.join(alfred.work(True), u'debug.log'),
-                    level=logging.DEBUG)
-log = logging.getLogger(u'search')
+log = logger(u'mailto')
 
 
 __usage__ = u"""
 Usage:
-    mailto select [<query>]
-    mailto set <path>
-    mailto get
     mailto help
     mailto openhelp
-    mailto clear
-    mailto delcache
+    mailto client [<query>]
     mailto usename [yes|no|clear]
+    mailto set <path>
+    mailto delcache
+    mailto dellog
 """
 
 __help__ = [
@@ -80,8 +76,6 @@ SETTINGS_CACHE = os.path.join(alfred.work(False), u'mailto.json')
 
 # Don't like names in mailto: URLs
 KNOWN_BAD_CLIENTS = [u'Airmail']
-
-CLEAR = object()
 
 
 class MailTo(object):
@@ -185,37 +179,6 @@ class MailTo(object):
         return os.path.splitext(os.path.basename(path))[0]
 
 
-def select_app(query):
-    """Show list of apps matching `query`"""
-    query = query.lower()
-    hits = []
-    apps = MailTo().all_apps
-    for appname, path in apps:
-        if appname.lower().startswith(query):
-            hits.append((appname, path))
-            log.debug(u'Hit : {}'.format(appname))
-    for appname, path in apps:
-        if query in appname.lower() and (appname, path) not in hits:
-            hits.append((appname, path))
-            log.debug(u'Hit : {}'.format(appname))
-    if not hits:
-        return
-    items = []
-    for appname, path in hits:
-        item = alfred.Item(
-            {u'valid':u'yes',
-             u'arg':path,
-             u'autocomplete':appname,
-             u'uid':appname
-            },
-            u'Use {} for MailTo'.format(appname),
-            u'',
-            icon=(path, {u'type':u'fileicon'})
-        )
-        items.append(item)
-    print(alfred.xml(items))
-
-
 def show_help():
     items = []
     for text, subtext in __help__:
@@ -257,29 +220,88 @@ def show_default():
     )
     print(alfred.xml([item]))
 
+def do_client(value=None):
+    """Get/set email client"""
+    log.debug(u'do_client : {!r}'.format(value))
+    mt = MailTo()
+
+    # show settings
+    items = []
+    appname, path = mt.default_app
+    if not appname:
+        appname = u'System Default'
+        path = u''
+    items.append( alfred.Item(
+        {u'valid':u'no',
+         u'uid':u'0'},
+         u'Current Email Client: {}'.format(appname),
+         path,
+         icon=u'icon.png')
+    )
+    if mt.default_app[0] is not None:
+        items.append(alfred.Item({u'valid':u'yes', u'arg':u'',
+                                  u'uid':0},
+                                  u'Use System Default Email Client',
+                                  u'', icon=u'icon.png'))
+    items.append(alfred.Item({u'valid':u'no', u'uid':1},
+                              u'Type an App Name to Select a New Client…',
+                              u'', icon=u'icon.png'))
+    print(alfred.xml(items))
+
+
+def choose_client(query):
+    """Choose a new email client"""
+    log.debug(u'choose_client : {!r}'.format(query))
+    query = query.lower()
+    hits = []
+    apps = MailTo().all_apps
+    for appname, path in apps:
+        if appname.lower().startswith(query):
+            hits.append((appname, path))
+            log.debug(u'Hit : {}'.format(appname))
+    for appname, path in apps:
+        if query in appname.lower() and (appname, path) not in hits:
+            hits.append((appname, path))
+            log.debug(u'Hit : {}'.format(appname))
+    if not hits:
+        return
+    items = []
+    for appname, path in hits:
+        item = alfred.Item(
+            {u'valid':u'yes',
+             u'arg':path,
+             u'autocomplete':appname,
+             u'uid':path
+            },
+            u'Use {} with MailTo'.format(appname),
+            u'',
+            icon=(path, {u'type':u'fileicon'})
+        )
+        items.append(item)
+    print(alfred.xml(items))
+
 
 def do_usename(value=None):
     """Get/set format of output sent to email client"""
     log.debug(u'do_usename : {!r}'.format(value))
-    ma = MailTo()
+    mt = MailTo()
     if value is True:
-        ma.use_contact_name = True
+        mt.use_contact_name = True
         print(u'Name and email address')
     elif value is False:
-        ma.use_contact_name = False
+        mt.use_contact_name = False
         print(u'Email address only')
-    elif value is CLEAR:
-        ma.use_contact_name = None
-        print(u'Reset to default')
     else:  # show some options
         items = []
-        use_name = ma.use_contact_name
-        title = u'Current setting'
-        subtitle = u'Default: Name and email except with known bad clients'
+        use_name = mt.use_contact_name
+        title = u'Current Setting: Default (Name & Email)'
+        subtitle = u'Email-only will be used with some problem clients'
         if use_name is True:
-            subtitle = u'Name and email: Bob Smith <bob.smith@example.com>'
+            title = u'Current Setting: Name & Email'
+            subtitle = u'E.g. Bob Smith <bob@example.com>, Joan Jones <joan@example.com>'
         elif use_name is False:
-            subtitle = u'Email only: bob.smith@example.com'
+            title = u'Current Setting: Email Only'
+            subtitle = u'E.g. bob.smith@example.com, joan@example.com'
         items.append( alfred.Item(
             {u'valid':u'no',
              u'uid':u'0'},
@@ -289,16 +311,16 @@ def do_usename(value=None):
         )
         options = {
             u'email' : alfred.Item({u'valid':u'yes', u'arg':u'no'},
-                                   u'Call mail client with email only',
+                                   u'Call Email Client with Email Only',
                                    u'e.g. bob.smith@example.com',
                                    icon=u'icon.png'),
             u'name' : alfred.Item({u'valid':u'yes', u'arg':u'yes'},
-                                   u'Call mail client with name and email',
+                                   u'Call Email Client with Name and Email',
                                    u'e.g. Bob Smith <bob.smith@example.com>',
                                    icon=u'icon.png'),
             u'default' : alfred.Item({u'valid':u'yes', u'arg':u'clear'},
-                                   u'Use default format',
-                                   u'Name and email except with known bad clients',
+                                   u'Use Default Format',
+                                   u'Name and email except with known problem clients',
                                    icon=u'icon.png')
         }
         if use_name is True:
@@ -315,28 +337,41 @@ def do_usename(value=None):
 
 def main():
     from docopt import docopt
-    args = docopt(__usage__, alfred.args())
-    log.debug(u'args : {}'.format(args))
-    if args.get(u'get'):
-        show_default()
-    elif args.get(u'set'):
-        path = args.get(u'<path>')
+    args = alfred.args()
+    log.debug(u'alfred.args : {}'.format(args))
+    args = docopt(__usage__, args)
+    log.debug(u'docopt.args : {}'.format(args))
+    if args.get(u'set'):  # set new default email client
+        path = args.get(u'<path>').strip()
+        if path == u'':
+            path = None
         log.debug(u'Setting default client to : {}'.format(path))
-        ma = MailTo()
-        ma.default_app = path
-        print(ma.default_app[0])
-    elif args.get(u'select'):
-        query = args.get(u'<query>')
-        log.debug(u'Select app based on : {}'.format(query))
-        select_app(query)
-    elif args.get(u'help'):
+        mt = MailTo()
+        mt.default_app = path
+        appname = mt.default_app[0]
+        if appname is None:
+            appname = u'System Default'
+        print(appname)
+    if args.get(u'help'):  # show help in Alfred
         show_help()
-    elif args.get(u'delcache'):
+    elif args.get(u'delcache'):  # delete settings file
         if os.path.exists(SETTINGS_CACHE):
             os.unlink(SETTINGS_CACHE)
-    elif args.get(u'openhelp'):
+    elif args.get(u'dellog'):  # delete logfile
+        if os.path.exists(LOGFILE):
+            os.unlink(LOGFILE)
+    elif args.get(u'openhelp'):  # open help file in browser
         open_help_file()
-    elif args.get(u'usename'):
+    elif args.get(u'client'):  # show client settings
+        if args.get(u'<query>'):
+            query = args.get(u'<query>')
+            if query == u'':
+                do_client()
+            else:
+                choose_client(query)
+        else:
+            do_client()
+    elif args.get(u'usename'):  # set recipient formatting
         if args.get(u'yes'):
             do_usename(True)
         elif args.get(u'no'):

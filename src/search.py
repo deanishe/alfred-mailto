@@ -26,15 +26,14 @@ import re
 from contacts import get_contacts
 import alfred
 from mailto import MailTo
+from log import logger
 
-# import logging
-# logging.basicConfig(filename=os.path.join(alfred.work(True), u'debug.log'),
-#                     level=logging.DEBUG)
-# log = logging.getLogger(u'search')
+log = logger(u'search')
+
 
 MAX_RESULTS = 50
 KEYWORDS = [u'getdefault', u'setdefault', u'cleardefault', u'help',
-            u'format', u'usename']
+            u'format', u'usename', u'client']
 
 valid_email = re.compile(r'[^@]+@[^@]+\.[^@]+').match
 
@@ -46,7 +45,7 @@ def main():
     else:
         q = u''
 
-    # log.debug(u'args : {} q : {!r}'.format(args, q))
+    log.debug(u'args : {} q : {!r}'.format(args, q))
 
     if q == u'':  # Compose empty mail
         item = alfred.Item(
@@ -58,7 +57,7 @@ def main():
             icon=u'icon.png'
         )
         xml = alfred.xml([item])
-        # log.debug(xml)
+        log.debug(xml)
         print(xml)
         return 0
 
@@ -83,7 +82,7 @@ def main():
                 existing = u''
             q = addresses[-1]
 
-    # log.debug(u'args : {}, existing : {}  addresses : {} invalid_addresses : {} q : {!r}'.format(args, existing, addresses, invalid_addresses, q))
+    log.debug(u'args : {}, existing : {}  addresses : {} invalid_addresses : {} q : {!r}'.format(args, existing, addresses, invalid_addresses, q))
 
 
     contacts = []

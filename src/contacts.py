@@ -25,7 +25,9 @@ from collections import defaultdict
 from time import time
 
 import alfred
+from log import logger
 
+log = logger(u'contacts')
 
 LOCAL_CONTACTS_DB = os.path.expanduser(u'~/Library/Application Support/AddressBook/AddressBook-v22.abcddb')
 ADDRESSBOOK_DATADIR = os.path.expanduser(u'~/Library/Application Support/AddressBook/Sources')

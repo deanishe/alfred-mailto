@@ -17,6 +17,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>2244D761-CFF6-43C4-B38B-03C03B8D9C43</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
 		<array>
 			<dict>
@@ -30,33 +41,11 @@
 		</array>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<array/>
-		<key>5D6AA2D2-8D66-41D5-A31D-63E74D017117</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-			</dict>
-		</array>
 		<key>60DCFD4C-2A78-4ACD-9471-A3602FB8FBC4</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-			</dict>
-		</array>
-		<key>6AE1A3B8-F367-4B5C-ACE4-9066EDC894C4</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>F274FEBE-0532-4448-8527-AE311EACA373</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -74,22 +63,11 @@
 				<string></string>
 			</dict>
 		</array>
-		<key>955409BD-F860-419D-8C14-068C56D2FA1D</key>
+		<key>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>5D6AA2D2-8D66-41D5-A31D-63E74D017117</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-			</dict>
-		</array>
-		<key>F274FEBE-0532-4448-8527-AE311EACA373</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>4FC2C194-7B7F-4C3F-AED4-2E13725972BE</string>
+				<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -150,169 +128,6 @@
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>output</key>
-				<integer>0</integer>
-				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
-				<key>title</key>
-				<string>Set default MailTo app</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>script</key>
-				<string>python mailto.py set "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>5D6AA2D2-8D66-41D5-A31D-63E74D017117</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>0</integer>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>keyword</key>
-				<string>mailto setdefault</string>
-				<key>runningsubtext</key>
-				<string>Searching applications …</string>
-				<key>script</key>
-				<string>python mailto.py select "{query}"</string>
-				<key>subtext</key>
-				<string>Type the name of an application</string>
-				<key>title</key>
-				<string>Set mail client for MailTo</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>955409BD-F860-419D-8C14-068C56D2FA1D</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>keyword</key>
-				<string>mailto getdefault</string>
-				<key>runningsubtext</key>
-				<string>Fetching info …</string>
-				<key>script</key>
-				<string>python mailto.py get</string>
-				<key>subtext</key>
-				<string>In case you've forgotten what you set</string>
-				<key>title</key>
-				<string>Show default mail client for MailTo</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>FA778970-7E81-4086-B6A0-7F1C791F3154</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>output</key>
-				<integer>0</integer>
-				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
-				<key>title</key>
-				<string>MailTo default client reset</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>4FC2C194-7B7F-4C3F-AED4-2E13725972BE</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>mailto cleardefault</string>
-				<key>subtext</key>
-				<string>Default system mail client will be used</string>
-				<key>text</key>
-				<string>Clear default mail client for MailTo</string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>6AE1A3B8-F367-4B5C-ACE4-9066EDC894C4</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>127</integer>
-				<key>script</key>
-				<string>python mailto.py clear</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>F274FEBE-0532-4448-8527-AE311EACA373</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -433,6 +248,77 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Set Default MailTo Email Client</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>mailto client</string>
+				<key>runningsubtext</key>
+				<string>Loading settings …</string>
+				<key>script</key>
+				<string>python mailto.py client "{query}"</string>
+				<key>subtext</key>
+				<string>View and change the default email client for MailTo</string>
+				<key>title</key>
+				<string>MailTo Email Client Settings</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>2244D761-CFF6-43C4-B38B-03C03B8D9C43</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>python mailto.py set "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
@@ -441,72 +327,52 @@
 		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
 		<dict>
 			<key>ypos</key>
-			<real>610</real>
+			<real>260</real>
+		</dict>
+		<key>2244D761-CFF6-43C4-B38B-03C03B8D9C43</key>
+		<dict>
+			<key>ypos</key>
+			<real>380</real>
 		</dict>
 		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
 		<dict>
 			<key>ypos</key>
-			<real>610</real>
+			<real>260</real>
 		</dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<dict>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
-		<key>4FC2C194-7B7F-4C3F-AED4-2E13725972BE</key>
-		<dict>
-			<key>ypos</key>
-			<real>370</real>
-		</dict>
-		<key>5D6AA2D2-8D66-41D5-A31D-63E74D017117</key>
-		<dict>
-			<key>ypos</key>
-			<real>130</real>
-		</dict>
 		<key>60DCFD4C-2A78-4ACD-9471-A3602FB8FBC4</key>
 		<dict>
 			<key>ypos</key>
-			<real>490</real>
-		</dict>
-		<key>6AE1A3B8-F367-4B5C-ACE4-9066EDC894C4</key>
-		<dict>
-			<key>ypos</key>
-			<real>370</real>
+			<real>130</real>
 		</dict>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
 		<dict>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
-		<key>955409BD-F860-419D-8C14-068C56D2FA1D</key>
+		<key>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>380</real>
 		</dict>
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
 			<key>ypos</key>
-			<real>490</real>
+			<real>130</real>
 		</dict>
 		<key>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>380</real>
 		</dict>
 		<key>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</key>
 		<dict>
 			<key>ypos</key>
-			<real>610</real>
-		</dict>
-		<key>F274FEBE-0532-4448-8527-AE311EACA373</key>
-		<dict>
-			<key>ypos</key>
-			<real>370</real>
-		</dict>
-		<key>FA778970-7E81-4086-B6A0-7F1C791F3154</key>
-		<dict>
-			<key>ypos</key>
-			<real>250</real>
+			<real>260</real>
 		</dict>
 	</dict>
 	<key>webaddress</key>
