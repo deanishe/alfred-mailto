@@ -1,5 +1,10 @@
-Keywords:
-	- Change keywords to unique ones
-		- client -> mailtoclient
-		- usename -> mailtoformat
-		- mailtoconfig/mailtoconf for both?
+
+Better config keywords:
+	- Change keywords to unique ones @done (13-11-03 17:18)
+		- client -> mailtoclient @done (13-11-03 17:18)
+		- usename -> mailtoformat @done (13-11-03 17:18)
+		- mailtoconf to show settings @done (13-11-03 17:18)
+
+Feature requests:
+	- Remember preferred email address for contacts @consider
+		http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/?p=19658
