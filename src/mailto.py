@@ -42,7 +42,7 @@ from time import time
 
 import alfred
 from contacts import get_contacts
-from log import logger
+from log import logger, LOGFILE
 
 log = logger(u'mailto')
 
@@ -56,6 +56,7 @@ Usage:
     mailto set <path>
     mailto delcache
     mailto dellog
+    mailto openlog
 """
 
 __help__ = [
@@ -360,6 +361,8 @@ def main():
     elif args.get(u'dellog'):  # delete logfile
         if os.path.exists(LOGFILE):
             os.unlink(LOGFILE)
+    elif args.get(u'openlog'):  # open logfile
+        check_call([u'open', LOGFILE])
     elif args.get(u'openhelp'):  # open help file in browser
         open_help_file()
     elif args.get(u'client'):  # show client settings
