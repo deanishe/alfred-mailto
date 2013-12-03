@@ -17,8 +17,8 @@ Client is selected using mailto.py
 from __future__ import print_function
 
 import sys
-import os
 from subprocess import check_call
+from urllib import quote
 
 import alfred
 from mailto import MailTo
@@ -35,12 +35,12 @@ def main():
         emails = [s.strip() for s in args[0].split(u',') if s.strip()]
         for email in emails:
             recipients.append(mt.format_recipient(email))
-        recipients = u','.join(recipients)
+        recipients = u', '.join(recipients)
     else:
         recipients = u''
     log.debug(u'args : {}  recipients : {}'.format(args, recipients))
     # build and execute command
-    url = u'mailto:{}'.format(recipients)
+    url = u'mailto:{}'.format(quote(recipients))
     appname, path = mt.default_app
     command = [u'open']
     if appname is not None:
