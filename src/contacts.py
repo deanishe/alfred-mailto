@@ -17,7 +17,6 @@ Loads local DB first and then iCloud DBs, newest first.
 
 from __future__ import print_function
 
-import sys
 import os
 import json
 import sqlite3
@@ -40,7 +39,6 @@ def iter_addressbooks(limit=MAX_DB_COUNT):
     """
     Return `limit` newest addressbook DBs from tree under `dirpath`
     """
-    t = time()
     yield LOCAL_CONTACTS_DB
     paths = []
     for filename in os.listdir(ADDRESSBOOK_DATADIR):
@@ -129,7 +127,7 @@ def load_from_db(dbpath):
     return email_name_map, name_emails_map, groupname_email_map
 
 
-def get_contacts():
+def get_contacts(use_cache=True):
     """Return tuple (contacts, groups)
 
     Loads contacts from cache if it exists and was updated less than
@@ -141,7 +139,8 @@ def get_contacts():
         names : list of tuples (name, list(emails))
         groups : list of tuples (name, emails_string)
     """
-    if os.path.exists(CACHEPATH) and (time() - os.stat(CACHEPATH).st_mtime) < MAX_CACHE_AGE:
+    if (use_cache and os.path.exists(CACHEPATH) and
+            (time() - os.stat(CACHEPATH).st_mtime) < MAX_CACHE_AGE):
         with open(CACHEPATH) as file:
             data = json.load(file)
             return data[u'emails'], data[u'names'], data[u'groups']
@@ -175,3 +174,20 @@ def get_contacts():
     with open(CACHEPATH, u'wb') as file:
         json.dump(dict(emails=emails, names=names, groups=groups), file)
     return emails, names, groups
+
+if __name__ == '__main__':
+    # benchmark
+    import sys
+    if len(sys.argv) < 2:
+        print('Usage : contacts.py <name> [<name>]\n\n'
+              'Search your Address Book contacts', file=sys.stderr)
+        sys.exit(1)
+    for key in sys.argv[1:]:
+        s = time()
+        emails, names, groups = get_contacts()
+        results = []
+        for contact in emails:
+            if key in contact[0].lower():
+                results.append(contact)
+        d = time() - s
+        print("Found {} results for '{}' in {:.4f} seconds".format(len(results), key, d))
