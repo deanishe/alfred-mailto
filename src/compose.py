@@ -35,7 +35,7 @@ def main():
         emails = [s.strip() for s in args[0].split(u',') if s.strip()]
         for email in emails:
             recipients.append(mt.format_recipient(email))
-        recipients = u', '.join(recipients)
+        recipients = u','.join(recipients)
     else:
         recipients = u''
     log.debug(u'args : {}  recipients : {}'.format(args, recipients))
