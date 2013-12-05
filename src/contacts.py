@@ -35,6 +35,7 @@ MAX_CACHE_AGE = 600  # 10 minutes
 
 CACHEPATH = os.path.join(alfred.work(True), u'contacts.json')
 
+
 def iter_addressbooks(limit=MAX_DB_COUNT):
     """
     Return `limit` newest addressbook DBs from tree under `dirpath`

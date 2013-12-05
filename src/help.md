@@ -10,6 +10,8 @@ Alfred-MailTo Help
 
 **MailTo** is an Alfred 2 Workflow that allows you to send an email to multiple recipients from your Mac Contacts (or your fingers) with the email client of your choice (or just the boring default one).
 
+**Note:** Some clients have problems with the default recipient format (name & email address). **MailTo** knows about a few of these clients and how to handle them, but first you have to tell it which email client you're using. See [Selecting an email client](#selectinganemailclient) and [Name/address formatting](#nameaddressformatting) for details.
+
 ## Contents ##
 
 - [TL;DR](#tldr)
@@ -17,7 +19,7 @@ Alfred-MailTo Help
 	- [Prioritising email addresses](#prioritisingemailaddresses)
 	- [Groups/Distribution Lists](#groupsdistributionlists)
 	- [Configuration](#configuration)
-		- [Selecting and email client](#selectinganemailclient)
+		- [Selecting an email client](#selectinganemailclient)
 		- [Name/address formatting](#nameaddressformatting)
 - [Supported clients](#supportedclients)
 - [Copyright, licensing etc.](#copyrightlicensingetc)
@@ -60,26 +62,28 @@ Change **MailTo**'s email client using `mailtoconf` and select `Change Client â€
 
 #### Name/address formatting ####
 
-By default, **MailTo** sends recipients to your email client with the format `Bob Smith <bob.smith@example.com>`. Some clients can't handle this format, and they will just receive the email address.
+By default, **MailTo** sends recipients to your email client with the format `Bob Smith <bob.smith@example.com>`. Some email clients, however, require the `mailto:` URL to be constructed in a certain way. **MailTo** knows how to handle many popular email apps, but in some cases you'll have to tell **MailTo** which email client you're using as described in the previous section. See just below for client-specific info.
 
-Currently, Airmail is the only "blacklisted" client, but if your preferred client also doesn't like the name + email format, you can use `mailtoconf` and the `Change Format â€¦` option or `mailtoformat` to change the default settings.
+If you're using an unlisted client and having problems (commas or diacritics in names can cause problems), you can force **MailTo** to call the client with just email addresses (no names). Use `mailtoconf` or `mailtoformat` to do this. If you're having problems with a specific client, [let me know](#feedback) and I'll see what I can do about adding explicit support for it.
 
 ## Supported clients ##
 
 In *theory*, any email client should work, as **MailTo** uses the `mailto:` protocol to call your email client. If an email client doesn't support this protocol, give the developers and earful because it really should ;)
 
-The following email clients definitely work:
+If the client does support the protocol, but doesn't work properly with **MailTo**, [let me know](#feedback) and I can possibly add formatting rules for that client.
+
+The following email clients currently work "out of the box":
 
 * Mail.app
 * Sparrow
-* MailMate
-* Unibox
 * Thunderbird
+
+The following email clients work, but you have to tell **MailTo** you're using the client:
+
+* Airmail
+* Unibox
+* MailMate
 * Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
-
-The following work with caveats:
-
-* Airmail (only accepts email addresses, no names)
 
 The following do **not** work:
 
@@ -100,7 +104,7 @@ Mail me at <deanishe@deanishe.net>.
 
 ## Technical caveat ##
 
-**MailTo** uses a questionable hack: with the official AppleScript access to your Contacts being hopelessly broken, it tries to find and directly access the Contacts/iCloud database files for puma-like speed.
+**MailTo** uses a questionable hack: as the official AppleScript access to your Contacts being hopelessly broken, and the Cocoa API is extremely slow when called from Python, it tries to find and directly access the Contacts/iCloud database files for puma-like speed.
 
 As a result, **MailTo** might break at any time, though the database format has remained stable over several majors version of OS X, and **MailTo** is verified as working on Mountain Lion and Mavericks.
 

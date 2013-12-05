@@ -20,6 +20,7 @@ import alfred
 
 
 class Settings(dict):
+    """A dictionary that saves itself when it's changed"""
 
     log_path = os.path.join(alfred.work(True), u'debug.log')
     settings_path = os.path.join(alfred.work(False), u'settings.json')
@@ -28,7 +29,7 @@ class Settings(dict):
     default_settings = {
         "default_app": None,
         "clients": [],
-        "use_name": None,
+        "use_name": True,
         "logging": logging_default
     }
 

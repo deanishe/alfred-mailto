@@ -23,7 +23,7 @@ def logger(name=u''):
     global _handler
     if not _handler:
         s = Settings()
-        if s['logging']:
+        if s[u'logging']:
             _handler = logging.FileHandler(filename=s.log_path,
                                            encoding=u'utf-8',
                                            delay=True)

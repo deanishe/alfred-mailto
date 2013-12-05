@@ -1,20 +1,36 @@
 
 Improvements:
-	- Show current client when setting client @done (13-11-03 17:35)
+	- Use bundle ID, not app name
+		This is required to identify default mailto: handler
+
 
 Better config keywords:
-	- Change keywords to unique ones @done (13-11-03 17:18)
-		- client -> mailtoclient @done (13-11-03 17:18)
-		- usename -> mailtoformat @done (13-11-03 17:18)
-		- mailtoconf to show settings @done (13-11-03 17:18)
+
+
 
 Feature requests:
 	- Remember preferred email address for contacts @consider
 		http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/?p=19658
+	- Allow to/cc/bcc fields
+		Adding 'to', 'cc' or 'bcc' as a recipient would add following recipients to that field
+	- Use AddressBook API to find contacts
+		This will also find contacts in Exchange accounts
+
+
 Bugs:
 	- Doesn't use name when contact is a company
-	- mailto: scheme must be different for different clients
-		- Airmail requires email only, no space between addresses
-		- MailMate requires space between recipients
-		- Unibox doesn't understand quoted ("") names with commas
-		- Sparrow doesn't like URL-quoting
+
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+- mailto: scheme must be different for different clients @done(13-12-05 20:53) @project(Bugs)
+- Unibox doesn't understand quoted ("") names with commas @done(13-12-05 20:53) @project(Bugs)
+- Sparrow doesn't like URL-quoting @done(13-12-05 20:53) @project(Bugs)
+- Some problem with the encoding and Sparrow :( @done(13-12-05 20:53) @project(Bugs)
+- MailMate requires space between recipients @done(13-12-05 20:53) @project(Bugs)
+- Airmail requires email only, no space between addresses @done(13-12-05 20:53) @project(Bugs)
+- Show current client when setting client @done (13-11-03 17:35) @project(Improvements)
+- usename -> mailtoformat @done (13-11-03 17:18) @project(Better config keywords)
+- mailtoconf to show settings @done (13-11-03 17:18) @project(Better config keywords)
+- client -> mailtoclient @done (13-11-03 17:18) @project(Better config keywords)
+- Change keywords to unique ones @done (13-11-03 17:18) @project(Better config keywords)

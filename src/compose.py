@@ -18,7 +18,6 @@ from __future__ import print_function
 
 import sys
 from subprocess import check_call
-from urllib import quote
 
 import alfred
 from mailto import MailTo
@@ -30,28 +29,25 @@ log = logger(u'compose')
 def main():
     args = alfred.args()
     log.debug('args : {}'.format(args))
-    recipients = []
+    # recipients = []
     mt = MailTo()
     if len(args):
         emails = [s.strip() for s in args[0].split(u',') if s.strip()]
-        for email in emails:
-            recipients.append(mt.format_recipient(email))
-        recipients = u','.join(recipients)
+        url = mt.build_url(emails)
     else:
-        recipients = u''
-    log.debug(u'args : {}  recipients : {}'.format(args, recipients))
-    # build and execute command
-    url = u'mailto:{}'.format(quote(recipients))
+        url = u'mailto:'
+    log.debug(u'args : {}'.format(args))
     log.debug('URL : {}'.format(url))
     appname, path = mt.default_app
-    command = [u'open']
+    command = ['open']
     if appname is not None:
-        command.append(u'-a')
+        command.append('-a')
         command.append(appname)
     command.append(url)
-    log.debug(u'command : {}'.format(command))
+    log.debug('command : {}'.format(command))
     retcode = check_call(command)
     return retcode
+
 
 if __name__ == '__main__':
     try:

@@ -20,7 +20,7 @@ Options:
     -h, --help  Show this help message.
 """
 
-from __future__ import print_function, unicode_literals
+from __future__ import print_function  #, unicode_literals
 
 
 from subprocess import check_call
@@ -188,6 +188,7 @@ def main():
 
     for title, url in URLS:
         print(title)
+        print('{!r}'.format(url))
         open_url(client, url)
 
 

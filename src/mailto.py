@@ -52,13 +52,13 @@ from __future__ import print_function
 
 import sys
 import os
-import json
 from subprocess import check_output, check_call
 from time import time
 from email.header import Header
+from urllib import quote
 
 import alfred
-from contacts import get_contacts
+from contacts import get_contacts, CACHEPATH
 from log import logger
 from settings import Settings
 
@@ -93,8 +93,63 @@ __help__ = [
 ]
 
 
-# Don't like names in mailto: URLs
-KNOWN_BAD_CLIENTS = [u'Airmail']
+#               spaces, names, MIME, no commas
+DEFAULT_RULES = (True, True, True, False)
+
+
+RULES = {
+    u'Airmail' : (False, False, False, False),
+    u'Unibox' : (True, True, False, True),
+    u'Google Chrome' : (True, True, False, False),
+    u'MailMate' : (True, True, False, False),
+}
+
+
+class Formatter(object):
+
+    def __init__(self, client):
+        self.client = client
+        self.rules = RULES.get(client, DEFAULT_RULES)
+        self.use_spaces, self.use_names, self.use_mime, self.use_no_commas = self.rules
+        log.debug(u'Loaded rules {!r} for client {!r}'.format(self.rules, client))
+
+    def get_url(self, contacts, use_names=False):
+        """Return formatted unicode URL for contacts
+
+        :param contacts: list of 2-tuples: (name, email)
+        :returns: string (bytes)
+        """
+        parts = []
+        encoded = False
+        for input in contacts:
+            name, email = input
+            if not self.use_names or not use_names:
+                parts.append(email)
+                log.debug('[not use_names] {!r} --> {!r}'.format(input, email))
+                continue
+            if self.use_mime:
+                try:
+                    name = name.encode(u'ascii')
+                except UnicodeEncodeError:
+                    name = str(Header(name, u'utf-8'))
+                    encoded = True
+            if ',' in name:
+                if self.use_no_commas:
+                    parts.append(email)
+                    log.debug('[use_no_commas] {!r} --> {!r}'.format(input, email))
+                    continue
+                else:
+                    name = u'"{}"'.format(name)
+            log.debug('[default] {!r} --> {!r}'.format(input, name, email))
+            parts.append(u'{} <{}>'.format(name, email))
+        if self.use_spaces:
+            result = u', '.join(parts)
+        else:
+            result = u','.join(parts)
+        result = result.encode('utf-8')
+        if encoded:  # also needs quoting
+            result = quote(result)
+        return 'mailto:{}'.format(result)
 
 
 class MailTo(object):
@@ -107,7 +162,7 @@ class MailTo(object):
 
     def get_use_contact_name(self):
         """Return bool re whether name should be used as well as address"""
-        return self._settings.get(u'use_name', None)
+        return self._settings.get(u'use_name', True)
 
     def set_use_contact_name(self, bool):
         """Set whether or not to use contact name as well as address"""
@@ -116,36 +171,14 @@ class MailTo(object):
 
     use_contact_name = property(get_use_contact_name, set_use_contact_name)
 
-    def format_recipient(self, email):
-        """Return recipient formatted according to settings
+    def build_url(self, emails):
+        """Return mailto: URL built according to Formatter"""
+        if self._contacts is None:
+            self._contacts = dict(get_contacts()[0])  # email:name
 
-        Returns:
-            Bob Smith <bob.smith@example.com>
-             - or -
-            bob.smith@example.com
-        """
-        def _with_name(email):
-            if self._contacts is None:
-                self._contacts = dict(get_contacts()[0])  # email:name
-            name = self._contacts.get(email)
-            if name and name != email:
-                try:
-                    name = name.encode('ascii')
-                except UnicodeEncodeError:
-                    name = str(Header(name))
-                    log.debug('mime-encoded name : {!r}'.format(name))
-                if name.find('"') == -1 and name.find(',') > -1:  # add quotes
-                    name = '"{}"'.format(name)
-                return '{} <{}>'.format(name, email)
-            return email
-        if self.use_contact_name is False:
-            return email
-        elif self.use_contact_name is True:
-            return _with_name(email)
-        else:
-            if self.default_app[0] in KNOWN_BAD_CLIENTS:
-                return email
-            return _with_name(email)
+        formatter = Formatter(self.default_app[0])
+        contacts = [(self._contacts.get(email), email) for email in emails]
+        return formatter.get_url(contacts, self.use_contact_name)
 
     def get_default_app(self):
         """Return (appname, path) to default mail app
@@ -163,7 +196,6 @@ class MailTo(object):
         If path is None, the default will be deleted
         """
         self._settings[u'default_app'] = path
-        # self._save_settings()
 
     default_app = property(get_default_app, set_default_app)
 
@@ -177,7 +209,6 @@ class MailTo(object):
         else:
             self._settings[u'logging'] = False
             log.debug(u'Logging OFF')
-        # self._save_settings()
 
     logging = property(get_logging, set_logging)
 
@@ -194,25 +225,13 @@ class MailTo(object):
                  u'mdfind',
                  u'-onlyin', u'/Applications',
                  u'-onlyin', os.path.expanduser(u'~/Applications'),
-                 u'kind:application'
+                 u'kMDItemContentTypeTree:com.apple.application-bundle'
             ]
             lines = check_output(command).decode(u'utf-8').split(u'\n')
             app_paths = [s.strip() for s in lines if s.strip()]
             self._all_apps = [(self._appname(p), p) for p in app_paths]
         log.debug(u'All apps listed in {:0.4f} secs'.format(time() - t))
         return self._all_apps
-
-    # def _load_settings(self):
-    #     if not os.path.exists(SETTINGS_CACHE):
-    #         return dict(default_app=None, clients=[], use_name=None,
-    #                     logging=LOGGING_DEFAULT)
-    #     with open(SETTINGS_CACHE) as file:
-    #         return json.load(file)
-
-    # def _save_settings(self):
-    #     log.debug(u'Saving settings : {}'.format(self._settings))
-    #     with open(SETTINGS_CACHE, u'wb') as file:
-    #         json.dump(self._settings, file, indent=2)
 
     def _appname(self, path):
         """Get app name from path"""
@@ -261,13 +280,10 @@ def show_config():
     items.append(alfred.Item({u'valid':u'yes', u'arg':u'client'},
                               u'Change Client …',
                               u'', icon=u'icon.png'))
-    # address format
-    title = u'Current Format: Default (Name & Email)'
-    subtitle = u'Email-only will be used with some problem clients'
-    if use_name is True:
-        title = u'Current Format: Name & Email'
-        subtitle = u'E.g. Bob Smith <bob@example.com>, Joan Jones <joan@example.com>'
-    elif use_name is False:
+    if use_name:
+        title = u'Current Format: Default (Name & Email)'
+        subtitle = u'Email-only will be used with some problem clients'
+    else:
         title = u'Current Format: Email Only'
         subtitle = u'E.g. bob.smith@example.com, joan@example.com'
     items.append( alfred.Item(
@@ -287,12 +303,10 @@ def choose_format():
     items = []
     mt = MailTo()
     use_name = mt.use_contact_name
-    title = u'Current Setting: Default (Name & Email)'
-    subtitle = u'Email-only will be used with some problem clients'
-    if use_name is True:
-        title = u'Current Setting: Name & Email'
-        subtitle = u'E.g. Bob Smith <bob@example.com>, Joan Jones <joan@example.com>'
-    elif use_name is False:
+    if use_name:
+        title = u'Current Setting: Default (Name & Email)'
+        subtitle = u'Email-only will be used with some problem clients'
+    else:
         title = u'Current Setting: Email Only'
         subtitle = u'E.g. bob.smith@example.com, joan@example.com'
     items.append( alfred.Item(
@@ -306,24 +320,15 @@ def choose_format():
                                u'Call Email Client with Email Only',
                                u'e.g. bob.smith@example.com',
                                icon=u'icon.png'),
-        u'name' : alfred.Item({u'valid':u'yes', u'arg':u'name'},
-                               u'Call Email Client with Name and Email',
-                               u'e.g. Bob Smith <bob.smith@example.com>',
-                               icon=u'icon.png'),
-        u'default' : alfred.Item({u'valid':u'yes', u'arg':u''},
-                               u'Use Default Format',
+        u'default' : alfred.Item({u'valid':u'yes', u'arg':u'name'},
+                               u'Use Default Format (Name & Email)',
                                u'Name and email except with known problem clients',
                                icon=u'icon.png')
     }
-    if use_name is True:
+    if use_name:
         items.append(options[u'email'])
-        items.append(options[u'default'])
-    elif use_name is False:
-        items.append(options[u'name'])
-        items.append(options[u'default'])
     else:
-        items.append(options[u'name'])
-        items.append(options[u'email'])
+        items.append(options[u'default'])
     print(alfred.xml(items))
 
 
@@ -432,22 +437,28 @@ def main():
         fmt = args.get(u'<format>')
         log.debug(u'setformat : {!r}'.format(fmt))
         mt = MailTo()
-        if not fmt:
-            mt.use_contact_name = None
-            print(u'Default Format')
-        elif fmt == u'name':
+        # if not fmt:
+        #     mt.use_contact_name = True
+        #     print(u'Default Format (Name & Email Address)')
+        if fmt == u'name':
             mt.use_contact_name = True
-            print(u'Name and Email Address')
+            print(u'Default Format (Name & Email Address)')
         elif fmt == u'email':
             mt.use_contact_name = False
             print(u'Email Address Only')
 
     # other options
     elif args.get(u'delcache'):  # delete settings file
+        deleted = False
         if os.path.exists(settings.settings_path):
             os.unlink(settings.settings_path)
+            print('Deleted settings', file=sys.stderr)
+            deleted = True
+        if os.path.exists(CACHEPATH):
+            os.unlink(CACHEPATH)
             print('Deleted cache', file=sys.stderr)
-        else:
+            deleted = True
+        if not deleted:
             print('No cache to delete', file=sys.stderr)
     elif args.get(u'dellog'):  # delete logfile
         if os.path.exists(settings.log_path):
@@ -468,7 +479,6 @@ def main():
     elif args.get(u'openhelp'):  # open help file in browser
         open_help_file()
     return 0
-
 
 if __name__ == '__main__':
     sys.exit(main())
