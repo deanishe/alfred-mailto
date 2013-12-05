@@ -38,11 +38,11 @@ def main():
         url = u'mailto:'
     log.debug(u'args : {}'.format(args))
     log.debug('URL : {}'.format(url))
-    appname, path = mt.default_app
+    appname, path, bundleid = mt.default_app
     command = ['open']
-    if appname is not None:
-        command.append('-a')
-        command.append(appname)
+    if bundleid is not None:
+        command.append('-b')
+        command.append(bundleid)
     command.append(url)
     log.debug('command : {}'.format(command))
     retcode = check_call(command)

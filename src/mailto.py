@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # encoding: utf-8
 
 """
@@ -56,6 +56,7 @@ from subprocess import check_output, check_call
 from time import time
 from email.header import Header
 from urllib import quote
+import re
 
 import alfred
 from contacts import get_contacts, CACHEPATH
@@ -81,6 +82,7 @@ Usage:
     mailto delcache
     mailto logon
     mailto logoff
+    mailto version
 """
 
 __help__ = [
@@ -98,14 +100,19 @@ DEFAULT_RULES = (True, True, True, False)
 
 
 RULES = {
-    u'Airmail' : (False, False, False, False),
-    u'Unibox' : (True, True, False, True),
-    u'Google Chrome' : (True, True, False, False),
-    u'MailMate' : (True, True, False, False),
+    u'it.bloop.airmail' : (False, False, False, False),
+    u'com.eightloops.Unibox' : (True, True, False, True),
+    u'com.google.Chrome' : (True, True, False, False),
+    u'com.freron.MailMate' : (True, True, False, False),
 }
 
 
 class Formatter(object):
+    """Format the mailto: URL according to client-specific rules
+
+    See `mailto.RULES` for details.
+
+    """
 
     def __init__(self, client):
         self.client = client
@@ -119,6 +126,7 @@ class Formatter(object):
         :param contacts: list of 2-tuples: (name, email)
         :returns: string (bytes)
         """
+        log.debug(u"Building URL for app '{}'".format(self.client))
         parts = []
         encoded = False
         for input in contacts:
@@ -154,6 +162,8 @@ class Formatter(object):
 
 class MailTo(object):
 
+    _match_bundle_id = re.compile(r'kMDItemCFBundleIdentifier = "(.+)"').match
+
     def __init__(self):
         self._settings = Settings()
         log.debug(u'Loaded settings : {!r}'.format(self._settings))
@@ -176,7 +186,7 @@ class MailTo(object):
         if self._contacts is None:
             self._contacts = dict(get_contacts()[0])  # email:name
 
-        formatter = Formatter(self.default_app[0])
+        formatter = Formatter(self.default_app[2])  # get by bundle id
         contacts = [(self._contacts.get(email), email) for email in emails]
         return formatter.get_url(contacts, self.use_contact_name)
 
@@ -185,17 +195,24 @@ class MailTo(object):
 
         Return (None, None) if no default is set.
         """
-        path = self._settings.get(u'default_app')
+        path, bundleid = self._settings.get(u'default_app')
         if path is None:
-            return (None, None)
-        return (self._appname(path), path)
+            bundleid = self._settings.get(u'system_default_app')
+            if not bundleid:
+                return (None, None, None)
+            else:
+                return (None, None, bundleid)
+        return (self._appname(path), path, bundleid)
 
     def set_default_app(self, path=None):
         """Set default app to use by path to application
 
         If path is None, the default will be deleted
         """
-        self._settings[u'default_app'] = path
+        if not path:
+            self._settings[u'default_app'] = (None, None)
+        else:
+            self._settings[u'default_app'] = (path, self._bundleid(path))
 
     default_app = property(get_default_app, set_default_app)
 
@@ -237,6 +254,14 @@ class MailTo(object):
         """Get app name from path"""
         return os.path.splitext(os.path.basename(path))[0]
 
+    def _bundleid(self, app_path):
+        """Return the bundle ID for Application at app_path"""
+        command = [u'mdls', u'-name', u'kMDItemCFBundleIdentifier', app_path]
+        m = self._match_bundle_id(check_output(command).strip())
+        if not m:
+            raise ValueError("Could not find bundle ID for '{}'".format(app_path))
+        return m.groups()[0]
+
 
 def show_help():
     items = []
@@ -265,7 +290,7 @@ def show_config():
     log.debug(u'show_config')
     mt = MailTo()
     use_name = mt.use_contact_name
-    appname, path = mt.default_app
+    appname, path, bundleid = mt.default_app
     # email client
     items = []
     if not appname:
@@ -337,7 +362,7 @@ def choose_client(query):
     log.debug(u'choose_client : {!r}'.format(query))
     query = query.lower()
     mt = MailTo()
-    current_app, current_path = mt.default_app
+    current_app, current_path, current_bundleid = mt.default_app
     apps = mt.all_apps
     hits = []
     items = []
@@ -355,7 +380,7 @@ def choose_client(query):
              icon=u'icon.png')
         )
     # Show other options
-    if current_app is not None:
+    if current_app is not None and query == u'':
         items.append(alfred.Item(
             {u'valid':u'yes',
              u'arg':u'',
@@ -478,7 +503,12 @@ def main():
         show_help()
     elif args.get(u'openhelp'):  # open help file in browser
         open_help_file()
+    elif args.get(u'version'):  # print version
+        print(open(os.path.join(os.path.dirname(__file__), 'version')).read().strip())
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as err:
+        log.exception(err)

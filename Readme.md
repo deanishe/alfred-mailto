@@ -6,6 +6,8 @@ Alfred-MailTo
 
 A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose recipients from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.
 
+**Note:** Contacts in Exchange accounts are currently not supported. I'm working on it.
+
 Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [nikipore](https://github.com/nikipore) and [docopt](http://docopt.org/).
 
 ## Usage ##
@@ -20,21 +22,26 @@ Use `mailtoconf` to view/change settings.
 
 ## Supported applications ##
 
-**MailTo** uses the `mailto:` protocol and as such should work with pretty much any email client.
+In *theory*, any email client should work, as **MailTo** uses the `mailto:` protocol to call your email client.
 
-The following apps definitely work:
+If your chosen client doesn't work properly with **MailTo**, post a bug report, and I can possibly add formatting rules for that client.
 
-* Mail.app
+The following email clients currently work "out of the box":
+
+* Apple Mail
 * Sparrow
-* MailMate
-* Unibox
-* Airmail
 * Thunderbird
+* Postbox
+* Airmail
+* Unibox
+* MailMate
 * Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
 
 The following do **not** work:
 
-* Safari (it will open your default mail client instead)
+* Safari (it will open your system default mail client instead)
+
+If your email weapon-of-choice isn't working properly, you can try using email addresses only (use `mailtohelp` in Alfred), and file a bug report, too. Perhaps we can get it to work.
 
 ## Copyright, licensing etc. ##
 

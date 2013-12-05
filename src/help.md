@@ -10,7 +10,7 @@ Alfred-MailTo Help
 
 **MailTo** is an Alfred 2 Workflow that allows you to send an email to multiple recipients from your Mac Contacts (or your fingers) with the email client of your choice (or just the boring default one).
 
-**Note:** Some clients have problems with the default recipient format (name & email address). **MailTo** knows about a few of these clients and how to handle them, but first you have to tell it which email client you're using. See [Selecting an email client](#selectinganemailclient) and [Name/address formatting](#nameaddressformatting) for details.
+**Note:** Contacts in Exchange accounts are currently not supported. I'm working on it.
 
 ## Contents ##
 
@@ -68,18 +68,16 @@ If you're using an unlisted client and having problems (commas or diacritics in 
 
 ## Supported clients ##
 
-In *theory*, any email client should work, as **MailTo** uses the `mailto:` protocol to call your email client. If an email client doesn't support this protocol, give the developers and earful because it really should ;)
+In *theory*, any email client should work, as **MailTo** uses the `mailto:` protocol to call your email client.
 
-If the client does support the protocol, but doesn't work properly with **MailTo**, [let me know](#feedback) and I can possibly add formatting rules for that client.
+If your chosen client doesn't work properly with **MailTo**, [let me know](#feedback) and I can possibly add formatting rules for that client.
 
 The following email clients currently work "out of the box":
 
-* Mail.app
+* Apple Mail
 * Sparrow
 * Thunderbird
-
-The following email clients work, but you have to tell **MailTo** you're using the client:
-
+* Postbox
 * Airmail
 * Unibox
 * MailMate
