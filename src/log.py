@@ -13,23 +13,21 @@
 
 from __future__ import print_function
 
-import os
-import alfred
 import logging
 
-LOGGING = False  # to log or not to log
-
-LOGFILE = os.path.join(alfred.work(True), u'debug.log')
+from settings import Settings
 
 _handler = None
 
 def logger(name=u''):
     global _handler
     if not _handler:
-        if LOGGING:
-            _handler = logging.FileHandler(filename=LOGFILE,
+        s = Settings()
+        if s['logging']:
+            _handler = logging.FileHandler(filename=s.log_path,
                                            encoding=u'utf-8',
                                            delay=True)
+            _handler.setFormatter(logging.Formatter('[%(name)s] %(message)s'))
         else:
             _handler = logging.NullHandler()
     log = logging.getLogger(name)

@@ -11,3 +11,10 @@ Better config keywords:
 Feature requests:
 	- Remember preferred email address for contacts @consider
 		http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/?p=19658
+Bugs:
+	- Doesn't use name when contact is a company
+	- mailto: scheme must be different for different clients
+		- Airmail requires email only, no space between addresses
+		- MailMate requires space between recipients
+		- Unibox doesn't understand quoted ("") names with commas
+		- Sparrow doesn't like URL-quoting

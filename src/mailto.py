@@ -31,6 +31,12 @@ help
 openhelp
     Open the help.html file in the default application
 
+logon
+    Turn on logging (for debugging purposes)
+
+logoff
+    Turn off logging
+
 openlog
     Open logfile in default app
 
@@ -40,7 +46,6 @@ dellog
 delcache
     Delete the cache file containing the settings. Mostly for me when I fuck
     stuff up.
-
 """
 
 from __future__ import print_function
@@ -50,12 +55,16 @@ import os
 import json
 from subprocess import check_output, check_call
 from time import time
+from email.header import Header
 
 import alfred
 from contacts import get_contacts
-from log import logger, LOGFILE
+from log import logger
+from settings import Settings
 
 log = logger(u'mailto')
+
+settings = Settings()
 
 
 __usage__ = u"""
@@ -70,6 +79,8 @@ Usage:
     mailto openlog
     mailto dellog
     mailto delcache
+    mailto logon
+    mailto logoff
 """
 
 __help__ = [
@@ -82,8 +93,6 @@ __help__ = [
 ]
 
 
-SETTINGS_CACHE = os.path.join(alfred.work(False), u'mailto.json')
-
 # Don't like names in mailto: URLs
 KNOWN_BAD_CLIENTS = [u'Airmail']
 
@@ -91,7 +100,7 @@ KNOWN_BAD_CLIENTS = [u'Airmail']
 class MailTo(object):
 
     def __init__(self):
-        self._settings = self._load_settings()
+        self._settings = Settings()
         log.debug(u'Loaded settings : {!r}'.format(self._settings))
         self._all_apps = None
         self._contacts = None
@@ -103,7 +112,7 @@ class MailTo(object):
     def set_use_contact_name(self, bool):
         """Set whether or not to use contact name as well as address"""
         self._settings[u'use_name'] = bool
-        self._save_settings()
+        # self._save_settings()
 
     use_contact_name = property(get_use_contact_name, set_use_contact_name)
 
@@ -120,7 +129,14 @@ class MailTo(object):
                 self._contacts = dict(get_contacts()[0])  # email:name
             name = self._contacts.get(email)
             if name and name != email:
-                return u'{} <{}>'.format(name, email)
+                try:
+                    name = name.encode('ascii')
+                except UnicodeEncodeError:
+                    name = str(Header(name))
+                    log.debug('mime-encoded name : {!r}'.format(name))
+                if name.find('"') == -1 and name.find(',') > -1:  # add quotes
+                    name = '"{}"'.format(name)
+                return '{} <{}>'.format(name, email)
             return email
         if self.use_contact_name is False:
             return email
@@ -147,9 +163,23 @@ class MailTo(object):
         If path is None, the default will be deleted
         """
         self._settings[u'default_app'] = path
-        self._save_settings()
+        # self._save_settings()
 
     default_app = property(get_default_app, set_default_app)
+
+    def get_logging(self):
+        return self._settings['logging']
+
+    def set_logging(self, value):
+        if value:
+            self._settings[u'logging'] = True
+            log.debug(u'Logging ON')
+        else:
+            self._settings[u'logging'] = False
+            log.debug(u'Logging OFF')
+        # self._save_settings()
+
+    logging = property(get_logging, set_logging)
 
     @property
     def all_apps(self):
@@ -172,16 +202,17 @@ class MailTo(object):
         log.debug(u'All apps listed in {:0.4f} secs'.format(time() - t))
         return self._all_apps
 
-    def _load_settings(self):
-        if not os.path.exists(SETTINGS_CACHE):
-            return dict(default_app=None, clients=[], use_name=None)
-        with open(SETTINGS_CACHE) as file:
-            return json.load(file)
+    # def _load_settings(self):
+    #     if not os.path.exists(SETTINGS_CACHE):
+    #         return dict(default_app=None, clients=[], use_name=None,
+    #                     logging=LOGGING_DEFAULT)
+    #     with open(SETTINGS_CACHE) as file:
+    #         return json.load(file)
 
-    def _save_settings(self):
-        log.debug(u'Saving settings : {}'.format(self._settings))
-        with open(SETTINGS_CACHE, u'wb') as file:
-            json.dump(self._settings, file, indent=2)
+    # def _save_settings(self):
+    #     log.debug(u'Saving settings : {}'.format(self._settings))
+    #     with open(SETTINGS_CACHE, u'wb') as file:
+    #         json.dump(self._settings, file, indent=2)
 
     def _appname(self, path):
         """Get app name from path"""
@@ -413,13 +444,25 @@ def main():
 
     # other options
     elif args.get(u'delcache'):  # delete settings file
-        if os.path.exists(SETTINGS_CACHE):
-            os.unlink(SETTINGS_CACHE)
+        if os.path.exists(settings.settings_path):
+            os.unlink(settings.settings_path)
+            print('Deleted cache', file=sys.stderr)
+        else:
+            print('No cache to delete', file=sys.stderr)
     elif args.get(u'dellog'):  # delete logfile
-        if os.path.exists(LOGFILE):
-            os.unlink(LOGFILE)
+        if os.path.exists(settings.log_path):
+            os.unlink(settings.log_path)
+            print('Deleted log file', file=sys.stderr)
+    elif args.get(u'logon'):  # turn on logging
+        mt = MailTo()
+        mt.logging = True
+        print('Turned logging on', file=sys.stderr)
+    elif args.get(u'logoff'):  # turn off logging
+        mt = MailTo()
+        mt.logging = False
+        print('Turned logging off', file=sys.stderr)
     elif args.get(u'openlog'):  # open logfile
-        check_call([u'open', LOGFILE])
+        check_call([u'open', settings.log_path])
     elif args.get(u'help'):  # show help in Alfred
         show_help()
     elif args.get(u'openhelp'):  # open help file in browser
