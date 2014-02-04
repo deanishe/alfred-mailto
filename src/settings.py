@@ -15,12 +15,9 @@ from __future__ import print_function, unicode_literals
 
 import os
 import json
+import plistlib
 from subprocess import check_output
 from time import time
-try:
-    import xml.etree.cElementTree as ET
-except ImportError:
-    import xml.etree.ElementTree as ET
 
 import alfred
 
@@ -80,14 +77,11 @@ class Settings(dict):
     def _get_system_default_client(self):
         command = ['plutil', '-convert', 'xml1', '-o', '-',
                    self.handler_plist_path]
-        root = ET.XML(check_output(command))
-        for elem in root.iter('dict'):
-            for child in elem.findall('string'):
-                if child.text == 'mailto':
-                    for string in elem.findall('string'):
-                        if string.text != 'mailto':
-                            return string.text
-                    return None
+        d = plistlib.readPlistFromString(check_output(command))
+        for h in d['LSHandlers']:
+            if not h.get('LSHandlerURLScheme') == 'mailto':
+                continue
+            return h['LSHandlerRoleAll']
         return None
 
     # dict methods
