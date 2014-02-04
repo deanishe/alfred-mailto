@@ -17,6 +17,10 @@ import os
 import json
 from subprocess import check_output
 from time import time
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET
 
 import alfred
 
@@ -29,7 +33,7 @@ class Settings(dict):
 
     log_path = os.path.join(alfred.work(True), u'debug.log')
     handler_plist_path = os.path.expanduser(
-        '~/Library/Preferences/com.apple.LaunchServices.plist')
+        u'~/Library/Preferences/com.apple.LaunchServices.plist')
     settings_path = os.path.join(alfred.work(False),
                                  u'settings.v-{}.json'.format(version))
     logging_default = False  # logging off by default
@@ -74,13 +78,16 @@ class Settings(dict):
             json.dump(data, file, sort_keys=True, indent=2, encoding='utf-8')
 
     def _get_system_default_client(self):
-        command = ['plutil', '-convert', 'json', '-o', '-',
+        command = ['plutil', '-convert', 'xml1', '-o', '-',
                    self.handler_plist_path]
-        d = json.loads(check_output(command))
-        for h in d['LSHandlers']:
-            if not h.get('LSHandlerURLScheme') == 'mailto':
-                continue
-            return h['LSHandlerRoleAll']
+        root = ET.XML(check_output(command))
+        for elem in root.iter('dict'):
+            for child in elem.findall('string'):
+                if child.text == 'mailto':
+                    for string in elem.findall('string'):
+                        if string.text != 'mailto':
+                            return string.text
+                    return None
         return None
 
     # dict methods
@@ -100,3 +107,5 @@ if __name__ == '__main__':
     s = Settings()
     for k, v in s.items():
         print('{}  :  {}'.format(k, v))
+    print('_get_system_default_client() --> {}'.format(
+          s._get_system_default_client()))
