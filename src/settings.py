@@ -20,19 +20,23 @@ from time import time
 
 import alfred
 
-version = open(os.path.join(os.path.dirname(__file__), 'version')).read().strip()
+version = open(os.path.join(os.path.dirname(__file__),
+               'version')).read().strip()
+
 
 class Settings(dict):
     """A dictionary that saves itself when it's changed"""
 
     log_path = os.path.join(alfred.work(True), u'debug.log')
-    handler_plist_path = os.path.expanduser('~/Library/Preferences/com.apple.LaunchServices.plist')
-    settings_path = os.path.join(alfred.work(False), u'settings.v-{}.json'.format(version))
+    handler_plist_path = os.path.expanduser(
+        '~/Library/Preferences/com.apple.LaunchServices.plist')
+    settings_path = os.path.join(alfred.work(False),
+                                 u'settings.v-{}.json'.format(version))
     logging_default = False  # logging off by default
 
     default_settings = {
-        'system_default_app' : None,
-        'system_default_last_update' : 0,
+        'system_default_app': None,
+        'system_default_last_update': 0,
         'default_app': [None, None],
         'use_name': True,
         'logging': logging_default
@@ -94,5 +98,5 @@ class Settings(dict):
 
 if __name__ == '__main__':
     s = Settings()
-    for k,v in s.items():
+    for k, v in s.items():
         print('{}  :  {}'.format(k, v))
