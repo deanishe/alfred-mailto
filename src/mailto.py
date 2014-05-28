@@ -87,11 +87,11 @@ Usage:
 
 __help__ = [
     (u"Open MailTo help file",
-        u"In your browser"),
+     u"In your browser"),
     (u"'mailtoconf' to view and change settings",
-        u"View/change email client and format"),
+     u"View/change email client and format"),
     (u"Enter 'mailtohelp' for this message",
-        u"Well, I guess you already figured this out …"),
+     u"Well, I guess you already figured this out …"),
 ]
 
 
@@ -139,27 +139,39 @@ class Formatter(object):
                 parts.append(email)
                 log.debug('[not use_names] {!r} --> {!r}'.format(input, email))
                 continue
+
+            elif name is None:  # email addy not in Address Book
+                parts.append(email)
+                log.debug('[name not found] {!r} --> {!r}'.format(input, email))
+                continue
+
             if self.use_mime:
                 try:
                     name = name.encode(u'ascii')
                 except UnicodeEncodeError:
                     name = str(Header(name, u'utf-8'))
                     encoded = True
+
             if ',' in name:
                 if self.use_no_commas:
                     parts.append(email)
                     log.debug('[use_no_commas] {!r} --> {!r}'.format(input,
                                                                      email))
                     continue
+
                 else:
                     name = u'"{}"'.format(name)
+
             log.debug('[default] {!r} --> {!r}'.format(input, name, email))
             parts.append(u'{} <{}>'.format(name, email))
+
         if self.use_spaces:
             result = u', '.join(parts)
         else:
             result = u','.join(parts)
+
         result = result.encode('utf-8')
+
         if encoded:  # also needs quoting
             result = quote(result)
         return 'mailto:{}'.format(result)
