@@ -28,8 +28,10 @@ from log import logger
 
 log = logger(u'contacts')
 
-LOCAL_CONTACTS_DB = os.path.expanduser(u'~/Library/Application Support/AddressBook/AddressBook-v22.abcddb')
-ADDRESSBOOK_DATADIR = os.path.expanduser(u'~/Library/Application Support/AddressBook/Sources')
+LOCAL_CONTACTS_DB = os.path.expanduser(
+    u'~/Library/Application Support/AddressBook/AddressBook-v22.abcddb')
+ADDRESSBOOK_DATADIR = os.path.expanduser(
+    u'~/Library/Application Support/AddressBook/Sources')
 MAX_DB_COUNT = 3  # number of addressbook files to read
 MAX_CACHE_AGE = 600  # 10 minutes
 
@@ -75,7 +77,13 @@ def load_from_db(dbpath):
     name_emails_map = defaultdict(list)
     person_id_email_map = defaultdict(list)
 
-    rows = c.execute("SELECT ZABCDEMAILADDRESS.z_pk, zaddressnormalized, zisprimary, zorderingindex, ZABCDRECORD.z_pk, zfirstname, zlastname FROM ZABCDRECORD, ZABCDEMAILADDRESS WHERE ZABCDRECORD.z_ent = 19 AND ZABCDRECORD.z_pk = ZABCDEMAILADDRESS.zowner AND zaddressnormalized != ''").fetchall()
+    rows = c.execute(
+        "SELECT ZABCDEMAILADDRESS.z_pk, zaddressnormalized, "
+        "zisprimary, zorderingindex, ZABCDRECORD.z_pk, zfirstname, zlastname "
+        "FROM ZABCDRECORD, ZABCDEMAILADDRESS "
+        "WHERE ZABCDRECORD.z_ent = 19 "
+        "AND ZABCDRECORD.z_pk = ZABCDEMAILADDRESS.zowner "
+        "AND zaddressnormalized != ''").fetchall()
     for row in rows:
         email_id, email, primary, order, person_id, first, last = row
         email_id_address_map[email_id] = email
@@ -99,12 +107,17 @@ def load_from_db(dbpath):
     group_id_name_map = {}
 
     # specific email addresses for groups
-    rows = c.execute("SELECT zcontact, zemail, zgroup FROM ZABCDDISTRIBUTIONLISTCONFIG").fetchall()
+    rows = c.execute(
+        "SELECT zcontact, zemail, zgroup "
+        "FROM ZABCDDISTRIBUTIONLISTCONFIG").fetchall()
     for row in rows:
         person_id, email_id, group_id = row
         group_person_email_map[u'{}-{}'.format(group_id, person_id)] = email_id
 
-    rows = c.execute("SELECT z_pk, zname, z_19contacts FROM ZABCDRECORD, Z_19PARENTGROUPS WHERE z_ent = 15 AND z_15parentgroups1 = z_pk").fetchall()
+    rows = c.execute(
+        "SELECT z_pk, zname, z_19contacts "
+        "FROM ZABCDRECORD, Z_19PARENTGROUPS "
+        "WHERE z_ent = 15 AND z_15parentgroups1 = z_pk").fetchall()
     for row in rows:
         group_id, name, person_id = row
         if name == u'card':  # contains all contacts
@@ -112,7 +125,9 @@ def load_from_db(dbpath):
         # print(row)
         if group_id not in group_id_name_map:
             group_id_name_map[group_id] = name
-        email_id = group_person_email_map.get(u'{}-{}'.format(group_id, person_id))
+
+        email_id = group_person_email_map.get(u'{}-{}'.format(
+                                              group_id, person_id))
         if email_id:
             groups[group_id].append(email_id_address_map[email_id])
         else:
@@ -150,7 +165,9 @@ def get_contacts(use_cache=True):
     name_emails_map = defaultdict(set)
     groups = {}
     for dbpath in iter_addressbooks():
-        email_to_name, name_to_emails, groupname_to_email = load_from_db(dbpath)
+        (email_to_name, name_to_emails,
+         groupname_to_email) = load_from_db(dbpath)
+
         for email in email_to_name:
             if emails.get(email, u'') == u'':
                 emails[email] = email_to_name[email]
@@ -191,4 +208,5 @@ if __name__ == '__main__':
             if key in contact[0].lower():
                 results.append(contact)
         d = time() - s
-        print("Found {} results for '{}' in {:.4f} seconds".format(len(results), key, d))
+        print("Found {} results for '{}' in {:.4f} seconds".format(
+              len(results), key, d))

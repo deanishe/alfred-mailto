@@ -100,10 +100,10 @@ DEFAULT_RULES = (True, True, True, False)
 
 
 RULES = {
-    u'it.bloop.airmail' : (False, False, False, False),
-    u'com.eightloops.Unibox' : (True, True, False, True),
-    u'com.google.Chrome' : (True, True, False, False),
-    u'com.freron.MailMate' : (True, True, False, False),
+    u'it.bloop.airmail': (False, False, False, False),
+    u'com.eightloops.Unibox': (True, True, False, True),
+    u'com.google.Chrome': (True, True, False, False),
+    u'com.freron.MailMate': (True, True, False, False),
 }
 
 
@@ -117,8 +117,12 @@ class Formatter(object):
     def __init__(self, client):
         self.client = client
         self.rules = RULES.get(client, DEFAULT_RULES)
-        self.use_spaces, self.use_names, self.use_mime, self.use_no_commas = self.rules
-        log.debug(u'Loaded rules {!r} for client {!r}'.format(self.rules, client))
+        (self.use_spaces,
+         self.use_names,
+         self.use_mime,
+         self.use_no_commas) = self.rules
+        log.debug(u'Loaded rules {!r} for client {!r}'.format(self.rules,
+                                                              client))
 
     def get_url(self, contacts, use_names=False):
         """Return formatted unicode URL for contacts
@@ -144,7 +148,8 @@ class Formatter(object):
             if ',' in name:
                 if self.use_no_commas:
                     parts.append(email)
-                    log.debug('[use_no_commas] {!r} --> {!r}'.format(input, email))
+                    log.debug('[use_no_commas] {!r} --> {!r}'.format(input,
+                                                                     email))
                     continue
                 else:
                     name = u'"{}"'.format(name)
@@ -239,10 +244,10 @@ class MailTo(object):
         t = time()
         if self._all_apps is None:
             command = [
-                 u'mdfind',
-                 u'-onlyin', u'/Applications',
-                 u'-onlyin', os.path.expanduser(u'~/Applications'),
-                 u'kMDItemContentTypeTree:com.apple.application-bundle'
+                u'mdfind',
+                u'-onlyin', u'/Applications',
+                u'-onlyin', os.path.expanduser(u'~/Applications'),
+                u'kMDItemContentTypeTree:com.apple.application-bundle'
             ]
             lines = check_output(command).decode(u'utf-8').split(u'\n')
             app_paths = [s.strip() for s in lines if s.strip()]
@@ -259,7 +264,8 @@ class MailTo(object):
         command = [u'mdls', u'-name', u'kMDItemCFBundleIdentifier', app_path]
         m = self._match_bundle_id(check_output(command).strip())
         if not m:
-            raise ValueError("Could not find bundle ID for '{}'".format(app_path))
+            raise ValueError("Could not find bundle ID for '{}'".format(
+                             app_path))
         return m.groups()[0]
 
 
@@ -267,7 +273,7 @@ def show_help():
     items = []
     for text, subtext in __help__:
         item = alfred.Item(
-            {u'valid':u'yes'},
+            {u'valid': u'yes'},
             text,
             subtext,
             icon=u'info.png'
@@ -291,35 +297,45 @@ def show_config():
     mt = MailTo()
     use_name = mt.use_contact_name
     appname, path, bundleid = mt.default_app
+
     # email client
     items = []
     if not appname:
         appname = u'System Default'
         path = u''
-    items.append( alfred.Item(
-        {u'valid':u'no'},
-         u'Current Email Client: {}'.format(appname),
-         path,
-         icon=u'icon.png')
-    )
-    items.append(alfred.Item({u'valid':u'yes', u'arg':u'client'},
-                              u'Change Client …',
-                              u'', icon=u'icon.png'))
+
+    items.append(alfred.Item(
+                 {u'valid': u'no'},
+                 u'Current Email Client: {}'.format(appname),
+                 path,
+                 icon=u'icon.png'))
+
+    items.append(alfred.Item({u'valid': u'yes',
+                              u'arg': u'client'},
+                             u'Change Client …',
+                             u'',
+                             icon=u'icon.png'))
+
     if use_name:
         title = u'Current Format: Default (Name & Email)'
         subtitle = u'Email-only will be used with some problem clients'
     else:
         title = u'Current Format: Email Only'
         subtitle = u'E.g. bob.smith@example.com, joan@example.com'
-    items.append( alfred.Item(
-        {u'valid':u'no'},
-         title,
-         subtitle,
-         icon=u'icon.png')
-    )
-    items.append(alfred.Item({u'valid':u'yes', u'arg':u'format'},
-                              u'Change Format …',
-                              u'', icon=u'icon.png'))
+
+    items.append(alfred.Item(
+                 {u'valid': u'no'},
+                 title,
+                 subtitle,
+                 icon=u'icon.png'))
+
+    items.append(alfred.Item(
+                 {u'valid': u'yes',
+                  u'arg': u'format'},
+                 u'Change Format …',
+                 u'',
+                 icon=u'icon.png'))
+
     print(alfred.xml(items))
 
 
@@ -334,21 +350,27 @@ def choose_format():
     else:
         title = u'Current Setting: Email Only'
         subtitle = u'E.g. bob.smith@example.com, joan@example.com'
-    items.append( alfred.Item(
-        {u'valid':u'no'},
-         title,
-         subtitle,
-         icon=u'icon.png')
-    )
+
+    items.append(alfred.Item(
+                 {u'valid': u'no'},
+                 title,
+                 subtitle,
+                 icon=u'icon.png'))
+
     options = {
-        u'email' : alfred.Item({u'valid':u'yes', u'arg':u'email'},
-                               u'Call Email Client with Email Only',
-                               u'e.g. bob.smith@example.com',
-                               icon=u'icon.png'),
-        u'default' : alfred.Item({u'valid':u'yes', u'arg':u'name'},
-                               u'Use Default Format (Name & Email)',
-                               u'Name and email except with known problem clients',
-                               icon=u'icon.png')
+        u'email': alfred.Item(
+            {u'valid': u'yes',
+             u'arg': u'email'},
+            u'Call Email Client with Email Only',
+            u'e.g. bob.smith@example.com',
+            icon=u'icon.png'),
+
+        u'default': alfred.Item(
+            {u'valid': u'yes',
+             u'arg': u'name'},
+            u'Use Default Format (Name & Email)',
+            u'Name and email except with known problem clients',
+            icon=u'icon.png')
     }
     if use_name:
         items.append(options[u'email'])
@@ -373,19 +395,19 @@ def choose_client(query):
         else:
             appname = current_app
             path = current_path
-        items.append( alfred.Item(
-            {u'valid':u'no'},
-             u'Current Email Client: {}'.format(appname),
-             path,
-             icon=u'icon.png')
+        items.append(alfred.Item(
+            {u'valid': u'no'},
+            u'Current Email Client: {}'.format(appname),
+            path,
+            icon=u'icon.png')
         )
     # Show other options
     if current_app is not None and query == u'':
         items.append(alfred.Item(
-            {u'valid':u'yes',
-             u'arg':u'',
-             u'autocomplete':u'System Default',
-            },
+            {u'valid': u'yes',
+             u'arg': u'',
+             u'autocomplete': u'System Default',
+             },
             u'System Default Email Client',
             u'Use system default email client with MailTo',
             icon=u'icon.png')
@@ -404,23 +426,23 @@ def choose_client(query):
     for appname, path in hits:
         if path == current_path:
             items.append(alfred.Item(
-                {u'valid':u'no'
+                {u'valid': u'no'
                  # u'uid':path
-                },
+                 },
                 u'{} (current client)'.format(appname),
                 path,
-                icon=(path, {u'type':u'fileicon'}))
+                icon=(path, {u'type': u'fileicon'}))
             )
         else:
             items.append(alfred.Item(
-                {u'valid':u'yes',
-                 u'arg':path,
-                 u'autocomplete':appname,
+                {u'valid': u'yes',
+                 u'arg': path,
+                 u'autocomplete': appname,
                  # u'uid':path
-                },
+                 },
                 appname,
                 path,
-                icon=(path, {u'type':u'fileicon'}))
+                icon=(path, {u'type': u'fileicon'}))
             )
     print(alfred.xml(items))
 
@@ -443,6 +465,7 @@ def main():
             query = u''
         query = query.strip()
         choose_client(query)
+
     elif args.get(u'setclient'):  # set default mail client
         path = args.get(u'<path>')
         log.debug(u'setclient : {!r}'.format(path))
@@ -458,6 +481,7 @@ def main():
     # email format
     elif args.get(u'format'):  # set email format
         choose_format()
+
     elif args.get(u'setformat'):  # set default format
         fmt = args.get(u'<format>')
         log.debug(u'setformat : {!r}'.format(fmt))
@@ -485,26 +509,34 @@ def main():
             deleted = True
         if not deleted:
             print('No cache to delete', file=sys.stderr)
+
     elif args.get(u'dellog'):  # delete logfile
         if os.path.exists(settings.log_path):
             os.unlink(settings.log_path)
             print('Deleted log file', file=sys.stderr)
+
     elif args.get(u'logon'):  # turn on logging
         mt = MailTo()
         mt.logging = True
         print('Turned logging on', file=sys.stderr)
+
     elif args.get(u'logoff'):  # turn off logging
         mt = MailTo()
         mt.logging = False
         print('Turned logging off', file=sys.stderr)
+
     elif args.get(u'openlog'):  # open logfile
         check_call([u'open', settings.log_path])
+
     elif args.get(u'help'):  # show help in Alfred
         show_help()
+
     elif args.get(u'openhelp'):  # open help file in browser
         open_help_file()
+
     elif args.get(u'version'):  # print version
-        print(open(os.path.join(os.path.dirname(__file__), 'version')).read().strip())
+        print(open(os.path.join(os.path.dirname(__file__),
+                                'version')).read().strip())
     return 0
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ from settings import Settings
 
 _handler = None
 
+
 def logger(name=u''):
     global _handler
     if not _handler:
