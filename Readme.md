@@ -12,7 +12,7 @@ Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [
 
 ## Usage ##
 
-Open Alfred, type `mailto` (the default keyword) then either hit `ENTER` to open an entirely blank message or start typing the name or email address you'd like to send a mail to.
+Open Alfred, type `@` or `mailto` (the default keyword) then either hit `ENTER` to open an entirely blank message or start typing the name or email address you'd like to send a mail to.
 
 Addresses will be suggested from matching contacts and groups in your Mac address book. Hit `TAB` to autocomplete the recipient list from the selected result, or `ENTER` or `⌘+NUM` to add the address and start composing a mail.
 
@@ -35,6 +35,7 @@ The following email clients currently work "out of the box":
 * Airmail
 * Unibox
 * MailMate
+* Mailbox (Beta)
 * Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
 
 The following do **not** work:
