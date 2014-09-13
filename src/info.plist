@@ -4,8 +4,21 @@
 <dict>
 	<key>bundleid</key>
 	<string>net.deanishe.alfred-mailto</string>
+	<key>category</key>
+	<string>Communication</string>
 	<key>connections</key>
 	<dict>
+		<key>11150742-DA6A-413A-A149-3886C9AAA46F</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4093B5F2-F988-435B-9775-4BCCA2DEABB7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
 		<array>
 			<dict>
@@ -99,6 +112,35 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>@</string>
+				<key>runningsubtext</key>
+				<string>Searching Contacts …</string>
+				<key>script</key>
+				<string>python search.py "{query}"</string>
+				<key>subtext</key>
+				<string>Hit ENTER to compose a new mail</string>
+				<key>title</key>
+				<string>Compose New Mail for Recipients</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>script</key>
@@ -138,7 +180,7 @@
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
+			<string>11150742-DA6A-413A-A149-3886C9AAA46F</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -386,30 +428,35 @@ end if</string>
 	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
 	<key>uidata</key>
 	<dict>
+		<key>11150742-DA6A-413A-A149-3886C9AAA46F</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
 		<key>166BA839-49F9-4A96-A846-9CD85DDF4B9B</key>
 		<dict>
 			<key>ypos</key>
-			<real>530</real>
+			<real>640</real>
 		</dict>
 		<key>2244D761-CFF6-43C4-B38B-03C03B8D9C43</key>
 		<dict>
 			<key>ypos</key>
-			<real>390</real>
+			<real>510</real>
 		</dict>
 		<key>2AA7744E-9E4E-4982-AA8D-3DA072B17B74</key>
 		<dict>
 			<key>ypos</key>
-			<real>530</real>
+			<real>640</real>
 		</dict>
 		<key>4093B5F2-F988-435B-9775-4BCCA2DEABB7</key>
 		<dict>
 			<key>ypos</key>
-			<real>10</real>
+			<real>70</real>
 		</dict>
 		<key>60DCFD4C-2A78-4ACD-9471-A3602FB8FBC4</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>250</real>
 		</dict>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
 		<dict>
@@ -419,32 +466,32 @@ end if</string>
 		<key>AB775DB2-67F2-41CE-BEA5-72CBB2C1547D</key>
 		<dict>
 			<key>ypos</key>
-			<real>390</real>
+			<real>510</real>
 		</dict>
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>250</real>
 		</dict>
 		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
 		<dict>
 			<key>ypos</key>
-			<real>250</real>
+			<real>380</real>
 		</dict>
 		<key>E6588C80-3408-4D93-AB00-2E030943369C</key>
 		<dict>
 			<key>ypos</key>
-			<real>250</real>
+			<real>380</real>
 		</dict>
 		<key>ECDF3D93-50D9-4A32-9D69-E94ECFE83AD0</key>
 		<dict>
 			<key>ypos</key>
-			<real>390</real>
+			<real>510</real>
 		</dict>
 		<key>EE8D0D6D-6A02-43A0-B0EC-EED1F23E5B7A</key>
 		<dict>
 			<key>ypos</key>
-			<real>530</real>
+			<real>640</real>
 		</dict>
 	</dict>
 	<key>webaddress</key>

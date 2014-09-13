@@ -104,6 +104,7 @@ RULES = {
     u'com.eightloops.Unibox': (True, True, False, True),
     u'com.google.Chrome': (True, True, False, False),
     u'com.freron.MailMate': (True, True, False, False),
+    u'com.dropbox.mbd.external-beta': (False, False, False, False)
 }
 
 

@@ -28,9 +28,11 @@ Alfred-MailTo Help
 
 ## Usage ##
 
+The main keyword is `@` or `mailto` (these do the same thing).
+
 To start a new mail without recipients, hit `ENTER` on the `Write new email` result.
 
-To add recipients, type `mailto ` (there's a space at the end there!) and start typing the name or email address of someone in your Contacts or the name of a Group/Distribution List (they're the same thing). You can also enter email addresses that aren't in your Contacts database.
+To add recipients, type `@ ` or `mailto ` (there's a space at the end there!) and start typing the name or email address of someone in your Contacts or the name of a Group/Distribution List (they're the same thing). You can also enter email addresses that aren't in your Contacts database.
 
 Selecting a result and hitting `TAB` will add that email address to the list of recipients, hitting `ENTER` on a result will add that email address to the list of recipients and open the compose window in your selected email client (i.e. closing Alfred's window).
 
@@ -81,6 +83,7 @@ The following email clients currently work "out of the box":
 * Airmail
 * Unibox
 * MailMate
+* Mailbox (Beta)
 * Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
 
 The following do **not** work:
@@ -109,8 +112,9 @@ As a result, **MailTo** might break at any time, though the database format has 
 ## TL;DR ##
 
 |    Command     |                    Function                    |
-| -------------- | ---------------------------------------------- |
-| `mailto `      | Search names, emails, groups                   |
+|----------------|------------------------------------------------|
+| `@ `           | Search names, emails, groups                   |
+| `mailto `      | Synonym for `@`                                |
 | `mailtoconf`   | Display and change settings                    |
 | `mailtoclient` | Choose email client to use                     |
 | `mailtoformat` | Set name/address format to send to your client |
