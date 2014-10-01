@@ -78,10 +78,10 @@ class Settings(dict):
         command = ['plutil', '-convert', 'xml1', '-o', '-',
                    self.handler_plist_path]
         d = plistlib.readPlistFromString(check_output(command))
-        for h in d['LSHandlers']:
+        for h in d.get('LSHandlers', []):
             if not h.get('LSHandlerURLScheme') == 'mailto':
                 continue
-            return h['LSHandlerRoleAll']
+            return h.get('LSHandlerRoleAll')
         return None
 
     # dict methods
