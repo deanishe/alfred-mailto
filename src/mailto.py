@@ -14,7 +14,7 @@ Usage:
     mailto.py search <query>
     mailto.py config [<query>]
     mailto.py setclient <app_path>
-    mailto.py setformat <format>
+    mailto.py toggle (format|update)
     mailto.py compose [<recipients>]
     mailto.py reload
     mailto.py update
@@ -45,6 +45,9 @@ with open(os.path.join(os.path.dirname(__file__), 'version')) as file_obj:
 UPDATE_INTERVAL = 1  # day
 GITHUB_REPO = 'deanishe/alfred-mailto'
 
+# Called to re-open settings
+CONFIG_KEYWORD = 'mailto'
+
 # Query segment separator
 SEPARATOR = '⟩'
 
@@ -55,8 +58,8 @@ ICON_GROUP = 'icons/group.icns'
 ICON_HELP = 'icons/help.icns'
 ICON_PERSON = 'icons/person.icns'
 ICON_RELOAD = 'icons/reload.icns'
-ICON_VERSION_NEW = 'icons/update-yes.icns'
-ICON_VERSION_OK = 'icons/update-okay.icns'
+ICON_VERSION_NEW = 'icons/update-available.icns'
+ICON_VERSION_OK = 'icons/update-none.icns'
 ICON_WARNING = 'icons/warning.icns'
 
 
@@ -103,6 +106,18 @@ class MailToApp(object):
         log.debug('Searching contacts')
 
         query = self.args.query
+
+        # Notify of update
+        if self.wf.settings.get('notify_updates', True):
+            if self.wf.update_available:
+                version = wf.cached_data('__workflow_update_status',
+                                         max_age=0)['version']
+
+                self.wf.add_item(
+                    'Version {} is available'.format(version),
+                    'Open configuration with "{}" to install update'.format(
+                        CONFIG_KEYWORD),
+                    icon=ICON_VERSION_NEW,)
 
         # Load cached contacts
         contacts = Contacts()
@@ -278,7 +293,7 @@ class MailToApp(object):
         from contacts import Contacts
         log.debug('Forcing cache update ...')
         Contacts().update(force=True)
-        print('Refreshing contacts and app caches…'.encode('utf-8'))
+        self.notify('Refreshing contacts and app caches…')
         return 0
 
     #                         dP            dP
@@ -296,10 +311,10 @@ class MailToApp(object):
         available = self.wf.start_update()
 
         if available:
-            print('Installing new version…'.encode('utf-8'))
+            self.notify('Installing new version…')
 
         else:
-            print('No new version available')
+            self.notify('No new version available')
 
     #                                     oo
 
@@ -308,26 +323,26 @@ class MailToApp(object):
     # 88 .88'  88.  ... 88             88 88 88.  .88 88    88
     # 8888P'   `88888P' dP       `88888P' dP `88888P' dP    dP
 
-    def do_version(self):
-        """Show current version and if an update is available"""
-        self.wf.add_item('Installed version : {}'.format(__version__))
+    # def do_version(self):
+    #     """Show current version and if an update is available"""
+    #     self.wf.add_item('Installed version : {}'.format(__version__))
 
-        if self.wf.update_available:
+    #     if self.wf.update_available:
 
-            version = wf.cached_data('__workflow_update_status')['version']
+    #         version = wf.cached_data('__workflow_update_status')['version']
 
-            self.wf.add_item('Version {} is available'.format(version),
-                             'ENTER to update',
-                             valid=True,
-                             icon=ICON_VERSION_NEW)
+    #         self.wf.add_item('Version {} is available'.format(version),
+    #                          'ENTER to update',
+    #                          valid=True,
+    #                          icon=ICON_VERSION_NEW)
 
-        else:
-            self.wf.add_item('No update is currently available',
-                             'ENTER to check for an update now',
-                             valid=True,
-                             icon=ICON_VERSION_OK)
+    #     else:
+    #         self.wf.add_item('No update is currently available',
+    #                          'ENTER to check for an update now',
+    #                          valid=True,
+    #                          icon=ICON_VERSION_OK)
 
-        self.wf.send_feedback()
+    #     self.wf.send_feedback()
 
     # dP                dP
     # 88                88
@@ -364,9 +379,9 @@ class MailToApp(object):
 
         # Go back
         if query.endswith(SEPARATOR):  # User deleted trailing space
-            run_alfred('mailto ')
+            run_alfred('{} '.format(CONFIG_KEYWORD))
 
-        # Handle subqueries
+        # Parse subqueries and dispatch to appropriate method
         if SEPARATOR in query:
             parts = [s.strip() for s in query.split(SEPARATOR) if s.strip()]
             log.debug('parts : {}'.format(parts))
@@ -380,8 +395,6 @@ class MailToApp(object):
 
                 if action == 'Client':
                     return self.choose_client(query)
-                elif action == 'Format':
-                    return self.choose_format(query)
                 else:
                     self.wf.add_item('Unknown setting : {}'.format(action),
                                      'Try a different query',
@@ -455,7 +468,7 @@ class MailToApp(object):
 
         # Format
         if self.wf.settings.get('use_name', True):
-            title = 'Format: Default (Name & Email)'
+            title = 'Format: Name & Email'
             subtitle = 'Email-only will be used with some problem clients'
         else:
             title = 'Format: Email Only'
@@ -465,7 +478,27 @@ class MailToApp(object):
             dict(
                 title=title,
                 subtitle=subtitle,
-                autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
+                # autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
+                valid=True,
+                arg='toggle format',
+                icon=ICON_CONFIG,
+            )
+        )
+
+        # Update notification
+        if self.wf.settings.get('notify_updates', True):
+            title = 'Update Notifications: ON'
+            subtitle = 'You will be notifed when a new version is available'
+        else:
+            title = 'Update Notifications: OFF'
+            subtitle = "You will have to check here for a new version"
+
+        items.append(
+            dict(
+                title=title,
+                subtitle=subtitle,
+                valid=True,
+                arg='toggle notify_updates',
                 icon=ICON_CONFIG,
             )
         )
@@ -511,7 +544,10 @@ class MailToApp(object):
         client = Client()
         log.debug('Choosing email client')
         log.debug('query : {}'.format(query))
-        apps = client.all_email_apps
+        # apps list a list of tuples [(name, path), ...]
+        apps = [t for t in client.all_email_apps if os.path.exists(t[1])]
+
+        log.debug('{} email clients on system'.format(len(apps)))
 
         if not query:  # Show current setting
             if not self.wf.settings.get('default_app'):  # System default
@@ -522,7 +558,7 @@ class MailToApp(object):
                     icon=app['path'],
                     icontype='fileicon'
                 )
-            else:
+            else:  # User has already set a preferred client
                 app = client.default_app
                 self.wf.add_item(
                     'Current Email Client: {}'.format(app['name']),
@@ -552,7 +588,7 @@ class MailToApp(object):
 
         for name, path in apps:
             arg = 'setclient {}'.format(quote(path))
-            log.debug('arg for `{}` : {}'.format(name, arg))
+            # log.debug('arg for `{}` : {}'.format(name, arg))
             self.wf.add_item(name,
                              path,
                              valid=True,
@@ -569,70 +605,119 @@ class MailToApp(object):
         app_path = self.args.query
         log.debug('Setting new client to : {}'.format(app_path))
 
-        if app_path == 'DEFAULT':  # Reset to system default
+        if app_path == 'DEFAULT':  # Reset to system default]
             del self.wf.settings['default_app']
-            msg = 'Email client set to system default'
+            msg = 'Email client set to System Default'
             log.info(msg)
-            print(msg.encode('utf-8'))
+            self.notify(msg)
             return
 
         if not os.path.exists(app_path):
-            print("Application doesn't exist : {}".format(app_path).encode(
-                  'utf-8'))
-            raise ValueError("Application doesn't exist : {}".format(app_path))
+            msg = "Application doesn't exist : {}".format(app_path)
+            self.notify(msg)
+            raise ValueError(msg)
 
         client.default_app = app_path
         msg = 'Email client set to : {}'.format(client.default_app['name'])
         log.info(msg)
-        print(msg.encode('utf-8'))
+        self.notify(msg)
 
-    # .8888b                                         dP
-    # 88   "                                         88
-    # 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P
-    # 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88
-    # 88     88.  .88 88       88  88  88 88.  .88   88
-    # dP     `88888P' dP       dP  dP  dP `88888P8   dP
+    #   dP                              dP
+    #   88                              88
+    # d8888P .d8888b. .d8888b. .d8888b. 88 .d8888b. .d8888b.
+    #   88   88'  `88 88'  `88 88'  `88 88 88ooood8 Y8ooooo.
+    #   88   88.  .88 88.  .88 88.  .88 88 88.  ...       88
+    #   dP   `88888P' `8888P88 `8888P88 dP `88888P' `88888P'
+    #                      .88      .88
+    #                  d8888P   d8888P
 
-    def choose_format(self, query):
-        """Select a new email client"""
-        log.debug('Choosing email format')
-        log.debug('query : {}'.format(query))
+    def do_toggle(self):
+        """Toggle settings. Dispatch to appropriate method"""
+        what = self.args.query
+        log.debug('Toggling {} ...'.format(what))
 
-        if self.wf.settings.get('use_name', True):
-            self.wf.add_item(
-                'Call Email Client with Email Only',
-                'E.g. bob.smith@example.com',
-                arg='setformat email',
-                valid=True,
-                icon=ICON_CONFIG
-            )
-        else:
-            self.wf.add_item(
-                'Use Default Format (Name & Email)',
-                'E.g. Bob Smith <bob.smith@example.com> '
-                'except with problem clients',
-                arg='setformat name',
-                valid=True,
-                icon=ICON_CONFIG
-            )
+        methname = 'toggle_{}'.format(what)
 
-        self.wf.send_feedback()
-
-    def do_setformat(self):
-        """Change Email format"""
-        fmt = self.args.query
-        log.debug('Setting format to {}'.format(fmt))
-
-        if fmt == 'email':
-            self.wf.settings['use_name'] = False
-            print('Set email format to Email only')
-        elif fmt == 'name':
-            self.wf.settings['use_name'] = True
-            print('Set email format to Name & Email')
-        else:
-            msg = 'Invalid format : {}'.format(fmt)
-            print(msg.encode('utf-8'))
+        if not hasattr(self, methname):
+            msg = 'Unknown settings toggle : {!r}'.format(what)
+            log.error(msg)
             raise ValueError(msg)
+
+        meth = getattr(self, methname)
+        return meth()
+
+    def toggle_format(self):
+        """Change format between name+email and email-only"""
+        if self.wf.settings.get('use_name', True):
+            self.wf.settings['use_name'] = False
+            msg = 'Changed format to Email Only'
+
+        else:
+            self.wf.settings['use_name'] = True
+            msg = 'Changed format to Name & Email'
+
+        log.debug(msg)
+        self.notify(msg)
+
+        # Re-open settings
+        run_alfred('{} '.format(CONFIG_KEYWORD))
+
+    def toggle_notify_updates(self):
+        """Turn update notifications on/off"""
+        if self.wf.settings.get('notify_updates', True):
+            self.wf.settings['notify_updates'] = False
+            msg = 'Turned update notifications off'
+
+        else:
+            self.wf.settings['notify_updates'] = True
+            msg = 'Turned update notifications on'
+
+        log.debug(msg)
+        self.notify(msg)
+
+        # Re-open settings
+        run_alfred('{} '.format(CONFIG_KEYWORD))
+
+    # def choose_format(self, query):
+    #     """Select a new email client"""
+    #     log.debug('Choosing email format')
+    #     log.debug('query : {}'.format(query))
+
+    #     if self.wf.settings.get('use_name', True):
+    #         self.wf.add_item(
+    #             'Call Email Client with Email Only',
+    #             'E.g. bob.smith@example.com',
+    #             arg='setformat email',
+    #             valid=True,
+    #             icon=ICON_CONFIG
+    #         )
+    #     else:
+    #         self.wf.add_item(
+    #             'Use Default Format (Name & Email)',
+    #             'E.g. Bob Smith <bob.smith@example.com> '
+    #             'except with problem clients',
+    #             arg='setformat name',
+    #             valid=True,
+    #             icon=ICON_CONFIG
+    #         )
+
+    #     self.wf.send_feedback()
+
+    # def do_setformat(self):
+    #     """Change Email format"""
+    #     fmt = self.args.query
+    #     log.debug('Setting format to {}'.format(fmt))
+
+    #     if fmt == 'email':
+    #         self.wf.settings['use_name'] = False
+    #         print('Set email format to Email only')
+    #     elif fmt == 'name':
+    #         self.wf.settings['use_name'] = True
+    #         print('Set email format to Name & Email')
+    #     else:
+    #         msg = 'Invalid format : {}'.format(fmt)
+    #         print(msg.encode('utf-8'))
+    #         raise ValueError(msg)
 
     # dP     dP           dP
     # 88     88           88
@@ -643,6 +728,12 @@ class MailToApp(object):
     #                        88
     #                        dP
 
+    def notify(self, message):
+        """Simple wrapper around ``print`` that encodes output"""
+        if isinstance(message, unicode):
+            message = message.encode('utf-8')
+        print(message)
+
     def _parse_args(self):
         """Parse command-line arguments with argparse"""
         parser = ArgumentParser()
@@ -651,10 +742,9 @@ class MailToApp(object):
             choices=('search',
                      'config',
                      'setclient',
-                     'setformat',
+                     'toggle',
                      'compose',
                      'reload',
-                     'version',
                      'update',
                      'help'))
         parser.add_argument('query', nargs='?')
