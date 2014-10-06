@@ -115,8 +115,10 @@ class MailToApp(object):
 
                 self.wf.add_item(
                     'Version {} is available'.format(version),
-                    'Open configuration with "{}" to install update'.format(
-                        CONFIG_KEYWORD),
+                    ('↩ to install new version, '
+                     '"{}" to turn off notifications'.format(CONFIG_KEYWORD)),
+                    valid=True,
+                    arg='update',
                     icon=ICON_VERSION_NEW,)
 
         # Load cached contacts
@@ -138,7 +140,7 @@ class MailToApp(object):
                              'Hit ENTER to compose a new email or start '
                              'typing to add recipients',
                              valid=True,
-                             arg='',
+                             arg='compose',
                              icon=ICON_COMPOSE)
 
             self.wf.send_feedback()
@@ -186,6 +188,8 @@ class MailToApp(object):
         if query:
             hits = contacts.search(query)
 
+        log.debug('{} matches for `{}`'.format(len(hits), query))
+
         # No matches, offer to compose message if there are valid recipients
         if not hits:
 
@@ -215,7 +219,7 @@ class MailToApp(object):
                              subtitle,
                              autocomplete=recipients + ', ',
                              valid=True,
-                             arg=recipients,
+                             arg='compose ' + quote(recipients),
                              icon=ICON_COMPOSE)
 
         # Show results
@@ -231,7 +235,6 @@ class MailToApp(object):
                 icon = ICON_GROUP
 
             recipients = ', '.join(existing[:] + [item['email']])
-            log.debug('{} : {}'.format(item['name'], recipients))
 
             subtitle = item['email']
 
@@ -243,7 +246,7 @@ class MailToApp(object):
                              uid=item['email'],
                              autocomplete=recipients + ', ',
                              valid=True,
-                             arg=recipients,
+                             arg='compose ' + quote(recipients),
                              icon=icon)
 
         self.wf.send_feedback()
@@ -315,34 +318,6 @@ class MailToApp(object):
 
         else:
             self.notify('No new version available')
-
-    #                                     oo
-
-    # dP   .dP .d8888b. 88d888b. .d8888b. dP .d8888b. 88d888b.
-    # 88   d8' 88ooood8 88'  `88 Y8ooooo. 88 88'  `88 88'  `88
-    # 88 .88'  88.  ... 88             88 88 88.  .88 88    88
-    # 8888P'   `88888P' dP       `88888P' dP `88888P' dP    dP
-
-    # def do_version(self):
-    #     """Show current version and if an update is available"""
-    #     self.wf.add_item('Installed version : {}'.format(__version__))
-
-    #     if self.wf.update_available:
-
-    #         version = wf.cached_data('__workflow_update_status')['version']
-
-    #         self.wf.add_item('Version {} is available'.format(version),
-    #                          'ENTER to update',
-    #                          valid=True,
-    #                          icon=ICON_VERSION_NEW)
-
-    #     else:
-    #         self.wf.add_item('No update is currently available',
-    #                          'ENTER to check for an update now',
-    #                          valid=True,
-    #                          icon=ICON_VERSION_OK)
-
-    #     self.wf.send_feedback()
 
     # dP                dP
     # 88                88
@@ -678,47 +653,6 @@ class MailToApp(object):
         # Re-open settings
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
-    # def choose_format(self, query):
-    #     """Select a new email client"""
-    #     log.debug('Choosing email format')
-    #     log.debug('query : {}'.format(query))
-
-    #     if self.wf.settings.get('use_name', True):
-    #         self.wf.add_item(
-    #             'Call Email Client with Email Only',
-    #             'E.g. bob.smith@example.com',
-    #             arg='setformat email',
-    #             valid=True,
-    #             icon=ICON_CONFIG
-    #         )
-    #     else:
-    #         self.wf.add_item(
-    #             'Use Default Format (Name & Email)',
-    #             'E.g. Bob Smith <bob.smith@example.com> '
-    #             'except with problem clients',
-    #             arg='setformat name',
-    #             valid=True,
-    #             icon=ICON_CONFIG
-    #         )
-
-    #     self.wf.send_feedback()
-
-    # def do_setformat(self):
-    #     """Change Email format"""
-    #     fmt = self.args.query
-    #     log.debug('Setting format to {}'.format(fmt))
-
-    #     if fmt == 'email':
-    #         self.wf.settings['use_name'] = False
-    #         print('Set email format to Email only')
-    #     elif fmt == 'name':
-    #         self.wf.settings['use_name'] = True
-    #         print('Set email format to Name & Email')
-    #     else:
-    #         msg = 'Invalid format : {}'.format(fmt)
-    #         print(msg.encode('utf-8'))
-    #         raise ValueError(msg)
-
     # dP     dP           dP
     # 88     88           88
     # 88aaaaa88a .d8888b. 88 88d888b. .d8888b. 88d888b. .d8888b.
@@ -747,7 +681,7 @@ class MailToApp(object):
                      'reload',
                      'update',
                      'help'))
-        parser.add_argument('query', nargs='?')
+        parser.add_argument('query', nargs='?', default='')
         return parser.parse_args(self.wf.args)
 
 

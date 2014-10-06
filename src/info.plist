@@ -12,7 +12,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>004D5F9E-4215-411C-B432-905EE9EA364B</string>
+				<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -52,23 +52,6 @@
 	<string>MailTo</string>
 	<key>objects</key>
 	<array>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>/usr/bin/python mailto.py compose "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>004D5F9E-4215-411C-B432-905EE9EA364B</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -174,15 +157,10 @@
 	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
 	<key>uidata</key>
 	<dict>
-		<key>004D5F9E-4215-411C-B432-905EE9EA364B</key>
-		<dict>
-			<key>ypos</key>
-			<real>10</real>
-		</dict>
 		<key>8550C579-13D1-4CC6-984E-11A6ADEC72EA</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>70</real>
 		</dict>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
 		<dict>
@@ -192,7 +170,7 @@
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
 			<key>ypos</key>
-			<real>130</real>
+			<real>70</real>
 		</dict>
 		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
 		<dict>
