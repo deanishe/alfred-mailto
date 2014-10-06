@@ -52,7 +52,9 @@ CONFIG_KEYWORD = 'mailto'
 SEPARATOR = '⟩'
 
 # Workflow icons
-ICON_CONFIG = 'icons/config.icns'
+ICON_CONFIG = 'icons/config-purple.icns'
+# ICON_CONFIG_FORMAT = 'icons/config-blue.icns'
+# ICON_CONFIG_NOTIFY = 'icons/config-purple.icns'
 ICON_COMPOSE = 'icons/compose.icns'
 ICON_GROUP = 'icons/group.icns'
 ICON_HELP = 'icons/help.icns'

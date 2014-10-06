@@ -154,7 +154,9 @@
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Send a new email message with the email client of your choice. You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (mailto help) for more information.</string>
+	<string>Rapidly create a list of recipients for a new email and compose it with the email client of your choice.
+
+You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (use "mailto" query) for more information.</string>
 	<key>uidata</key>
 	<dict>
 		<key>8550C579-13D1-4CC6-984E-11A6ADEC72EA</key>
