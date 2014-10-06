@@ -14,7 +14,7 @@ Usage:
     mailto.py search <query>
     mailto.py config [<query>]
     mailto.py setclient <app_path>
-    mailto.py toggle (format|update)
+    mailto.py toggle (format|update|help)
     mailto.py compose [<recipients>]
     mailto.py reload
     mailto.py update
@@ -68,6 +68,7 @@ ICON_WARNING = 'icons/warning.icns'
 DEFAULT_SETTINGS = {
     'use_name': True,  # Use contact names and emails by default
     'notify_updates': True,  # Show user when a new version is available
+    'show_help': True,  # Show help text in subtitles
 }
 
 
@@ -138,9 +139,14 @@ class MailToApp(object):
             return 0
 
         if not query:
+            subtitle = ('↩ to compose a new email or start typing to '
+                        'add recipients')
+
+            if not self.wf.settings.get('show_help', True):
+                subtitle = None
+
             self.wf.add_item('Compose a new email',
-                             'Hit ENTER to compose a new email or start '
-                             'typing to add recipients',
+                             subtitle,
                              valid=True,
                              arg='compose',
                              icon=ICON_COMPOSE)
@@ -381,6 +387,7 @@ class MailToApp(object):
                     return
 
         items = []
+        help_text = '  //  ↩ to change'
 
         # Update status
         if self.wf.update_available:
@@ -414,7 +421,7 @@ class MailToApp(object):
         items.append(
             dict(
                 title='Force Reload',
-                subtitle='Reload contacts and applications now',
+                subtitle='↩ to reload contacts and applications now',
                 valid=True,
                 arg='reload',
                 icon=ICON_RELOAD
@@ -451,11 +458,13 @@ class MailToApp(object):
             title = 'Format: Email Only'
             subtitle = 'E.g. bob.smith@example.com'
 
+        if self.wf.settings.get('show_help', True):
+            subtitle += help_text
+
         items.append(
             dict(
                 title=title,
                 subtitle=subtitle,
-                # autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
                 valid=True,
                 arg='toggle format',
                 icon=ICON_CONFIG,
@@ -470,12 +479,37 @@ class MailToApp(object):
             title = 'Update Notifications: OFF'
             subtitle = "You will have to check here for a new version"
 
+        if self.wf.settings.get('show_help', True):
+            subtitle += help_text
+
         items.append(
             dict(
                 title=title,
                 subtitle=subtitle,
                 valid=True,
                 arg='toggle notify_updates',
+                icon=ICON_CONFIG,
+            )
+        )
+
+        # Additional help text in subtitle
+        if self.wf.settings.get('show_help', True):
+            title = 'Help Text: ON'
+            subtitle = 'Action hints will be shown in subtitles'
+        else:
+            title = 'Help Text: OFF'
+            subtitle = 'Subtitles will show no action hints'
+
+        if self.wf.settings.get('show_help', True):
+            subtitle += help_text
+
+        items.append(
+            dict(
+                title=title,
+                subtitle=subtitle,
+                # autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
+                valid=True,
+                arg='toggle help_text',
                 icon=ICON_CONFIG,
             )
         )
@@ -498,12 +532,19 @@ class MailToApp(object):
 
         # Show error message
         if not items:
-            self.wf.add_item('Nothing matches',
-                             'Try a different query',
-                             icon=ICON_WARNING)
+            subtitle = 'Try a different query'
+
+            if not self.wf.settings.get('show_help', True):
+                subtitle = None
+
+            self.wf.add_item('Nothing matches', subtitle, icon=ICON_WARNING)
 
         # Send feedback
         for item in items:
+
+            if not self.wf.settings.get('show_help', True):
+                item['subtitle'] = None
+
             self.wf.add_item(**item)
 
         self.wf.send_feedback()
@@ -648,6 +689,22 @@ class MailToApp(object):
         else:
             self.wf.settings['notify_updates'] = True
             msg = 'Turned update notifications on'
+
+        log.debug(msg)
+        self.notify(msg)
+
+        # Re-open settings
+        run_alfred('{} '.format(CONFIG_KEYWORD))
+
+    def toggle_help_text(self):
+        """Turn additional usage notes in subtitles on/off"""
+        if self.wf.settings.get('show_help', True):
+            self.wf.settings['show_help'] = False
+            msg = 'Turned additional help text off'
+
+        else:
+            self.wf.settings['show_help'] = True
+            msg = 'Turned additional help text on'
 
         log.debug(msg)
         self.notify(msg)
