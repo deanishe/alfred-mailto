@@ -1,212 +1,134 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # encoding: utf-8
 #
-# Copyright © 2013 deanishe@deanishe.net.
+# Copyright © 2014 deanishe@deanishe.net
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
-# Created on 2013-11-01
+# Created on 2014-10-03
 #
 
 """
-Load list of (email, name) contacts from local Contacts/AddressBook
-database files on Mac.
-
-Loads local DB first and then iCloud DBs, newest first.
 """
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals, absolute_import
 
-import os
-import json
-import sqlite3
-from collections import defaultdict
-from time import time
+from workflow import Workflow
+from workflow.background import run_in_background, is_running
 
-import alfred
-from log import logger
-
-log = logger(u'contacts')
-
-LOCAL_CONTACTS_DB = os.path.expanduser(
-    u'~/Library/Application Support/AddressBook/AddressBook-v22.abcddb')
-ADDRESSBOOK_DATADIR = os.path.expanduser(
-    u'~/Library/Application Support/AddressBook/Sources')
-MAX_DB_COUNT = 3  # number of addressbook files to read
-MAX_CACHE_AGE = 600  # 10 minutes
-
-CACHEPATH = os.path.join(alfred.work(True), u'contacts.json')
+wf = Workflow()
+log = wf.logger
 
 
-def iter_addressbooks(limit=MAX_DB_COUNT):
-    """
-    Return `limit` newest addressbook DBs from tree under `dirpath`
-    """
-    yield LOCAL_CONTACTS_DB
-    paths = []
-    for filename in os.listdir(ADDRESSBOOK_DATADIR):
-        path = os.path.join(ADDRESSBOOK_DATADIR, filename)
-        if not os.path.isdir(path):
-            continue
-        dbpath = os.path.join(path, u'AddressBook-v22.abcddb')
-        if os.path.exists(dbpath):
-            paths.append((os.stat(dbpath).st_mtime, dbpath))
-    paths.sort(reverse=True)  # newest first
-    for i, path in enumerate(paths):
-        if i == limit - 1:
-            break
-        yield paths[i][1]
+MAX_CACHE_AGE = 3600  # 1 hour
+MIN_MATCH_SCORE = 30
 
 
-def load_from_db(dbpath):
-    """Load contacts and groups from specified DB
+#   ,ad8888ba,
+#  d8"'    `"8b                          ,d                            ,d
+# d8'                                    88                            88
+# 88             ,adPPYba,  8b,dPPYba, MM88MMM ,adPPYYba,  ,adPPYba, MM88MMM ,adPPYba,
+# 88            a8"     "8a 88P'   `"8a  88    ""     `Y8 a8"     ""   88    I8[    ""
+# Y8,           8b       d8 88       88  88    ,adPPPPP88 8b           88     `"Y8ba,
+#  Y8a.    .a8P "8a,   ,a8" 88       88  88,   88,    ,88 "8a,   ,aa   88,   aa    ]8I
+#   `"Y8888Y"'   `"YbbdP"'  88       88  "Y888 `"8bbdP"Y8  `"Ybbd8"'   "Y888 `"YbbdP"'
 
-    Returns:
-        tuple (email_to_name, name_to_email, groupname_to_email)
-        email_to_name : dict[email] = name
-        name_to_email : dict[name] = [(primary, order, email), ...]
-        groupname_to_email : dict[name] = email
-        groups : dict(name=emails_string)
-    """
-    conn = sqlite3.connect(dbpath)
-    c = conn.cursor()
+class Contacts(object):
 
-    # people
-    email_id_address_map = {}
-    email_name_map = {}
-    name_emails_map = defaultdict(list)
-    person_id_email_map = defaultdict(list)
+    def __init__(self):
+        self.contacts = {}
+        self.update()
 
-    rows = c.execute(
-        "SELECT ZABCDEMAILADDRESS.z_pk, zaddressnormalized, "
-        "zisprimary, zorderingindex, ZABCDRECORD.z_pk, zfirstname, zlastname "
-        "FROM ZABCDRECORD, ZABCDEMAILADDRESS "
-        "WHERE ZABCDRECORD.z_ent = 19 "
-        "AND ZABCDRECORD.z_pk = ZABCDEMAILADDRESS.zowner "
-        "AND zaddressnormalized != ''").fetchall()
-    for row in rows:
-        email_id, email, primary, order, person_id, first, last = row
-        email_id_address_map[email_id] = email
-        if primary == 1:
-            primary = 0  # so it comes first after sorting
-        else:
-            primary = 1
-        person_id_email_map[person_id].append((primary, order, email))
-        if not first:
-            first = u''
-        if not last:
-            last = u''
-        name = u'{} {}'.format(first, last).strip()
-        if not name:
-            name = email
-        email_name_map[email] = name
-        name_emails_map[name].append((primary, order, email))
+    #  .d888888   888888ba  dP
+    # d8'    88   88    `8b 88
+    # 88aaaaa88a a88aaaa8P' 88
+    # 88     88   88        88
+    # 88     88   88        88
+    # 88     88   dP        dP
 
-    groups = defaultdict(list)
-    group_person_email_map = {}
-    group_id_name_map = {}
+    def update(self, force=False):
+        """Load contacts from cache"""
+        # Load cached contacts
+        self.contacts = wf.cached_data('contacts', None, max_age=0)
 
-    # specific email addresses for groups
-    rows = c.execute(
-        "SELECT zcontact, zemail, zgroup "
-        "FROM ZABCDDISTRIBUTIONLISTCONFIG").fetchall()
-    for row in rows:
-        person_id, email_id, group_id = row
-        group_person_email_map[u'{}-{}'.format(group_id, person_id)] = email_id
+        # Update if required
+        if not wf.cached_data_fresh('contacts', MAX_CACHE_AGE) or force:
+            log.debug('Updating contacts cache ...')
+            cmd = ['/usr/bin/python', wf.workflowfile('update_caches.py')]
+            run_in_background('update', cmd)
 
-    rows = c.execute(
-        "SELECT z_pk, zname, z_19contacts "
-        "FROM ZABCDRECORD, Z_19PARENTGROUPS "
-        "WHERE z_ent = 15 AND z_15parentgroups1 = z_pk").fetchall()
-    for row in rows:
-        group_id, name, person_id = row
-        if name == u'card':  # contains all contacts
-            continue
-        # print(row)
-        if group_id not in group_id_name_map:
-            group_id_name_map[group_id] = name
+    @property
+    def empty(self):
+        return not self.contacts
 
-        email_id = group_person_email_map.get(u'{}-{}'.format(
-                                              group_id, person_id))
-        if email_id:
-            groups[group_id].append(email_id_address_map[email_id])
-        else:
-            emails = sorted(person_id_email_map.get(person_id, []))
-            if emails:
-                groups[group_id].append(emails[0][2])
+    @property
+    def updating(self):
+        return is_running('update')
 
-    groupname_email_map = {}
-    for group_id, emails in groups.items():
-        name = group_id_name_map[group_id]
-        groupname_email_map[name] = u', '.join(emails)
+    def name_for_email(self, email):
+        """Return name associated with email or None"""
 
-    return email_name_map, name_emails_map, groupname_email_map
+        s = email.lower()
+        for e, name in self.contacts.get('emails', []):
+            if s == e.lower():
+                log.debug('{} belongs to {}'.format(email, name))
+                return name
 
+        return None
 
-def get_contacts(use_cache=True):
-    """Return tuple (contacts, groups)
+    #                                              dP
+    #                                              88
+    # .d8888b. .d8888b. .d8888b. 88d888b. .d8888b. 88d888b.
+    # Y8ooooo. 88ooood8 88'  `88 88'  `88 88'  `"" 88'  `88
+    #       88 88.  ... 88.  .88 88       88.  ... 88    88
+    # `88888P' `88888P' `88888P8 dP       `88888P' dP    dP
 
-    Loads contacts from cache if it exists and was updated less than
-    MAX_CACHE_AGE seconds ago.
+    def search(self, query):
+        """Return list of dicts matching query
 
-    Returns:
-        tuple (emails, names, groups)
-        emails : list of tuples (email, name)
-        names : list of tuples (name, list(emails))
-        groups : list of tuples (name, emails_string)
-    """
-    if (use_cache and os.path.exists(CACHEPATH) and
-            (time() - os.stat(CACHEPATH).st_mtime) < MAX_CACHE_AGE):
-        with open(CACHEPATH) as file:
-            data = json.load(file)
-            return data[u'emails'], data[u'names'], data[u'groups']
-    emails = {}
-    names = defaultdict(list)
-    name_emails_map = defaultdict(set)
-    groups = {}
-    for dbpath in iter_addressbooks():
-        (email_to_name, name_to_emails,
-         groupname_to_email) = load_from_db(dbpath)
+        Dict format:
+        {
+            'name': 'name of person or group',
+            'email': 'email',
+            'group': True/False
+        }
 
-        for email in email_to_name:
-            if emails.get(email, u'') == u'':
-                emails[email] = email_to_name[email]
+        if `group` is True, `email` will be multiple, comma-separated emails
 
-        for name, addrs in name_to_emails.items():
-            existing = name_emails_map[name]
-            for addr in addrs:
-                if addr[2] not in existing:
-                    name_emails_map[name].add(addr[2])
-                    names[name].append(addr)
+        """
 
-        for name in groupname_to_email:
-            if groups.get(name, u'') == u'':
-                groups[name] = groupname_to_email[name]
+        items = []
+        for email, name in self.contacts['emails']:
+            items.append({
+                'email': email,
+                'name': name,
+                'group': False
+            })
 
-    emails = sorted(emails.items())
-    groups = sorted(groups.items())
-    for name, addresses in names.items():
-        names[name] = [t[2] for t in sorted(addresses)]
-    names = sorted(names.items())
+        for name, emails in self.contacts['groups']:
+            items.append({
+                'name': name,
+                'email': ', '.join(emails),
+                'group': True
+            })
 
-    with open(CACHEPATH, u'wb') as file:
-        json.dump(dict(emails=emails, names=names, groups=groups), file)
-    return emails, names, groups
+        hits = wf.filter(query, items, self._search_key,
+                         min_score=MIN_MATCH_SCORE)
 
-if __name__ == '__main__':
-    # benchmark
-    import sys
-    if len(sys.argv) < 2:
-        print('Usage : contacts.py <name> [<name>]\n\n'
-              'Search your Address Book contacts', file=sys.stderr)
-        sys.exit(1)
-    for key in sys.argv[1:]:
-        s = time()
-        emails, names, groups = get_contacts()
-        results = []
-        for contact in emails:
-            if key in contact[0].lower():
-                results.append(contact)
-        d = time() - s
-        print("Found {} results for '{}' in {:.4f} seconds".format(
-              len(results), key, d))
+        log.debug('{} hits for `{}`'.format(len(hits), query))
+        return hits
+
+    # dP     dP           dP
+    # 88     88           88
+    # 88aaaaa88a .d8888b. 88 88d888b. .d8888b. 88d888b. .d8888b.
+    # 88     88  88ooood8 88 88'  `88 88ooood8 88'  `88 Y8ooooo.
+    # 88     88  88.  ... 88 88.  .88 88.  ... 88             88
+    # dP     dP  `88888P' dP 88Y888P' `88888P' dP       `88888P'
+    #                        88
+    #                        dP
+
+    def _search_key(self, item):
+        if item['group']:
+            return item['name']
+
+        return '{} {}'.format(item['name'], item['email'])

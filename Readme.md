@@ -2,15 +2,21 @@
 Alfred-MailTo
 =============
 
+A Workflow for [Alfred 2](http://www.alfredapp.com/).
+
 ![](img/screenshot-2.png)
 
-A Workflow for [Alfred 2](http://www.alfredapp.com/) that allows you to choose recipients from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.
-
-**Note:** Contacts in Exchange accounts are currently not supported. I'm working on it.
-
-Uses the [alfred-python](https://github.com/nikipore/alfred-python) library by [nikipore](https://github.com/nikipore) and [docopt](http://docopt.org/).
+Quickly select recipients from your Mac's Contacts database and send them to your email client of choice. Also works with Groups/Distribution Lists.
 
 ## Usage ##
+
+- `@ <query>` — Search your Contacts by name, nickname, email address. The
+  search is fairly smart and will match "bs" to "Bob Smith". You can also enter
+  email addresses that aren't in your Contacts.
+  - `⇥` — Add selected contact to list of recipients.
+  - `↩` or `⌘+NUM` — Add selected contact to list of recipients and send to
+    your email client.
+- `mailto [<query>]` — Show and edit configuration.
 
 Open Alfred, type `@` or `mailto` (the default keyword) then either hit `ENTER` to open an entirely blank message or start typing the name or email address you'd like to send a mail to.
 
