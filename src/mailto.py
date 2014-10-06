@@ -395,7 +395,8 @@ class MailToApp(object):
         # Update status
         if self.wf.update_available:
 
-            version = wf.cached_data('__workflow_update_status')['version']
+            version = wf.cached_data(
+                '__workflow_update_status', max_age=0)['version']
 
             items.append(
                 dict(
