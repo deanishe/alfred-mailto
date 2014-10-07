@@ -104,10 +104,4 @@ class Contacts(object):
         hits = wf.filter(query, self.contacts['contacts'],
                          itemgetter('key'), min_score=MIN_MATCH_SCORE)
 
-        # log.debug('{} hits for `{}`'.format(len(hits), query))
-        if len(hits) < 10:
-            for item in hits:
-                if item['company'] is True:
-                    log.debug(item)
-
         return hits

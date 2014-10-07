@@ -76,6 +76,7 @@ _person_text_property_map = {
     # output key :  (property, conversion func)
     'first_name': (AB.kABFirstNameProperty, None),
     'last_name': (AB.kABLastNameProperty, None),
+    'nickname': (AB.kABNicknameProperty, None),
     'company': (AB.kABOrganizationProperty, None),
     'emails': (AB.kABEmailProperty, _unicode_list),
 }
@@ -113,7 +114,6 @@ def ab_person_to_dict(person):
     if not d.get('company'):
         d['company'] = False
 
-    # log.debug(d)
     return d
 
 
@@ -202,12 +202,16 @@ def main(wf):
             d = {}
             d['name'] = person.get('name')
             d['email'] = email
+            d['nickname'] = person.get('nickname')
             d['is_group'] = person.get('group', False)
-            d['company'] = person.get('company', False)
+            d['company'] = person.get('company')
             d['is_company'] = person.get('is_company', False)
-            d['key'] = '{} {}'.format(d['name'], d['email'])
+            d['key'] = '{} {} {}'.format(d['nickname'], d['name'], d['email'])
 
-            log.debug('{} <{}>'.format(d['name'], d['email']))
+            msg = '{} <{}>'.format(d['name'], d['email'])
+            if d['nickname']:
+                msg += ' ({})'.format(d['nickname'])
+            log.debug(msg)
             contacts.append(d)
             people_count += 1
 
@@ -220,9 +224,10 @@ def main(wf):
 
         group['email'] = ', '.join(group['emails'])
         group['key'] = group['name']
+        i = len(group['emails'])
         del group['emails']
 
-        log.debug('Group : "{}"'.format(group))
+        log.debug('{:3d} people in "{}"'.format(i, group['name']))
         contacts.append(group)
         group_count += 1
 

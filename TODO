@@ -1,13 +1,7 @@
 
 Database:
-	- Add nickname support
-		Pull contact nicknames from Contacts db
-	- Make cached contacts data more useable
-		- Generate search key when caching contacts
-		-	Put email > name map in cache
 
 Configuration:
-	- Move Update settings to submenu
 
 Documetation:
 	- Update README for Version 2
@@ -21,6 +15,11 @@ Bugs:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	- Add nickname support @done(14-10-07 12:51) @project(Database)
+		Pull contact nicknames from Contacts db
+	- Make cached contacts data more useable @done(14-10-07 12:35) @project(Database)
+	- Generate search key when caching contacts @done(14-10-07 12:35) @project(Database)
+	-	Put email > name map in cache @done(14-10-07 12:35) @project(Database)
 	- Doesn't use name when contact is a company @done(14-10-05 00:06) @project(Bugs)
 	- Remember preferred email address for contacts @consider @done(14-10-05 00:05) @project(Feature requests)
 		http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/?p=19658

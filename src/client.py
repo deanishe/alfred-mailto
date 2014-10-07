@@ -261,7 +261,7 @@ class Client(object):
 
         for path in paths:
             apps.add((self.appname(path), path))
-            log.debug('Can handle mailto : {}'.format(
+            log.debug('mailto handler : {}'.format(
                       path))
 
         apps = sorted(apps)
