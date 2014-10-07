@@ -55,6 +55,7 @@ SEPARATOR = '⟩'
 ICON_CONFIG = 'icons/config-purple.icns'
 # ICON_CONFIG_FORMAT = 'icons/config-blue.icns'
 # ICON_CONFIG_NOTIFY = 'icons/config-purple.icns'
+ICON_COMPANY = 'icons/company.icns'
 ICON_COMPOSE = 'icons/compose.icns'
 ICON_GROUP = 'icons/group.icns'
 ICON_HELP = 'icons/help.icns'
@@ -239,8 +240,11 @@ class MailToApp(object):
 
             icon = ICON_PERSON
 
-            if item['group']:
+            if item['is_group']:
                 icon = ICON_GROUP
+
+            elif item['is_company']:
+                icon = ICON_COMPANY
 
             recipients = ', '.join(existing[:] + [item['email']])
 

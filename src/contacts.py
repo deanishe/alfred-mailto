@@ -13,6 +13,8 @@
 
 from __future__ import print_function, unicode_literals, absolute_import
 
+from operator import itemgetter
+
 from workflow import Workflow
 from workflow.background import run_in_background, is_running
 
@@ -21,7 +23,7 @@ log = wf.logger
 
 
 MAX_CACHE_AGE = 3600  # 1 hour
-MIN_MATCH_SCORE = 30
+MIN_MATCH_SCORE = 70
 
 
 #   ,ad8888ba,
@@ -68,11 +70,12 @@ class Contacts(object):
     def name_for_email(self, email):
         """Return name associated with email or None"""
 
-        s = email.lower()
-        for e, name in self.contacts.get('emails', []):
-            if s == e.lower():
-                log.debug('{} belongs to {}'.format(email, name))
-                return name
+        key = email.lower()
+        contact = self.contacts.get('contacts', {}).get(key)
+
+        if contact:
+            log.debug('{} belongs to {}'.format(email, contact['name']))
+            return contact['name']
 
         return None
 
@@ -88,47 +91,23 @@ class Contacts(object):
 
         Dict format:
         {
-            'name': 'name of person or group',
+            'name': 'name of person, company or group',
             'email': 'email',
-            'group': True/False
+            'is_group': True/False,
+            'is_company': True/False,
         }
 
         if `group` is True, `email` will be multiple, comma-separated emails
 
         """
 
-        items = []
-        for email, name in self.contacts['emails']:
-            items.append({
-                'email': email,
-                'name': name,
-                'group': False
-            })
+        hits = wf.filter(query, self.contacts['contacts'],
+                         itemgetter('key'), min_score=MIN_MATCH_SCORE)
 
-        for name, emails in self.contacts['groups']:
-            items.append({
-                'name': name,
-                'email': ', '.join(emails),
-                'group': True
-            })
+        # log.debug('{} hits for `{}`'.format(len(hits), query))
+        if len(hits) < 10:
+            for item in hits:
+                if item['company'] is True:
+                    log.debug(item)
 
-        hits = wf.filter(query, items, self._search_key,
-                         min_score=MIN_MATCH_SCORE)
-
-        log.debug('{} hits for `{}`'.format(len(hits), query))
         return hits
-
-    # dP     dP           dP
-    # 88     88           88
-    # 88aaaaa88a .d8888b. 88 88d888b. .d8888b. 88d888b. .d8888b.
-    # 88     88  88ooood8 88 88'  `88 88ooood8 88'  `88 Y8ooooo.
-    # 88     88  88.  ... 88 88.  .88 88.  ... 88             88
-    # dP     dP  `88888P' dP 88Y888P' `88888P' dP       `88888P'
-    #                        88
-    #                        dP
-
-    def _search_key(self, item):
-        if item['group']:
-            return item['name']
-
-        return '{} {}'.format(item['name'], item['email'])

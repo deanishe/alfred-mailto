@@ -116,8 +116,9 @@ class Formatter(object):
                 else:
                     name = '"{}"'.format(name)
 
-            log.debug('[default] {!r} --> {!r}'.format(contact, name, email))
-            parts.append('{} <{}>'.format(name, email))
+            addr = '{} <{}>'.format(name, email)
+            log.debug('[default] {!r} --> {!r}'.format(contact, addr))
+            parts.append(addr)
 
         if self.use_spaces:
             result = ', '.join(parts)
@@ -173,7 +174,7 @@ class Client(object):
         if not contacts:
             raise ValueError('No contacts available')
 
-        email_name_map = {email: name for email, name in contacts['emails']}
+        email_name_map = contacts['email_name_map']
 
         # [(name, email), ...]
         recipients = [(email_name_map.get(email), email) for

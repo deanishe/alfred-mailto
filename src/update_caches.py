@@ -40,26 +40,21 @@ from client import Client
 log = None
 
 
-#   ,ad8888ba,
-#  d8"'    `"8b
-# d8'
-# 88             ,adPPYba,   ,adPPYba,  ,adPPYba,  ,adPPYYba,
-# 88            a8"     "8a a8"     "" a8"     "8a ""     `Y8
-# Y8,           8b       d8 8b         8b       d8 ,adPPPPP88
-#  Y8a.    .a8P "8a,   ,a8" "8a,   ,aa "8a,   ,a8" 88,    ,88
-#   `"Y8888Y"'   `"YbbdP"'   `"Ybbd8"'  `"YbbdP"'  `"8bbdP"Y8
+#  a88888b.
+# d8'   `88
+# 88        .d8888b. .d8888b. .d8888b. .d8888b.
+# 88        88'  `88 88'  `"" 88'  `88 88'  `88
+# Y8.   .88 88.  .88 88.  ... 88.  .88 88.  .88
+#  Y88888P' `88888P' `88888P' `88888P' `88888P8
 #
-#
-# 88                     88
-# 88                     88
-# 88                     88
-# 88,dPPYba,   ,adPPYba, 88 8b,dPPYba,   ,adPPYba, 8b,dPPYba, ,adPPYba,
-# 88P'    "8a a8P_____88 88 88P'    "8a a8P_____88 88P'   "Y8 I8[    ""
-# 88       88 8PP""""""" 88 88       d8 8PP""""""" 88          `"Y8ba,
-# 88       88 "8b,   ,aa 88 88b,   ,a8" "8b,   ,aa 88         aa    ]8I
-# 88       88  `"Ybbd8"' 88 88`YbbdP"'   `"Ybbd8"' 88         `"YbbdP"'
-#                           88
-#                           88
+# dP                dP
+# 88                88
+# 88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b. .d8888b.
+# 88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88 Y8ooooo.
+# 88    88 88.  ... 88 88.  .88 88.  ... 88             88
+# dP    dP `88888P' dP 88Y888P' `88888P' dP       `88888P'
+#                      88
+#                      dP
 
 def _unwrap(cdw):
     """Return list of objects within a CoreDataWrapper"""
@@ -85,20 +80,15 @@ _person_text_property_map = {
     'emails': (AB.kABEmailProperty, _unicode_list),
 }
 
-#   ,ad8888ba,
-#  d8"'    `"8b                                                             ,d
-# d8'                                                                       88
-# 88             ,adPPYba,  8b,dPPYba,  8b       d8  ,adPPYba, 8b,dPPYba, MM88MMM ,adPPYba, 8b,dPPYba, ,adPPYba,
-# 88            a8"     "8a 88P'   `"8a `8b     d8' a8P_____88 88P'   "Y8   88   a8P_____88 88P'   "Y8 I8[    ""
-# Y8,           8b       d8 88       88  `8b   d8'  8PP""""""" 88           88   8PP""""""" 88          `"Y8ba,
-#  Y8a.    .a8P "8a,   ,a8" 88       88   `8b,d8'   "8b,   ,aa 88           88,  "8b,   ,aa 88         aa    ]8I
-#   `"Y8888Y"'   `"YbbdP"'  88       88     "8"      `"Ybbd8"' 88           "Y888 `"Ybbd8"' 88         `"YbbdP"'
 
+# .d8888b. .d8888b. 88d888b. dP   .dP .d8888b. 88d888b. .d8888b. dP .d8888b. 88d888b.
+# 88'  `"" 88'  `88 88'  `88 88   d8' 88ooood8 88'  `88 Y8ooooo. 88 88'  `88 88'  `88
+# 88.  ... 88.  .88 88    88 88 .88'  88.  ... 88             88 88 88.  .88 88    88
+# `88888P' `88888P' dP    dP 8888P'   `88888P' dP       `88888P' dP `88888P' dP    dP
 
 def ab_person_to_dict(person):
     """Convert ABPerson to Python dict"""
-    d = {}
-    d['emails'] = []
+    d = {'emails': [], 'is_group': False, 'is_company': False}
 
     for key in _person_text_property_map:
         prop, func = _person_text_property_map[key]
@@ -110,18 +100,27 @@ def ab_person_to_dict(person):
         d[key] = value
 
     name = '{} {}'.format(d['first_name'], d['last_name']).strip()
-    if not name:
+    if not name and d.get('company'):
+        # log.debug('first_name : {!r} last_name : {!r}'.format(d['first_name'],
+        #                                                       d['last_name']))
+        # log.debug('company : {!r}'.format(d['company']))
         name = d['company']
+        d['is_company'] = True
+        # log.debug('company : {!r}'.format(d))
 
     d['name'] = name
 
+    if not d.get('company'):
+        d['company'] = False
+
+    # log.debug(d)
     return d
 
 
 def ab_group_to_dict(group):
     """Convert ABGroup to Python dict. Return None if group is empty"""
 
-    d = {'name': '', 'emails': []}
+    d = {'name': '', 'emails': [], 'is_group': True, 'is_company': False}
     d['name'] = group.valueForProperty_(AB.kABGroupNameProperty)
 
     for person in group.members():
@@ -130,7 +129,8 @@ def ab_group_to_dict(group):
 
         if identifier:
             emails = person.valueForProperty_(AB.kABEmailProperty)
-            email = emails.valueAtIndex_(emails.indexForIdentifier_(identifier))
+            email = emails.valueAtIndex_(
+                emails.indexForIdentifier_(identifier))
             # log.debug('{} is in group {}'.format(email, d['name']))
             d['emails'].append(email)
 
@@ -139,15 +139,13 @@ def ab_group_to_dict(group):
 
     return d
 
-# 88
-# 88   ,d                                      ,d
-# 88   88                                      88
-# 88 MM88MMM ,adPPYba, 8b,dPPYba, ,adPPYYba, MM88MMM ,adPPYba,  8b,dPPYba, ,adPPYba,
-# 88   88   a8P_____88 88P'   "Y8 ""     `Y8   88   a8"     "8a 88P'   "Y8 I8[    ""
-# 88   88   8PP""""""" 88         ,adPPPPP88   88   8b       d8 88          `"Y8ba,
-# 88   88,  "8b,   ,aa 88         88,    ,88   88,  "8a,   ,a8" 88         aa    ]8I
-# 88   "Y888 `"Ybbd8"' 88         `"8bbdP"Y8   "Y888 `"YbbdP"'  88         `"YbbdP"'
 
+#                              dP                       dP
+#                              88                       88
+# .d8888b. .d8888b. 88d888b. d8888P .d8888b. .d8888b. d8888P .d8888b.
+# 88'  `"" 88'  `88 88'  `88   88   88'  `88 88'  `""   88   Y8ooooo.
+# 88.  ... 88.  .88 88    88   88   88.  .88 88.  ...   88         88
+# `88888P' `88888P' dP    dP   dP   `88888P8 `88888P'   dP   `88888P'
 
 def iter_people():
     """Yield ABPerson objects for contacts in Address Book"""
@@ -162,27 +160,33 @@ def iter_groups():
     for group in address_book.groups():
         yield group
 
-#                               88
-#                               ""
 
-# 88,dPYba,,adPYba,  ,adPPYYba, 88 8b,dPPYba,
-# 88P'   "88"    "8a ""     `Y8 88 88P'   `"8a
-# 88      88      88 ,adPPPPP88 88 88       88
-# 88      88      88 88,    ,88 88 88       88
-# 88      88      88 `"8bbdP"Y8 88 88       88
-
+#                     oo
+#
+# 88d8b.d8b. .d8888b. dP 88d888b.
+# 88'`88'`88 88'  `88 88 88'  `88
+# 88  88  88 88.  .88 88 88    88
+# dP  dP  dP `88888P8 dP dP    dP
 
 def main(wf):
     start = time()
-    contacts = {
-        'names': set(),
-        'emails': set(),
-        'groups': set(),
-        # 'email_name': {},
-    }
+    # list of contact dicts:
+    # [
+    #     {'name': 'name of contact/company/group',
+    #      'email': 'email address',
+    #      'key': 'search key',
+    #      'group': True/False,
+    #      'company': True/False },
+    #      ...
+    # ]
+    contacts = []
+    # Needed by `compose` to reconstruct the recipient
+    email_name_map = {}
+    # Just for logging stats
+    people_count = 0
+    group_count = 0
 
     # Load people
-
     for person in iter_people():
         person = ab_person_to_dict(person)
 
@@ -192,30 +196,46 @@ def main(wf):
         if person['name']:  # Cache names for email addresses
             for email in person['emails']:
                 # contacts['email_name'][email] = person['name']
-                contacts['emails'].add((email, person['name']))
+                email_name_map[email] = person['name']
 
-        contacts['names'].add((person['name'], tuple(person['emails'])))
+        for email in person['emails']:
+            d = {}
+            d['name'] = person.get('name')
+            d['email'] = email
+            d['is_group'] = person.get('group', False)
+            d['company'] = person.get('company', False)
+            d['is_company'] = person.get('is_company', False)
+            d['key'] = '{} {}'.format(d['name'], d['email'])
 
-        log.debug('{} <{}>'.format(person['name'], person['emails'][0]))
+            log.debug('{} <{}>'.format(d['name'], d['email']))
+            contacts.append(d)
+            people_count += 1
 
     # Load groups
-
     for group in iter_groups():
         group = ab_group_to_dict(group)
+
         if not group:
             continue
-        log.debug('Group : "{}"'.format(group['name']))
-        contacts['groups'].add((group['name'], tuple(sorted(group['emails']))))
+
+        group['email'] = ', '.join(group['emails'])
+        group['key'] = group['name']
+        del group['emails']
+
+        log.debug('Group : "{}"'.format(group))
+        contacts.append(group)
+        group_count += 1
 
     # Turn sets into lists to make them sortable
-    for key in contacts:
-        contacts[key] = sorted(list(contacts[key]))
+    # for key in contacts:
+    #     contacts[key] = sorted(list(contacts[key]))
 
-    wf.cache_data('contacts', contacts)
+    cache_data = {'contacts': contacts, 'email_name_map': email_name_map}
+
+    wf.cache_data('contacts', cache_data)
 
     log.info('{} people, {} groups loaded in {:0.2f} seconds'.format(
-             len(contacts['names']), len(contacts['groups']),
-             time() - start))
+             people_count, group_count, time() - start))
 
     # Update client application caches
     start = time()
