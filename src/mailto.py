@@ -34,22 +34,37 @@ from workflow import Workflow
 
 from common import run_alfred
 
+# Placeholder
 log = None
 
+# Very basic (and not strictly correct) email validation
+# This will (wrongly) reject valid emails with no TLD, e.g.
+# dave@localhost, but my assumption is that they ain't very
+# commonly used
 email_valid = re.compile(r'[^@]+@[^@]+\.[^@]+').match
 
-# Update settings
+# Grab version number from `version` file
 with open(os.path.join(os.path.dirname(__file__), 'version')) as file_obj:
     __version__ = file_obj.read().strip()
 
-UPDATE_INTERVAL = 1  # day
-GITHUB_REPO = 'deanishe/alfred-mailto'
-
-# Called to re-open settings
+# Alfred keyword to open settings. This is used with the `run_alfred`
+# function to re-open the configuration after toggling a setting
 CONFIG_KEYWORD = 'mailto'
 
 # Query segment separator
 SEPARATOR = '⟩'
+
+DEFAULT_SETTINGS = {
+    'use_name': True,  # Use contact names and emails by default
+    'notify_updates': True,  # Show user when a new version is available
+    'show_help': True,  # Show help text in subtitles
+}
+
+UPDATE_SETTINGS = {
+    'github_slug': 'deanishe/alfred-mailto',
+    'version': __version__,
+    'interval': 1,  # day(s)
+}
 
 # Workflow icons
 ICON_CONFIG = 'icons/config-purple.icns'
@@ -66,13 +81,6 @@ ICON_VERSION_OK = 'icons/update-none.icns'
 ICON_WARNING = 'icons/warning.icns'
 
 
-DEFAULT_SETTINGS = {
-    'use_name': True,  # Use contact names and emails by default
-    'notify_updates': True,  # Show user when a new version is available
-    'show_help': True,  # Show help text in subtitles
-}
-
-
 # ooo        ooooo            o8o  oooo  ooooooooooooo
 # `88.       .888'            `"'  `888  8'   888   `8
 #  888b     d'888   .oooo.   oooo   888       888       .ooooo.
@@ -82,10 +90,17 @@ DEFAULT_SETTINGS = {
 # o8o        o888o `Y888""8o o888o o888o     o888o     `Y8bod8P'
 
 class MailToApp(object):
+    """Main application object
+
+    Instatiated and `run()` method called via `Workflow.run()`.
+
+    The first command line argument (action) is handled by the
+    correponding `do_action()` method.
+
+    """
 
     def __init__(self):
         self.wf = wf
-        self.validator = None
 
     def run(self, wf):
         self.wf = wf
@@ -365,10 +380,16 @@ class MailToApp(object):
         log.debug('query : {}'.format(query))
 
         # Go back
+        # --------------------------------------------------------------
         if query.endswith(SEPARATOR):  # User deleted trailing space
             run_alfred('{} '.format(CONFIG_KEYWORD))
 
+        # Subquery
+        # --------------------------------------------------------------
         # Parse subqueries and dispatch to appropriate method
+        # A subquery is `keyword + <SEPARATOR> + <space>`
+        # `query` will be the rest of the original `query` after
+        # the first `<SEPARATOR>`
         if SEPARATOR in query:
             parts = [s.strip() for s in query.split(SEPARATOR) if s.strip()]
             log.debug('parts : {}'.format(parts))
@@ -380,6 +401,7 @@ class MailToApp(object):
                 else:
                     query = None
 
+                # `Client` is the only subquery at the moment
                 if action == 'Client':
                     return self.choose_client(query)
                 else:
@@ -390,6 +412,8 @@ class MailToApp(object):
                     self.wf.send_feedback()
                     return
 
+        # Display root configuration options
+        # --------------------------------------------------------------
         items = []
         help_text = '  //  ↩ to change'
 
@@ -627,7 +651,7 @@ class MailToApp(object):
         app_path = self.args.query
         log.debug('Setting new client to : {}'.format(app_path))
 
-        if app_path == 'DEFAULT':  # Reset to system default]
+        if app_path == 'DEFAULT':  # Reset to system default
             del self.wf.settings['default_app']
             msg = 'Email client set to System Default'
             log.info(msg)
@@ -749,14 +773,9 @@ class MailToApp(object):
 
 
 if __name__ == '__main__':
-    update_settings = {
-        'github_slug': GITHUB_REPO,
-        'version': __version__,
-        'interval': UPDATE_INTERVAL,
-    }
 
     wf = Workflow(
-        update_settings=update_settings,
+        update_settings=UPDATE_SETTINGS,
         default_settings=DEFAULT_SETTINGS,
         # libraries=[os.path.join(os.path.dirname(__file__), 'libs')],
     )

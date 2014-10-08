@@ -18,8 +18,7 @@ from email.header import Header
 import os
 import re
 from time import time
-from urllib import quote, unquote
-from urlparse import urlparse
+from urllib import quote
 
 from workflow import Workflow
 
