@@ -1,0 +1,83 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Test — Test\, Inc.;Harry;;;
+FN:Harry Test — Test\, Inc.
+EMAIL;type=INTERNET;type=HOME;type=pref:harry@example.com
+CATEGORIES:Test
+UID:5bcb8b32-ccb7-485c-bc7f-f169fe1c5d24
+X-ABUID:D4AB67D1-A2F2-44B5-88EF-35EA6A38FB5F:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Test;Bob;;;
+FN:Bob Test
+EMAIL;type=INTERNET;type=HOME;type=pref:bob.test@example.com
+CATEGORIES:Test
+UID:9bc576a8-d3ab-42b7-9046-dff0307b5d49
+X-ABUID:4646C94C-9F66-43BB-836B-2B0A90F17BD5:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Test;Bobby;;;
+FN:Bobby Test
+EMAIL;type=INTERNET;type=HOME;type=pref:b.test@gmail.com
+CATEGORIES:Test
+UID:a8a1487b-326d-427f-8ef2-5b1b1922eb4e
+X-ABUID:260FD555-6C22-4DB8-B5F7-2A05D6EBB7E4:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Test;Dave;;;
+FN:Dave Test
+EMAIL;type=INTERNET;type=HOME;type=pref:dave.test@example.com
+CATEGORIES:Test
+UID:80aee7fd-eb19-4922-ad5b-d3e6c3c2f8ac
+X-ABUID:9046956A-F48A-4C56-B59D-56EB900945FE:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Test;Sue;;;
+FN:Sue Test
+EMAIL;type=INTERNET;type=HOME;type=pref:sue.test@example.com
+CATEGORIES:Test
+UID:c79c5917-a867-4686-82c0-1ec7f7930e33
+X-ABUID:13DCF4D7-1CF1-4B7C-BBDD-92AC5B824E61:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:;;;;
+FN:Test\, Inc.
+ORG:Test\, Inc.;
+EMAIL;type=INTERNET;type=HOME;type=pref:contact@example.com
+X-ABShowAs:COMPANY
+CATEGORIES:Test
+UID:e8b6e8a7-2eef-42a5-b9fe-10d481e68883
+X-ABUID:2756A633-BC00-42A6-A68F-8372EC1D0125:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Versuch;Rüdiger;;;
+FN:Rüdiger Versuch
+EMAIL;type=INTERNET;type=HOME;type=pref:rudi@example.com
+CATEGORIES:Test
+UID:2881e326-4285-4dd6-9364-49ae6bb9b933
+X-ABUID:117AB01C-3F1A-4A10-9558-184DF34F40BD:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.9.5//EN
+N:Versuch\, Dr.;Jürgen;;;
+FN:Jürgen Versuch\, Dr.
+EMAIL;type=INTERNET;type=HOME;type=pref:versuch@example.com
+EMAIL;type=INTERNET;type=WORK:versuchgroup@example.com
+CATEGORIES:Test
+UID:b82125ee-7de2-4fdb-81e2-9e34bfc450f1
+X-ABUID:1D4DA7CE-74EA-48EE-A5CC-23D233169850:ABPerson
+END:VCARD
