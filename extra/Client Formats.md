@@ -1,6 +1,3 @@
-title: Client Formats
-author: deanishe@deanishe.net
-date: 2013-12-05
 
 # Client Formats #
 
