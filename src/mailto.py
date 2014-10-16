@@ -132,10 +132,16 @@ class MailToApp(object):
                 version = wf.cached_data('__workflow_update_status',
                                          max_age=0)['version']
 
+                subtitle = (
+                    '↩ to install new version, '
+                    '"{}" to turn off notifications'.format(CONFIG_KEYWORD))
+
+                if not self.wf.settings.get('show_help', True):
+                    subtitle = None
+
                 self.wf.add_item(
                     'Version {} is available'.format(version),
-                    ('↩ to install new version, '
-                     '"{}" to turn off notifications'.format(CONFIG_KEYWORD)),
+                    subtitle,
                     valid=True,
                     arg='update',
                     icon=ICON_VERSION_NEW,)
