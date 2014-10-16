@@ -2,6 +2,8 @@
 Database:
 
 Configuration:
+	- Delete v1 settings on first run (or bad things will happen)
+	- Turn off update checks
 
 Documetation:
 	- Update README for Version 2
