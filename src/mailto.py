@@ -382,8 +382,8 @@ class MailToApp(object):
 
     def do_help(self):
         """Open help file in browser"""
-        log.debug('Opening README in browser ...')
-        cmd = ['open', wf.workflowfile('README.html')]
+        log.debug('Opening help.html in browser ...')
+        cmd = ['open', wf.workflowfile('help.html')]
         subprocess.call(cmd)
 
     #                            .8888b oo

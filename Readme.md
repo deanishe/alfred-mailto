@@ -2,87 +2,111 @@
 Alfred-MailTo
 =============
 
-A Workflow for [Alfred 2](http://www.alfredapp.com/).
+A Workflow for [Alfred 2][alfred].
 
-![](img/screenshot-2.png)
+Quickly select recipients from your Mac's Contacts database and send them to
+your email client of choice. Also works with Groups/Distribution Lists.
 
-Quickly select recipients from your Mac's Contacts database and send them to your email client of choice. Also works with Groups/Distribution Lists.
+![](assets/demo.gif)
 
-## Usage ##
 
-- `@ <query>` — Search your Contacts by name, nickname, email address. The
-  search is fairly smart and will match "bs" to "Bob Smith". You can also enter
-  email addresses that aren't in your Contacts.
-  - `⇥` — Add selected contact to list of recipients.
-  - `↩` or `⌘+NUM` — Add selected contact to list of recipients and send to
-    your email client.
-- `mailto [<query>]` — Show and edit configuration.
+## Download and installation [download-and-installation] ##
 
-Open Alfred, type `@` or `mailto` (the default keyword) then either hit `ENTER` to open an entirely blank message or start typing the name or email address you'd like to send a mail to.
+You can install MailTo either from [GitHub releases][github-releases] or
+[the Packal website][packal-page].
 
-Addresses will be suggested from matching contacts and groups in your Mac address book. Hit `TAB` to autocomplete the recipient list from the selected result, or `ENTER` or `⌘+NUM` to add the address and start composing a mail.
+
+## Usage [usage] ##
+
+**Note:** The first time you run MailTo, you will probably be asked to grant
+access to your Contacts. Obviously enough, if you refuse access, MailTo won't
+work.
+
+Use the `@` keyword in Alfred to access MailTo and search your Mac's Address
+Book.
+
+Recipients will be suggested from matching contacts and groups in the
+accounts configured in your `Contacts` app (see the [help][help] file for
+supported account types).
+
+Hit `⇥` to autocomplete the recipient list from the selected result, or `↩`
+or `⌘+NUM` to add the address to the recipient list and start composing a mail.
 
 You can add multiple recipients by adding a comma between them.
 
-Use `mailtoconf` to view/change settings.
+Use `mailto` to view/change settings.
 
-## Supported applications ##
+See [Help][help] for more information.
 
-In *theory*, any email client should work, as **MailTo** uses the `mailto:` protocol to call your email client.
 
-If your chosen client doesn't work properly with **MailTo**, post a bug report, and I can possibly add formatting rules for that client.
+## Supported email clients [supported-email-clients] ##
 
 The following email clients currently work "out of the box":
 
-* Apple Mail
-* Sparrow
-* Thunderbird
-* Postbox
-* Airmail
-* Unibox
-* MailMate
-* Mailbox (Beta)
-* Google Chrome (if you've [set a handler](https://support.google.com/chrome/answer/1382847?hl=en))
+- Apple Mail
+- Sparrow
+- Thunderbird
+- Postbox
+- Airmail (email addresses only)
+- Unibox
+- MailMate
+- Mailbox Beta (email addresses only)
+- Google Chrome (if you've [set a handler][chrome-handlers])
+- Fluid single-session browsers (please see [Help](#help) for
+  more information)
+
+
+## Unsupported clients [unsupported-clients] ##
 
 The following do **not** work:
 
-* Safari (it will open your system default mail client instead)
+- Safari (it will open your system default mail client instead)
 
-If your email weapon-of-choice isn't working properly, you can try using email addresses only (use `mailtohelp` in Alfred), and file a bug report, too. Perhaps we can get it to work.
 
-## Copyright, licensing etc. ##
+## Help [help] ##
 
-* All the code I wrote is released under the [MIT licence](http://opensource.org/licenses/MIT).
-* [alfred.py](https://github.com/nikipore/alfred-python)'s author has indicated no licensing terms that I'm smart enough to find.
-* [docopt](http://docopt.org/) is released under the [MIT licence](http://opensource.org/licenses/MIT).
-* Email icon from [Icon Archive](http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html) is free for personal use.
-* Original info icon from [IconsDB](http://www.iconsdb.com/royal-blue-icons/info-icon.html) is CC0 1.0 public domain.
-* Original warning icon also from [IconsDB](http://www.iconsdb.com/orange-icons/warning-icon.html) as above.
+Further information can be found in the included help file. Use the keyword
+`mailto` to open it in your browser or view it online [here][online-help].
 
-## Screenshots ##
 
-Create an empty message:
+## Contribute ##
 
-![](img/screenshot-1.png "Create an empty message")
+To report a bug or submit a feature request, please create
+[an issue on GitHub][github-issues] or [submit a pull request][github-pulls].
 
-Auto-complete addresses from your Contacts by name or by email address:
 
-![](img/screenshot-2.png "Auto-complete from your address book by name")
+## Thanks, licensing etc. [thanks-licensing-etc] ##
 
-![](img/screenshot-3.png "Auto-complete from your address book by email address")
+- The MailTo code is released under the [MIT licence][mit-licence].
+- MailTo is heavily based on [Alfred-Workflow][alfred-workflow], also
+  released under the [MIT licence][mit-licence] and also by [me][deanishe].
+- The icons are almost all from [Dave Gandy][dave-gandy]'s
+  [Font Awesome][font-awesome] ([SIL Open Font License][sil-licence]) via
+  [Seth Lilly][seth-lilly]'s also awesome
+  [Font Awesome Symbols for Sketch][font-awesome-sketch]
+  ([MIT licence][mit-licence]). Any icons that are not from Font Awesome, you
+  may do with as you please.
 
-Add multiple recipients:
 
-![](img/screenshot-4.png "Add multiple recipients")
 
-Handle unknown recipients and invalid addresses intelligently:
-
-![](img/screenshot-5.png "Enter recipients manually")
-
-![](img/screenshot-6.png "No mails to invalid addresses")
-
-![](img/screenshot-7.png "Mail only valid addresses")
-
-## Further information ##
-
-For more information, please see the included help file. `mailtohelp` will open it from within Alfred.
+[alfred]: http://www.alfredapp.com/
+[mit-licence]: http://opensource.org/licenses/MIT
+[font-awesome]: http://fortawesome.github.io/Font-Awesome/
+[font-awesome-sketch]: https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch
+[sil-licence]: http://scripts.sil.org/OFL
+[dave-gandy]: http://twitter.com/davegandy
+[seth-lilly]: http://twitter.com/sethlilly
+[deanishe]: http://twitter.com/deanishe
+[alfred-workflow]: https://github.com/deanishe/alfred-workflow/
+[github-issues]: https://github.com/deanishe/alfred-mailto/issues
+[github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
+[online-help]: http://www.deanishe.net/alfred-mailto/
+[fluidapp]: http://fluidapp.com/
+[roundcube]: http://roundcube.net/
+[forum-thread]: http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/
+[packal-page]: http://www.packal.org/workflow/mailto
+[github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
+[packal-updater]: http://www.packal.org/workflow/packal-updater
+[ab-api]: https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html
+[chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
+[online-help]: http://www.deanishe.net/mailto/

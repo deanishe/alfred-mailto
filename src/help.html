@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>README</title>
+  <title>MailTo Workflow Help</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
 /*
@@ -779,35 +779,128 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </style>
 
 </head>
-<body class="normal firstload">
+<body class="normal">
   <div id="wrapper">
       <h1 id="alfred-mailto">Alfred-MailTo</h1>
 
+<p>A Workflow for <a href="http://www.alfredapp.com/">Alfred 2</a>.</p>
+
+<p>Quickly select recipients from your Mac&#8217;s Contacts database and send them to
+your email client of choice. Also works with Groups/Distribution Lists.</p>
+
 <figure>
-<img src="img/screenshot-2.png" alt="" />
+<img src="../assets/demo.gif" alt="" />
 </figure>
 
-<p>A Workflow for <a href="http://www.alfredapp.com/">Alfred 2</a> that allows you to choose recipients from your Mac Contacts, including Groups (or enter email addresses manually) and compose a message using the email app of your choice.</p>
+<h2 id="contents">Contents</h2>
 
-<p><strong>Note:</strong> Contacts in Exchange accounts are currently not supported. I&#8217;m working on it.</p>
+<ul>
+<li><a href="#usage">Usage</a>
 
-<p>Uses the <a href="https://github.com/nikipore/alfred-python">alfred-python</a> library by <a href="https://github.com/nikipore">nikipore</a> and <a href="http://docopt.org/">docopt</a>.</p>
+<ul>
+<li><a href="#all-options">All options</a></li>
+</ul></li>
+<li><a href="#email-clients">Email clients</a>
+
+<ul>
+<li><a href="#supported-email-clients">Supported email clients</a></li>
+<li><a href="#unsupported-clients">Unsupported clients</a></li>
+</ul></li>
+<li><a href="#supported-account-types">Supported account types</a>
+
+<ul>
+<li><a href="#google-contacts">Google Contacts</a></li>
+</ul></li>
+<li><a href="#fluid-apps">Fluid apps</a></li>
+<li><a href="#updates">Updates</a></li>
+<li><a href="#bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</a></li>
+<li><a href="#thanks-licensing-etc">Thanks, licensing etc.</a></li>
+</ul>
 
 <h2 id="usage">Usage</h2>
 
-<p>Open Alfred, type <code>@</code> or <code>mailto</code> (the default keyword) then either hit <code>ENTER</code> to open an entirely blank message or start typing the name or email address you&#8217;d like to send a mail to.</p>
+<p><strong>Note:</strong> The first time you run MailTo, you will probably be asked to grant
+access to your Contacts. Obviously enough, if you refuse access, MailTo won&#8217;t
+work.</p>
 
-<p>Addresses will be suggested from matching contacts and groups in your Mac address book. Hit <code>TAB</code> to autocomplete the recipient list from the selected result, or <code>ENTER</code> or <code>⌘+NUM</code> to add the address and start composing a mail.</p>
+<h3 id="quickstart">Quickstart</h3>
+
+<p>Use the <code>@</code> keyword in Alfred to access MailTo and search your Mac&#8217;s Address
+Book.</p>
+
+<p>Recipients will be suggested from matching contacts and groups in the
+<a href="#supported-account-types">accounts</a> configured in your <code>Contacts</code> app.
+Hit <code>⇥</code> to autocomplete the recipient list from the selected result, or <code>↩</code>
+or <code>⌘+NUM</code> to add the address to the recipient list and start composing a mail.</p>
 
 <p>You can add multiple recipients by adding a comma between them.</p>
 
-<p>Use <code>mailtoconf</code> to view/change settings.</p>
+<p>Use <code>mailto</code> to view/change settings.</p>
 
-<h2 id="supportedapplications">Supported applications</h2>
+<h3 id="all-options">All options</h3>
 
-<p>In <em>theory</em>, any email client should work, as <strong>MailTo</strong> uses the <code>mailto:</code> protocol to call your email client.</p>
+<ul>
+<li><code>@ &lt;query&gt;</code> — Search your Contacts by name, nickname, email address. The
+ search is fairly smart and will match &#8220;bs&#8221; to &#8220;Bob Smith&#8221;. You can also enter
+ email addresses that aren&#8217;t in your Contacts.
 
-<p>If your chosen client doesn&#8217;t work properly with <strong>MailTo</strong>, post a bug report, and I can possibly add formatting rules for that client.</p>
+<ul>
+<li><code>⇥</code> — Add selected contact to list of recipients and search for another
+ contact.</li>
+<li><code>↩</code> or <code>⌘+NUM</code> — Add selected contact to list of recipients and send to
+ your email client.</li>
+</ul></li>
+<li><code>mailto [&lt;query&gt;]</code> — Show and edit configuration.
+
+<ul>
+<li><code>Force Reload</code> — <code>↩</code> to force MailTo to update its cache of your
+ contacts and email clients on your system. By default, MailTo will cache
+ your contacts for one hour and the list of email clients on your system
+ for one day. See <a href="#cache-updates">cache updates</a> for more information.</li>
+<li><code>Email Client: …</code> — Displays your currently selected email client.
+ By default, MailTo uses your default system client, but you can change
+ to any app on your system that supports the <code>mailto:</code> protocol. <code>↩</code> to
+ view and search a list of your apps and <code>↩</code> again to select one.</li>
+<li><code>Format: (Name &amp; Email | Email Only)</code> — How MailTo sends the list of
+ recipients to your email client. Default is <code>Name &amp; Email</code>, whereby
+ MailTo will use email addresses only if the selected client is known
+ not to support names in <code>mailto:</code> URIs (see
+ <a href="#supported-email-clients">Supported email clients</a>). <code>↩</code> to toggle
+ between the two formats.</li>
+<li><code>Update Notifications: (ON | OFF)</code> — If <code>ON</code> (the default), MailTo will
+ show a notice of any available update at the top of its search results
+ list. If <code>OFF</code>, you&#8217;ll have to go into the Configuration (<code>mailto</code>) to
+ see if a new version is available. <code>↩</code> to toggle on/off.</li>
+<li><code>Help Text: (ON | OFF)</code> — If <code>ON</code> (the default), additional help text
+ will be shown in the item subtitles in Alfred. Turning off will make
+ MailTo look a bit cleaner. <code>↩</code> to toggle on/off.</li>
+<li><code>View MailTo Help</code> — <code>↩</code> to open the MailTo help file in your browser.</li>
+</ul></li>
+</ul>
+
+<h2 id="email-clients">Email clients</h2>
+
+<p>In <em>theory</em>, any email client should work, as MailTo uses a
+<a href="http://en.wikipedia.org/wiki/Mailto"><code>mailto:</code></a> URI to call your email client.</p>
+
+<p>In <em>practice</em>, support for <code>mailto:</code> varies widely between clients. Pretty
+much any client will accept a URI containing only email addresses, but many
+choke if the URI also contains recipients&#8217; names, e.g.
+<code>Bob Jones &lt;bob.jones@example.com&gt;</code> instead of just <code>bob.jones@example.com</code>.</p>
+
+<p>Things rapidly go downhill when addressee names contain non-ASCII letters or
+commas.</p>
+
+<p>MailTo knows how to handle all the clients listed below and will automatically
+generate URIs containing only email addresses (no names) if the client in know
+to choke on them.</p>
+
+<p>If your email weapon-of-choice isn&#8217;t working properly, try forcing MailTo to
+use email addresses only (enter <code>mailto</code> in Alfred and toggle <code>Format</code> to
+<code>Email Only</code> in MailTo Configuration), and <a href="https://github.com/deanishe/alfred-mailto/issues">file a bug report</a> or
+submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request</a>.</p>
+
+<h3 id="supported-email-clients">Supported email clients</h3>
 
 <p>The following email clients currently work &#8220;out of the box&#8221;:</p>
 
@@ -816,12 +909,15 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <li>Sparrow</li>
 <li>Thunderbird</li>
 <li>Postbox</li>
-<li>Airmail</li>
+<li>Airmail (email addresses only)</li>
 <li>Unibox</li>
 <li>MailMate</li>
-<li>Mailbox (Beta)</li>
+<li>Mailbox Beta (email addresses only)</li>
 <li>Google Chrome (if you&#8217;ve <a href="https://support.google.com/chrome/answer/1382847?hl=en">set a handler</a>)</li>
+<li>Fluid single-session browsers (see <a href="#fluid-apps">note</a>)</li>
 </ul>
+
+<h3 id="unsupported-clients">Unsupported clients</h3>
 
 <p>The following do <strong>not</strong> work:</p>
 
@@ -829,60 +925,116 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <li>Safari (it will open your system default mail client instead)</li>
 </ul>
 
-<p>If your email weapon-of-choice isn&#8217;t working properly, you can try using email addresses only (use <code>mailtohelp</code> in Alfred), and file a bug report, too. Perhaps we can get it to work.</p>
+<h2 id="supported-account-types">Supported account types</h2>
 
-<h2 id="copyrightlicensingetc.">Copyright, licensing etc.</h2>
+<p>MailTo uses the <a href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html">official Address Book API</a> to read your contacts.</p>
+
+<p>The following account types are <em>definitely</em> supported:</p>
 
 <ul>
-<li>All the code I wrote is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
-<li><a href="https://github.com/nikipore/alfred-python">alfred.py</a>&#8217;s author has indicated no licensing terms that I&#8217;m smart enough to find.</li>
-<li><a href="http://docopt.org/">docopt</a> is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
-<li>Email icon from <a href="http://www.iconarchive.com/show/plex-icons-by-cornmanthe3rd/Communication-email-2-icon.html">Icon Archive</a> is free for personal use.</li>
-<li>Original info icon from <a href="http://www.iconsdb.com/royal-blue-icons/info-icon.html">IconsDB</a> is CC0 1.0 public domain.</li>
-<li>Original warning icon also from <a href="http://www.iconsdb.com/orange-icons/warning-icon.html">IconsDB</a> as above.</li>
+<li>Local contacts</li>
+<li>iCloud contacts</li>
+<li>Google contacts (see <a href="#google-contacts">below</a>)</li>
 </ul>
 
-<h2 id="screenshots">Screenshots</h2>
+<p>I don&#8217;t know about any other account types, as I don&#8217;t have any to test
+MailTo with…</p>
 
-<p>Create an empty message:</p>
+<p>(If anyone knows how to get an LDAP server working with Contacts.app, please
+drop <a href="http://twitter.com/deanishe">me</a> a line.)</p>
 
-<figure>
-<img src="img/screenshot-1.png" alt="" title="Create an empty message" />
-</figure>
+<h3 id="google-contacts">Google Contacts</h3>
 
-<p>Auto-complete addresses from your Contacts by name or by email address:</p>
+<p>Groups are currently not synced properly between Google accounts and
+Contacts.app. Groups created in Contacts.app in a Google account become a
+single, empty contact in your Google Contacts; groups in Google Contacts
+are ignored by Contacts.app.</p>
 
-<figure>
-<img src="img/screenshot-2.png" alt="" title="Auto-complete from your address book by name" />
-</figure>
+<p>This is a limitation of the Contacts.app–Google Contacts integration, not
+of MailTo.</p>
 
-<figure>
-<img src="img/screenshot-3.png" alt="" title="Auto-complete from your address book by email address" />
-</figure>
+<h2 id="fluid-apps">Fluid apps</h2>
 
-<p>Add multiple recipients:</p>
+<p><a href="http://fluidapp.com/">Fluid</a> is an application that turns web applications into native
+applications. It generates so-called &#8220;single-session browsers&#8221;, which are
+basically browser apps designed to visit only one website.</p>
 
-<figure>
-<img src="img/screenshot-4.png" alt="" title="Add multiple recipients" />
-</figure>
+<p>By default, all Fluid-generated apps can handle <code>mailto:</code> URIs (and will show
+up in MailTo&#8217;s list of email clients), but only via Gmail (which is
+pre-configured by Fluid).</p>
 
-<p>Handle unknown recipients and invalid addresses intelligently:</p>
+<p>To add a different webmail service, first you need to figure out the URL to
+send the email address(es) to.</p>
 
-<figure>
-<img src="img/screenshot-5.png" alt="" title="Enter recipients manually" />
-</figure>
+<h3 id="roundcubewebmail">Roundcube webmail</h3>
 
-<figure>
-<img src="img/screenshot-6.png" alt="" title="No mails to invalid addresses" />
-</figure>
+<p>For a <a href="http://roundcube.net/">Roundcube</a> installation, it would be something like:</p>
 
-<figure>
-<img src="img/screenshot-7.png" alt="" title="Mail only valid addresses" />
-</figure>
+<p><code>https://mail.example.com/?_task=mail&amp;_action=compose&amp;to=</code></p>
 
-<h2 id="furtherinformation">Further information</h2>
+<p>Once you&#8217;ve got your URL, open your Fluid app&#8217;s Preferences and go to <code>URL
+Handler Preferences</code>. Add a new group for your webmail service and add the
+pattern <code>mailto:*</code>. Then copy the JavaScript from the <code>Gmail &gt; mailto:*</code>
+script box into your own <code>mailto:*</code> handler&#8217;s box. Finally, change the
+URL in the <code>outURLString</code> line to your own webmail&#8217;s URL. For a Roundcube
+installation, it&#8217;d look like this:</p>
 
-<p>For more information, please see the included help file. <code>mailtohelp</code> will open it from within Alfred.</p>
+<pre><code class="javascript">function transform(inURLString) {
+    inURLString = inURLString.replace(&apos;mailto:&apos;, &apos;&apos;);
+    inURLString = inURLString.replace(&apos;&amp;amp;&apos;, &apos;&amp;&apos;);
+
+    var argStr = &apos;&apos;;
+    var splits = inURLString.split(&apos;?&apos;);
+
+    var emailAddr = null;
+    var args = {};
+    if (splits.length &gt; 0) emailAddr = splits[0];
+    if (splits.length &gt; 1) argStr = splits[1];
+
+    var outURLString = &apos;https://mail.example.com/?_task=mail&amp;_action=compose&amp;to=&apos; + emailAddr;
+
+    if (argStr.length &gt; 0) outURLString += &apos;&amp;&apos; + argStr;
+    return outURLString;
+}</code></pre>
+
+<p>Don&#8217;t forget to deactivate (uncheck) the <code>Gmail</code> <code>mailto:*</code> script!</p>
+
+<h2 id="updates">Updates</h2>
+
+<p>MailTo has a built-in updater and will offer to update itself via GitHub if a
+newer version is available.</p>
+
+<p>You can <a href="#all-options">turn off update notifications</a> if you prefer (by default,
+MailTo will show an update notification in your results list).</p>
+
+<p>If you use the <a href="http://www.packal.org/workflow/packal-updater">Packal Updater</a>, you should turn off update
+notifications and leave the updating to the Packal Updater. An update
+notification will still be shown in the configuration screen (keyword <code>mailto</code>),
+but it&#8217;s much easier to avoid selecting that one by accident.</p>
+
+<p>Packal adds additional metadata to the workflows it distributes to enable
+updates. This metadata is missing in the GitHub version, so the Packal Updater
+will no longer update MailTo for you until you reinstall it from Packal.</p>
+
+<h2 id="bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</h2>
+
+<p>Please report any bugs and submit any feature requests via
+<a href="https://github.com/deanishe/alfred-mailto/issues">GitHub issues</a> or in the thread on the
+<a href="http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/">Alfred Forum</a>.</p>
+
+<h2 id="thanks-licensing-etc">Thanks, licensing etc.</h2>
+
+<ul>
+<li>The MailTo code is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
+<li>MailTo is heavily based on <a href="https://github.com/deanishe/alfred-workflow/">Alfred-Workflow</a>, also
+ released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a> and also by <a href="http://twitter.com/deanishe">me</a>.</li>
+<li>The icons are almost all from <a href="http://twitter.com/davegandy">Dave Gandy</a>&#8217;s
+ <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> (<a href="http://scripts.sil.org/OFL">SIL Open Font License</a>) via
+ <a href="http://twitter.com/sethlilly">Seth Lilly</a>&#8217;s also awesome
+ <a href="https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch">Font Awesome Symbols for Sketch</a>
+ (<a href="http://opensource.org/licenses/MIT">MIT licence</a>). Any icons that are not from Font Awesome, you
+ may do with as you please.</li>
+</ul>
 
 <div style="display:none">
 <!--This seemingly unnecessary div markup is the only thing keeping this script working after Markdown conversion. Trust me.-->
