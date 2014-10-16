@@ -101,12 +101,8 @@ To report a bug or submit a feature request, please create
 [github-issues]: https://github.com/deanishe/alfred-mailto/issues
 [github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
 [online-help]: http://www.deanishe.net/alfred-mailto/
-[fluidapp]: http://fluidapp.com/
-[roundcube]: http://roundcube.net/
-[forum-thread]: http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/
 [packal-page]: http://www.packal.org/workflow/mailto
 [github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
 [packal-updater]: http://www.packal.org/workflow/packal-updater
-[ab-api]: https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html
 [chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
 [online-help]: http://www.deanishe.net/mailto/
