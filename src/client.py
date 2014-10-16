@@ -15,6 +15,7 @@ Manage email clients and their settings
 from __future__ import print_function, unicode_literals, absolute_import
 
 from email.header import Header
+from fnmatch import fnmatch
 import os
 import re
 from time import time
@@ -39,11 +40,12 @@ DEFAULT_RULES = (True, True, True, False)
 
 
 RULES = {
-    u'it.bloop.airmail': (False, False, False, False),
-    u'com.eightloops.Unibox': (True, True, False, True),
-    u'com.google.Chrome': (True, True, False, False),
-    u'com.freron.MailMate': (True, True, False, False),
-    u'com.dropbox.mbd.external-beta': (False, False, False, False)
+    'it.bloop.airmail': (False, False, False, False),
+    'com.eightloops.Unibox': (True, True, False, True),
+    'com.google.Chrome': (True, True, False, False),
+    'com.freron.MailMate': (True, True, False, False),
+    'com.dropbox.mbd.external-beta': (False, False, False, False),
+    'com.fluidapp.FluidApp.*': (True, True, False, False),
 }
 
 # Where to search for applications
@@ -67,7 +69,12 @@ class Formatter(object):
 
     def __init__(self, client):
         self.client = client
-        self.rules = RULES.get(client, DEFAULT_RULES)
+        self.rules = DEFAULT_RULES
+        # Get rules for selected client
+        for bundle_id in RULES:
+            if fnmatch(client, bundle_id):
+                self.rules = RULES.get(bundle_id)
+
         (self.use_spaces,
          self.use_names,
          self.use_mime,
