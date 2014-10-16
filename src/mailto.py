@@ -54,6 +54,13 @@ CONFIG_KEYWORD = 'mailto'
 # Query segment separator
 SEPARATOR = '⟩'
 
+# Empty file to create in data directory when v2 of the workflow
+# has run.
+# This is necessary because the v1 settings/cache data is incompatible
+# with v2. If this file doesn't exist, all cache and data files
+# will be deleted and the file will be created.
+V2_HAS_RUN_FILENAME = 'did_run-v2'
+
 DEFAULT_SETTINGS = {
     'use_name': True,  # Use contact names and emails by default
     'notify_updates': True,  # Show user when a new version is available
@@ -102,7 +109,19 @@ class MailToApp(object):
     def __init__(self):
         self.wf = wf
 
+    # 88d888b. dP    dP 88d888b.
+    # 88'  `88 88    88 88'  `88
+    # 88       88.  .88 88    88
+    # dP       `88888P' dP    dP
+
     def run(self, wf):
+        # Check if v1 was installed and delete its data if if was
+        filepath = wf.datafile(V2_HAS_RUN_FILENAME)
+        if not os.path.exists(filepath):
+            log.debug('First run of v2. Deleting old data…')
+            wf.reset()
+            open(filepath, 'wb').write('')
+
         self.wf = wf
         self.args = self._parse_args()
         log.debug('args : {}'.format(self.args))
