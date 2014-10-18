@@ -1,3 +1,4 @@
+title: MailTo Workflow Help
 
 Alfred-MailTo
 =============
@@ -7,7 +8,7 @@ A Workflow for [Alfred 2][alfred].
 Quickly select recipients from your Mac's Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.
 
-![](../assets/demo.gif)
+![](../../assets/demo.gif)
 
 ## Contents ##
 
@@ -25,7 +26,7 @@ your email client of choice. Also works with Groups/Distribution Lists.
 - [Thanks, licensing etc.](#thanks-licensing-etc)
 
 
-## Download and installation [download-and-installation] ##
+## Download and installation ##
 
 You can install MailTo either from [GitHub releases][github-releases] or
 [the Packal website][packal-page].
@@ -33,7 +34,7 @@ You can install MailTo either from [GitHub releases][github-releases] or
 Install by double-clicking `MailTo.alfredworkflow`.
 
 
-## Usage [usage] ##
+## Usage ##
 
 **Note:** The first time you run MailTo, you will probably be asked to grant
 access to your Contacts. Obviously enough, if you refuse access, MailTo won't
@@ -55,7 +56,7 @@ You can add multiple recipients by adding a comma between them.
 Use `mailto` to view/change settings.
 
 
-### All options [all-options] ###
+### All options ###
 
 - `@ <query>` — Search your Contacts by name, nickname, email address. The
   search is fairly smart and will match "bs" to "Bob Smith". You can also enter
@@ -89,7 +90,7 @@ Use `mailto` to view/change settings.
     - `View MailTo Help` — `↩` to open the MailTo help file in your browser.
 
 
-## Email clients [email-clients] ##
+## Email clients ##
 
 In *theory*, any email client should work, as MailTo uses a
 [`mailto:`][mailto-scheme] URI to call your email client.
@@ -112,7 +113,7 @@ use email addresses only (enter `mailto` in Alfred and toggle `Format` to
 submit a [pull request][github-pulls].
 
 
-### Supported email clients [supported-email-clients] ###
+### Supported email clients ###
 
 The following email clients currently work "out of the box":
 
@@ -128,14 +129,14 @@ The following email clients currently work "out of the box":
 - Fluid single-session browsers (see [note](#fluid-apps))
 
 
-### Unsupported clients [unsupported-clients] ###
+### Unsupported clients ###
 
 The following do **not** work:
 
 - Safari (it will open your system default mail client instead)
 
 
-## Supported account types [supported-account-types] ##
+## Supported account types ##
 
 MailTo uses the [official Address Book API][ab-api] to read your contacts.
 
@@ -152,7 +153,7 @@ MailTo with…
 drop [me][deanishe] a line.)
 
 
-### Google Contacts [google-contacts] ###
+### Google Contacts ###
 
 Groups are currently not synced properly between Google accounts and
 Contacts.app. Groups created in Contacts.app in a Google account become a
@@ -163,7 +164,7 @@ This is a limitation of the Contacts.app–Google Contacts integration, not
 of MailTo.
 
 
-## Fluid apps [fluid-apps] ##
+## Fluid apps ##
 
 [Fluid][fluidapp] is an application that turns web applications into native
 applications. It generates so-called "single-session browsers", which are
@@ -231,14 +232,14 @@ updates. This metadata is missing in the GitHub version, so the Packal Updater
 will no longer update MailTo for you until you reinstall it from Packal.
 
 
-## Bugs, feature requests, suggestions [bugs-feature-requests-suggestions] ##
+## Bugs, feature requests, suggestions ##
 
 Please report any bugs and submit any feature requests via
 [GitHub issues][github-issues] or in the thread on the
 [Alfred Forum][forum-thread].
 
 
-## Thanks, licensing etc. [thanks-licensing-etc] ##
+## Thanks, licensing etc. ##
 
 - The MailTo code is released under the [MIT licence][mit-licence].
 - MailTo is heavily based on [Alfred-Workflow][alfred-workflow], also

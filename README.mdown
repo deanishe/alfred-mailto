@@ -10,7 +10,7 @@ your email client of choice. Also works with Groups/Distribution Lists.
 ![](assets/demo.gif)
 
 
-## Download and installation [download-and-installation] ##
+## Download and installation ##
 
 You can install MailTo either from [GitHub releases][github-releases] or
 [the Packal website][packal-page].
@@ -18,7 +18,7 @@ You can install MailTo either from [GitHub releases][github-releases] or
 Install by double-clicking `MailTo.alfredworkflow`.
 
 
-## Usage [usage] ##
+## Usage ##
 
 **Note:** The first time you run MailTo, you will probably be asked to grant
 access to your Contacts. Obviously enough, if you refuse access, MailTo won't
@@ -41,7 +41,7 @@ Use `mailto` to view/change settings.
 See [Help][help] for more information.
 
 
-## Supported email clients [supported-email-clients] ##
+## Supported email clients ##
 
 The following email clients currently work "out of the box":
 
@@ -58,14 +58,14 @@ The following email clients currently work "out of the box":
   more information)
 
 
-## Unsupported clients [unsupported-clients] ##
+## Unsupported clients ##
 
 The following do **not** work:
 
 - Safari (it will open your system default mail client instead)
 
 
-## Help [help] ##
+## Help ##
 
 Further information can be found in the included help file. Use the keyword
 `mailto` to open it in your browser or view it online [here][online-help].
@@ -77,7 +77,7 @@ To report a bug or submit a feature request, please create
 [an issue on GitHub][github-issues] or [submit a pull request][github-pulls].
 
 
-## Thanks, licensing etc. [thanks-licensing-etc] ##
+## Thanks, licensing etc. ##
 
 - The MailTo code is released under the [MIT licence][mit-licence].
 - MailTo is heavily based on [Alfred-Workflow][alfred-workflow], also
