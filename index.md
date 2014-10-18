@@ -72,6 +72,10 @@ Use `mailto` to view/change settings.
     - `↩` or `⌘+NUM` — Add selected contact to list of recipients and send to
       your email client.
 - `mailto [<query>]` — Show, filter and edit configuration.
+    - `Version X.X.X is available` — Such a message will be shown if a newer
+      version of MailTo is available. `↩` to download and install. Please see
+      [Updates, GitHub and Packal](#updates--github-and-packal), especially
+      if you use the [Packal updater][packal-updater].
     - `Force Reload` — `↩` to force MailTo to update its cache of your
       contacts and email clients on your system. By default, MailTo will cache
       your contacts for one hour and the list of email clients on your system
@@ -93,6 +97,10 @@ Use `mailto` to view/change settings.
     - `Help Text: (ON | OFF)` — If `ON` (the default), additional help text
       will be shown in the item subtitles in Alfred. Turning off will make
       MailTo look a bit cleaner. `↩` to toggle on/off.
+    - `Edit Client Formatting Rules` — Edit the `client_rules.json` file
+      where you can add your own rules for a different client or override
+      the built-in defaults. See [Other clients](#other-clients) for details.
+      `↩` to reveal `client_rules.json` in Finder.
     - `View MailTo Help` — `↩` to open the MailTo help file in your browser.
 
 
@@ -106,17 +114,14 @@ much any client will accept a URI containing only email addresses, but many
 choke if the URI also contains recipients' names, e.g.
 `Bob Jones <bob.jones@example.com>` instead of just `bob.jones@example.com`.
 
-Things rapidly go downhill when addressee names contain non-ASCII letters or
-commas.
-
 MailTo knows how to handle all the clients listed below and will automatically
-generate URIs containing only email addresses (no names) if the client is known
-to choke on them.
+fall back to email addresses only if the client is known to choke on names.
 
 If your email weapon-of-choice isn't working properly, try forcing MailTo to
 use email addresses only (enter `mailto` in Alfred and toggle `Format` to
-`Email Only` in MailTo Configuration), and [file a bug report][github-issues] or
-submit a [pull request][github-pulls].
+`Email Only` in MailTo the Configuration), and [file a bug report][github-issues]
+or submit a [pull request][github-pulls] if you've
+[got it working yourself](#other-clients).
 
 
 ### Supported email clients ###
@@ -144,13 +149,14 @@ The following do **not** work:
 
 ### Other clients ###
 
-Anything not listed above hasn't been tested because I don't own a copy.
+Anything not listed above hasn't been tested because I don't own a copy to test
+with.
 
-If your client doesn't work with the default settings, you can try your
-hand at adding rules for that client by editing the `client_rules.json`
-file in MailTo's data directory. To access the file, open the configuration
-options with `mailto` and select `Edit Client Formatting Rules`.
-`client_rules.json` will be revealed in Finder.
+If your client doesn't work with the default settings, you can try your hand at
+adding rules for that client by editing the `client_rules.json` file in MailTo's
+data directory. To access the file, open the configuration options with `mailto`
+and select `Edit Client Formatting Rules`. `client_rules.json` will be revealed
+in Finder.
 
 The file is well documented, and you can try different combinations of
 options to see if you can find one that works with your client. If you do,
@@ -174,14 +180,16 @@ like this (this is the default configuration for [MailMate][mailmate]):
 ```
 
 **Note:** To configure an app, you must use its bundle ID, not its name (i.e.
-`com.freron.MailMate`, not `MailMate`). To get the bundle ID of an application,
-you can use MailTo's [configuration](#all-options).
+`com.freron.MailMate`, not `MailMate`).
 
-Use `mailto` to bring up the configuration menu, and choose `Email Client: …`.
-This will display a list off all compatible apps on your system. Search or
-scroll down the list to select the app you want. Hold `⌘` to display its
-bundle ID as the subtitle or press `⌘+C` to copy the bundle ID to the
-clipboard.
+You can use MailTo's configuration screen to get the bundle ID of an
+application:
+
+1. Use `mailto` to bring up the configuration menu, and choose `Email Client: …`.
+   This will display a list off all compatible apps on your system.
+2. Search or scroll down the list to select the app you want.
+3. Hold `⌘` to display its bundle ID as the subtitle or press `⌘+C` to copy
+   the bundle ID to the pasteboard.
 
 Alternatively, you can use the following command in Terminal to get the
 bundle ID of an application:
@@ -190,7 +198,6 @@ bundle ID of an application:
 mdls -name kMDItemCFBundleIdentifier -raw /Applications/MailMate.app
 # com.freron.MailMate
 ```
-
 
 
 ## Supported account types ##
@@ -336,24 +343,24 @@ Please report any bugs and submit any feature requests via
 
 
 
-[alfred]: http://www.alfredapp.com/
-[mit-licence]: http://opensource.org/licenses/MIT
-[font-awesome]: http://fortawesome.github.io/Font-Awesome/
-[font-awesome-sketch]: https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch
-[sil-licence]: http://scripts.sil.org/OFL
-[dave-gandy]: http://twitter.com/davegandy
-[seth-lilly]: http://twitter.com/sethlilly
-[deanishe]: http://twitter.com/deanishe
+[ab-api]: https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html
 [alfred-workflow]: https://github.com/deanishe/alfred-workflow/
-[mailto-scheme]: http://en.wikipedia.org/wiki/Mailto
-[mailmate]: http://freron.com/
+[alfred]: http://www.alfredapp.com/
+[chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
+[dave-gandy]: http://twitter.com/davegandy
+[deanishe]: http://twitter.com/deanishe
+[fluidapp]: http://fluidapp.com/
+[font-awesome-sketch]: https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch
+[font-awesome]: http://fortawesome.github.io/Font-Awesome/
+[forum-thread]: http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/
 [github-issues]: https://github.com/deanishe/alfred-mailto/issues
 [github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
-[fluidapp]: http://fluidapp.com/
-[roundcube]: http://roundcube.net/
-[forum-thread]: http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/
-[packal-page]: http://www.packal.org/workflow/mailto
 [github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
+[mailmate]: http://freron.com/
+[mailto-scheme]: http://en.wikipedia.org/wiki/Mailto
+[mit-licence]: http://opensource.org/licenses/MIT
+[packal-page]: http://www.packal.org/workflow/mailto
 [packal-updater]: http://www.packal.org/workflow/packal-updater
-[ab-api]: https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html
-[chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
+[roundcube]: http://roundcube.net/
+[seth-lilly]: http://twitter.com/sethlilly
+[sil-licence]: http://scripts.sil.org/OFL
