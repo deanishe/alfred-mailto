@@ -38,37 +38,16 @@ You can add multiple recipients by adding a comma between them.
 
 Use `mailto` to view/change settings.
 
-See [Help][help] for more information.
+See the [online help][help] for more information.
 
 
 ## Supported email clients ##
 
-The following email clients currently work "out of the box":
+MailTo *should* work with any email client, as it uses the standard `mailto:`
+URI scheme to call them.
 
-- Apple Mail
-- Sparrow
-- Thunderbird
-- Postbox
-- Airmail (email addresses only)
-- Unibox
-- MailMate
-- Mailbox Beta (email addresses only)
-- Google Chrome (if you've [set a handler][chrome-handlers])
-- Fluid single-session browsers (please see [Help](#help) for
-  more information)
-
-
-## Unsupported clients ##
-
-The following do **not** work:
-
-- Safari (it will open your system default mail client instead)
-
-
-## Help ##
-
-Further information can be found in the included help file. Use the keyword
-`mailto` to open it in your browser or view it online [here][online-help].
+See the online help for a full list of
+[supported and unsupported clients][help-supported-clients].
 
 
 ## Contribute ##
@@ -91,20 +70,19 @@ To report a bug or submit a feature request, please create
 
 
 
-[alfred]: http://www.alfredapp.com/
-[mit-licence]: http://opensource.org/licenses/MIT
-[font-awesome]: http://fortawesome.github.io/Font-Awesome/
-[font-awesome-sketch]: https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch
-[sil-licence]: http://scripts.sil.org/OFL
-[dave-gandy]: http://twitter.com/davegandy
-[seth-lilly]: http://twitter.com/sethlilly
-[deanishe]: http://twitter.com/deanishe
 [alfred-workflow]: https://github.com/deanishe/alfred-workflow/
+[alfred]: http://www.alfredapp.com/
+[dave-gandy]: http://twitter.com/davegandy
+[deanishe]: http://twitter.com/deanishe
+[font-awesome-sketch]: https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch
+[font-awesome]: http://fortawesome.github.io/Font-Awesome/
 [github-issues]: https://github.com/deanishe/alfred-mailto/issues
 [github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
-[online-help]: http://www.deanishe.net/alfred-mailto/
-[packal-page]: http://www.packal.org/workflow/mailto
 [github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
+[help-supported-clients]: http://www.deanishe.net/alfred-mailto/#supported-clients
+[mit-licence]: http://opensource.org/licenses/MIT
+[help]: http://www.deanishe.net/alfred-mailto/
+[packal-page]: http://www.packal.org/workflow/mailto
 [packal-updater]: http://www.packal.org/workflow/packal-updater
-[chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
-[online-help]: http://www.deanishe.net/alfred-mailto/
+[seth-lilly]: http://twitter.com/sethlilly
+[sil-licence]: http://scripts.sil.org/OFL
