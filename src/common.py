@@ -58,7 +58,8 @@ def nsurl_to_path(nsurl):
 
 def reveal_in_finder(path):
     """Tell Finder to show file at path"""
-    cmd = ['/usr/bin/osascript', '-e', REVEAL_SCRIPT.format(path)]
+    cmd = ['/usr/bin/osascript', '-e',
+           REVEAL_SCRIPT.format(_applescriptify(path))]
     log.debug('Running command : {}'.format(cmd))
     command_output(cmd)
 
