@@ -9,7 +9,7 @@ Documetation:
 	- Update README for Version 2
 		- Create animated GIF showing usage @done(14-10-16 19:16)
 	- Change image URLs after upload
-	-	Publish help.html to `gh-pages`
+	-	Publish docs to `gh-pages` @done(14-10-18 20:39)
 
 Feature requests:
 	- Allow to/cc/bcc fields
