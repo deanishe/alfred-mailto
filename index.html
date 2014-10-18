@@ -788,7 +788,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <p>Quickly select recipients from your Mac&rsquo;s Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.</p>
 
-<p><img src="../../assets/demo.gif" alt="" /></p>
+<p><a name="demo"></a>
+<img src="demo.gif" alt="" /></p>
 
 <h2 id="contents">Contents</h2>
 
@@ -797,6 +798,7 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <li><a href="#usage">Usage</a>
 
 <ul>
+<li><a href="#quickstart">Quickstart</a></li>
 <li><a href="#all-options">All options</a></li>
 </ul>
 </li>
@@ -805,6 +807,7 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <ul>
 <li><a href="#supported-email-clients">Supported email clients</a></li>
 <li><a href="#unsupported-clients">Unsupported clients</a></li>
+<li><a href="#other-clients">Other clients</a></li>
 </ul>
 </li>
 <li><a href="#supported-account-types">Supported account types</a>
@@ -813,8 +816,19 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <li><a href="#google-contacts">Google Contacts</a></li>
 </ul>
 </li>
-<li><a href="#fluid-apps">Fluid apps</a></li>
-<li><a href="#updates">Updates</a></li>
+<li><a href="#miscellany">Miscellany</a>
+
+<ul>
+<li><a href="#configuring-groups-and-distribution-lists">Configuring groups and distribution lists</a></li>
+<li><a href="#fluid-apps">Fluid apps</a>
+
+<ul>
+<li><a href="#roundcube-webmail">Roundcube webmail</a></li>
+</ul>
+</li>
+<li><a href="#updates-github-and-packal">Updates, GitHub and Packal</a></li>
+</ul>
+</li>
 <li><a href="#bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</a></li>
 <li><a href="#thanks-licensing-etc">Thanks, licensing etc.</a></li>
 </ul>
@@ -839,7 +853,7 @@ work.</p>
 Book.</p>
 
 <p>Recipients will be suggested from matching contacts and groups in the
-<a href="#supported-account-types">accounts</a> configured in your <code>Contacts</code> app.
+<a href="#supported-account-types">accounts</a> configured in your Contacts database.
 Hit <code>⇥</code> to autocomplete the recipient list from the selected result, or <code>↩</code>
 or <code>⌘+NUM</code> to add the address to the recipient list and start composing a mail.</p>
 
@@ -861,13 +875,13 @@ contact.</li>
 your email client.</li>
 </ul>
 </li>
-<li><code>mailto [&lt;query&gt;]</code> — Show and edit configuration.
+<li><code>mailto [&lt;query&gt;]</code> — Show, filter and edit configuration.
 
 <ul>
 <li><code>Force Reload</code> — <code>↩</code> to force MailTo to update its cache of your
 contacts and email clients on your system. By default, MailTo will cache
 your contacts for one hour and the list of email clients on your system
-for one day. See <a href="#cache-updates">cache updates</a> for more information.</li>
+for one day.</li>
 <li><code>Email Client: …</code> — Displays your currently selected email client.
 By default, MailTo uses your default system client, but you can change
 to any app on your system that supports the <code>mailto:</code> protocol. <code>↩</code> to
@@ -940,6 +954,10 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 </ul>
 
 
+<h3 id="other-clients">Other clients</h3>
+
+<p>Anything not listed above hasn&rsquo;t been tested because I don&rsquo;t own a copy.</p>
+
 <h2 id="supported-account-types">Supported account types</h2>
 
 <p>MailTo uses the <a href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html">official Address Book API</a> to read your contacts.</p>
@@ -948,16 +966,18 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 
 <ul>
 <li>Local contacts</li>
-<li>iCloud contacts</li>
-<li>Google contacts (see <a href="#google-contacts">below</a>)</li>
+<li>iCloud</li>
+<li>Google (see <a href="#google-contacts">below</a>)</li>
+<li>Facebook</li>
+<li>CardDAV</li>
 </ul>
 
 
 <p>I don&rsquo;t know about any other account types, as I don&rsquo;t have any to test
-MailTo with…</p>
+with…</p>
 
-<p>(If anyone knows how to get an LDAP server working with Contacts.app, please
-drop <a href="http://twitter.com/deanishe">me</a> a line.)</p>
+<p>Please let <a href="http://twitter.com/deanishe">me</a> know if you have a different kind of account,
+e.g. Exchange or LDAP, and whether or not it works.</p>
 
 <h3 id="google-contacts">Google Contacts</h3>
 
@@ -969,7 +989,31 @@ are ignored by Contacts.app.</p>
 <p>This is a limitation of the Contacts.app–Google Contacts integration, not
 of MailTo.</p>
 
-<h2 id="fluid-apps">Fluid apps</h2>
+<h2 id="miscellany">Miscellany</h2>
+
+<h3 id="configuring-groups-and-distribution-lists">Configuring groups and distribution lists</h3>
+
+<p>You can use groups in your Contacts database as mailing lists/distribution
+lists. When you add a contact to a group, their primary email address will
+be used when you send an email to that group (the primary email is the one
+listed first in Contacts.app).</p>
+
+<p>If you&rsquo;d like to change the email address associated with a group, open
+Contacts.app and select the <code>Edit &gt; Edit Distribution List…</code> menu item:</p>
+
+<p><img src="distribution_lists_menu.png" alt="" /></p>
+
+<p>Select the group you&rsquo;d like to edit from the list on the left and then
+click on the email addresses you&rsquo;d like to associate with the group:</p>
+
+<p><img src="distribution_lists_window.png" alt="" /></p>
+
+<p>In this example, I&rsquo;ve associated Jürgen&rsquo;s <code>versuchgroup@example.com</code> email
+address with the group. If you watch the <a href="#demo">demo animation</a>, you can
+see that when I send an email to <code>Test Group</code>, that&rsquo;s the address that&rsquo;s
+used for Jürgen.</p>
+
+<h3 id="fluid-apps">Fluid apps</h3>
 
 <p><a href="http://fluidapp.com/">Fluid</a> is an application that turns web applications into native
 applications. It generates so-called &ldquo;single-session browsers&rdquo;, which are
@@ -982,7 +1026,7 @@ pre-configured by Fluid).</p>
 <p>To add a different webmail service, first you need to figure out the URL to
 send the email address(es) to.</p>
 
-<h3 id="roundcube-webmail">Roundcube webmail</h3>
+<h4 id="roundcube-webmail">Roundcube webmail</h4>
 
 <p>For a <a href="http://roundcube.net/">Roundcube</a> installation, it would be something like:</p>
 
@@ -995,7 +1039,7 @@ script box into your own <code>mailto:*</code> handler&rsquo;s box. Finally, cha
 URL in the <code>outURLString</code> line to your own webmail&rsquo;s URL. For a Roundcube
 installation, it&rsquo;d look like this:</p>
 
-<pre><code>function transform(inURLString) {
+<pre><code class="javascript">function transform(inURLString) {
     inURLString = inURLString.replace(&apos;mailto:&apos;, &apos;&apos;);
     inURLString = inURLString.replace(&apos;&amp;amp;&apos;, &apos;&amp;&apos;);
 
@@ -1016,12 +1060,12 @@ installation, it&rsquo;d look like this:</p>
 
 <p>Don&rsquo;t forget to deactivate (uncheck) the <code>Gmail</code> <code>mailto:*</code> script!</p>
 
-<h2 id="updates">Updates</h2>
+<h3 id="updates--github-and-packal">Updates, GitHub and Packal</h3>
 
 <p>MailTo has a built-in updater and will offer to update itself via GitHub if a
 newer version is available.</p>
 
-<p>You can [turn off update notifications][all-options] if you prefer (by default,
+<p>You can <a href="#all-options">turn off update notifications</a> if you prefer (by default,
 MailTo will show an update notification in your results list).</p>
 
 <p>If you use the <a href="http://www.packal.org/workflow/packal-updater">Packal Updater</a>, you should turn off update
