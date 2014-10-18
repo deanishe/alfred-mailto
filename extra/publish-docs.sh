@@ -7,7 +7,7 @@ if [[ -z "$1" ]]; then
     exit 1
 fi
 
-basedir=$(cd $(dirname $0); pwd)
+basedir=$(cd $(dirname $0)/../; pwd)
 docdir="${basedir}/src/help"
 
 ghp-import -n -p -m "$1" "${docdir}"
