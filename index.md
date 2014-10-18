@@ -1,6 +1,3 @@
-title: MailTo Workflow Help
-author: Dean Jackson <deanishe@deanishe.net>
-date: 2014-10-10
 
 Alfred-MailTo
 =============
