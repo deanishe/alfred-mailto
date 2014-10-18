@@ -139,45 +139,13 @@ class MailToApp(object):
 
     def do_search(self):
         """Search contacts"""
-        from contacts import Contacts
 
         log.debug('Searching contacts')
 
         query = self.args.query
 
-        # Notify of update
-        if self.wf.settings.get('notify_updates', True):
-            if self.wf.update_available:
-                version = wf.cached_data('__workflow_update_status',
-                                         max_age=0)['version']
-
-                subtitle = (
-                    '↩ to install new version, '
-                    '"{}" to turn off notifications'.format(CONFIG_KEYWORD))
-
-                if not self.wf.settings.get('show_help', True):
-                    subtitle = None
-
-                self.wf.add_item(
-                    'Version {} is available'.format(version),
-                    subtitle,
-                    valid=True,
-                    arg='update',
-                    icon=ICON_VERSION_NEW,)
-
-        # Load cached contacts
-        contacts = Contacts()
-
-        if contacts.updating:
-            self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
-
-        if contacts.empty:
-            self.wf.add_item('Contacts not yet cached',
-                             'Please wait a second or two',
-                             icon=ICON_WARNING)
-
-            self.wf.send_feedback()
-            return 0
+        self.notify_of_update()
+        contacts = self.load_contacts()
 
         if not query:
             subtitle = ('↩ to compose a new email or start typing to '
@@ -195,30 +163,13 @@ class MailToApp(object):
             self.wf.send_feedback()
             return 0
 
+        # Nothing further to be done with no contacts...
+        if contacts.empty:
+            self.wf.send_feedback()
+            return 0
+
         # Extract email addresses from query
-        query = query.lower()
-        emails = []
-        invalid_emails = []
-        existing = []
-
-        if ',' in query:
-            emails = [s.strip() for s in query.split(',')]
-
-            if len(emails):
-                existing = []
-                for email in emails[:-1]:
-
-                    if not email_valid(email):
-                        invalid_emails.append(email)
-
-                    else:
-                        existing.append(email)
-
-                query = emails[-1]
-
-        log.debug(
-            'existing : {!r} emails : {!r} invalid_emails : {!r} query : {!r}'
-            .format(existing, emails, invalid_emails, query))
+        query, invalid_emails, existing = self.parse_query(query)
 
         # Show errors first
         if invalid_emails:
@@ -259,7 +210,7 @@ class MailToApp(object):
             recipients = ', '.join(recipients)
             log.debug('recipients : {}'.format(recipients))
 
-            subtitle = ''
+            subtitle = None
 
             if self.wf.settings.get('show_help', True):
                 subtitle = 'Hit ↩ to compose a new message'
@@ -291,7 +242,7 @@ class MailToApp(object):
             subtitle = item['email']
 
             if self.wf.settings.get('show_help', True):
-                subtitle += '  //  ⇥ to add, ↩ to add+compose'
+                subtitle += '  //  ⇥ to add, ↩ to add & compose'
 
             self.wf.add_item(item['name'],
                              subtitle,
@@ -303,6 +254,90 @@ class MailToApp(object):
 
         self.wf.send_feedback()
         return
+
+    # ------------------------------------------------------------------
+    # Search helper methods
+    # ------------------------------------------------------------------
+
+    def load_contacts(self):
+        """Load contacts from cache"""
+        from contacts import Contacts
+        contacts = Contacts()
+        warning = None
+
+        if contacts.updating:
+            self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
+
+            if contacts.empty:
+                warning = ('Contacts not yet cached',
+                           'Please wait a second or two')
+        elif contacts.empty:
+            warning = ('No contacts found',
+                       'Please check the log file for problems')
+
+        if warning:
+            title, subtitle = warning
+            if not self.wf.settings.get('show_help', True):
+                subtitle = None
+
+            self.wf.add_item(title, subtitle, icon=ICON_WARNING)
+
+        return contacts
+
+    def parse_query(self, query):
+        """Extract existing valid and invalid email addresses from query
+
+        Return current query, invalid addresses and valid addresses
+        """
+        query = query.lower()
+        emails = []
+        invalid_emails = []
+        existing = []
+
+        if ',' in query:
+            emails = [s.strip() for s in query.split(',')]
+
+            if len(emails):
+                existing = []
+                for email in emails[:-1]:
+
+                    if not email_valid(email):
+                        invalid_emails.append(email)
+
+                    else:
+                        existing.append(email)
+
+                query = emails[-1]
+
+        log.debug(
+            ('existing : {!r} emails : {!r} '
+             'invalid_emails : {!r} query : {!r}').format(
+                existing, emails, invalid_emails, query))
+
+        return (query, invalid_emails, existing)
+
+    def notify_of_update(self):
+        """Add notification to results list if newer version available"""
+        if self.wf.settings.get('notify_updates', True):
+            if self.wf.update_available:
+                version = wf.cached_data('__workflow_update_status',
+                                         max_age=0)['version']
+
+                subtitle = (
+                    '↩ to install new version, '
+                    '"{}" to turn off notifications'.format(
+                        CONFIG_KEYWORD)
+                )
+
+                if not self.wf.settings.get('show_help', True):
+                    subtitle = None
+
+                self.wf.add_item(
+                    'Version {} is available'.format(version),
+                    subtitle,
+                    valid=True,
+                    arg='update',
+                    icon=ICON_VERSION_NEW,)
 
     # .d8888b. .d8888b. 88d8b.d8b. 88d888b. .d8888b. .d8888b. .d8888b.
     # 88'  `"" 88'  `88 88'`88'`88 88'  `88 88'  `88 Y8ooooo. 88ooood8
@@ -349,6 +384,7 @@ class MailToApp(object):
         log.debug('Forcing cache update ...')
         Contacts().update(force=True)
         self.notify('Refreshing contacts and app caches…')
+        run_alfred('{} '.format(CONFIG_KEYWORD))
         return 0
 
     #                         dP            dP
@@ -383,7 +419,7 @@ class MailToApp(object):
     def do_help(self):
         """Open help file in browser"""
         log.debug('Opening help.html in browser ...')
-        cmd = ['open', wf.workflowfile('help.html')]
+        cmd = ['open', wf.workflowfile('help/index.html')]
         subprocess.call(cmd)
 
     #                            .8888b oo
@@ -397,8 +433,6 @@ class MailToApp(object):
 
     def do_config(self):
         """Show configuration"""
-        from client import Client
-        client = Client()
         log.debug('Showing settings')
 
         query = self.args.query
@@ -408,6 +442,7 @@ class MailToApp(object):
         # --------------------------------------------------------------
         if query.endswith(SEPARATOR):  # User deleted trailing space
             run_alfred('{} '.format(CONFIG_KEYWORD))
+            return
 
         # Subquery
         # --------------------------------------------------------------
@@ -439,6 +474,37 @@ class MailToApp(object):
 
         # Display root configuration options
         # --------------------------------------------------------------
+
+        items = self.get_config_items()
+
+        # Filter items if a query was given
+        if query:
+            items = self.wf.filter(query, items, lambda d: d['title'],
+                                   min_score=50)
+
+        # Show error message
+        if not items:
+            subtitle = 'Try a different query'
+
+            if not self.wf.settings.get('show_help', True):
+                subtitle = None
+
+            self.wf.add_item('Nothing matches', subtitle, icon=ICON_WARNING)
+
+        # Send feedback
+        for item in items:
+
+            if not self.wf.settings.get('show_help', True):
+                item['subtitle'] = None
+
+            self.wf.add_item(**item)
+
+        self.wf.send_feedback()
+
+    def get_config_items(self):
+        """Return list of all configuration items"""
+        from client import Client
+        client = Client()
         items = []
         help_text = '  //  ↩ to change'
 
@@ -578,29 +644,7 @@ class MailToApp(object):
             )
         )
 
-        # Filter items if a query was given
-        if query:
-            items = self.wf.filter(query, items, lambda d: d['title'],
-                                   min_score=50)
-
-        # Show error message
-        if not items:
-            subtitle = 'Try a different query'
-
-            if not self.wf.settings.get('show_help', True):
-                subtitle = None
-
-            self.wf.add_item('Nothing matches', subtitle, icon=ICON_WARNING)
-
-        # Send feedback
-        for item in items:
-
-            if not self.wf.settings.get('show_help', True):
-                item['subtitle'] = None
-
-            self.wf.add_item(**item)
-
-        self.wf.send_feedback()
+        return items
 
     #          dP oo                     dP
     #          88                        88
@@ -681,6 +725,7 @@ class MailToApp(object):
             msg = 'Email client set to System Default'
             log.info(msg)
             self.notify(msg)
+            run_alfred('{} '.format(CONFIG_KEYWORD))
             return
 
         if not os.path.exists(app_path):
@@ -692,6 +737,7 @@ class MailToApp(object):
         msg = 'Email client set to : {}'.format(client.default_app['name'])
         log.info(msg)
         self.notify(msg)
+        run_alfred('{} '.format(CONFIG_KEYWORD))
 
     #   dP                              dP
     #   88                              88
