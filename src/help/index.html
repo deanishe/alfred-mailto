@@ -779,7 +779,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </style>
 
 </head>
-<body class="normal">
+<body class="normal firstload">
   <div id="wrapper">
       <h1 id="alfred-mailto">Alfred-MailTo</h1>
 
@@ -987,7 +987,7 @@ script box into your own <code>mailto:*</code> handler&#8217;s box. Finally, cha
 URL in the <code>outURLString</code> line to your own webmail&#8217;s URL. For a Roundcube
 installation, it&#8217;d look like this:</p>
 
-<pre><code>function transform(inURLString) {
+<pre><code class="javascript">function transform(inURLString) {
     inURLString = inURLString.replace(&apos;mailto:&apos;, &apos;&apos;);
     inURLString = inURLString.replace(&apos;&amp;amp;&apos;, &apos;&amp;&apos;);
 
