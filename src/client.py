@@ -183,7 +183,7 @@ class Client(object):
 
     def __init__(self):
         self.all_email_apps = []
-        self.system_default_app = None
+        self.system_default_app = {}
         self.update()
 
     def get_default_app(self):
@@ -236,6 +236,10 @@ class Client(object):
         self.all_email_apps = wf.cached_data('all_apps', max_age=0)
         self.system_default_app = wf.cached_data('system_default_app',
                                                  max_age=0)
+        if self.all_email_apps is None:
+            self.all_email_apps = []
+        if self.system_default_app is None:
+            self.system_default_app = {}
 
         do_update = False
         if force:
@@ -255,6 +259,10 @@ class Client(object):
     @property
     def updating(self):
         return is_running('update-apps')
+
+    @property
+    def empty(self):
+        return not self.all_email_apps or not self.system_default_app
 
 
 if __name__ == '__main__':

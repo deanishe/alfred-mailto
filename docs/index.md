@@ -146,6 +146,52 @@ The following do **not** work:
 
 Anything not listed above hasn't been tested because I don't own a copy.
 
+If your client doesn't work with the default settings, you can try your
+hand at adding rules for that client by editing the `client_rules.json`
+file in MailTo's data directory. To access the file, open the configuration
+options with `mailto` and select `Edit Client Formatting Rules`.
+`client_rules.json` will be revealed in Finder.
+
+The file is well documented, and you can try different combinations of
+options to see if you can find one that works with your client. If you do,
+please share them in a [GitHub issue][github-issues] or
+[pull request][github-pulls] (add the configuration to the default
+`client_rules.json` in the `src` directory). A sample configuration looks
+like this (this is the default configuration for [MailMate][mailmate]):
+
+```javascript
+{
+  "com.freron.MailMate": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  },
+  // other apps here
+  // ...
+}
+```
+
+**Note:** To configure an app, you must use its bundle ID, not its name (i.e.
+`com.freron.MailMate`, not `MailMate`). To get the bundle ID of an application,
+you can use MailTo's [configuration](#all-options).
+
+Use `mailto` to bring up the configuration menu, and choose `Email Client: …`.
+This will display a list off all compatible apps on your system. Search or
+scroll down the list to select the app you want. Hold `⌘` to display its
+bundle ID as the subtitle or press `⌘+C` to copy the bundle ID to the
+clipboard.
+
+Alternatively, you can use the following command in Terminal to get the
+bundle ID of an application:
+
+```bash
+mdls -name kMDItemCFBundleIdentifier -raw /Applications/MailMate.app
+# com.freron.MailMate
+```
+
+
 
 ## Supported account types ##
 
@@ -300,6 +346,7 @@ Please report any bugs and submit any feature requests via
 [deanishe]: http://twitter.com/deanishe
 [alfred-workflow]: https://github.com/deanishe/alfred-workflow/
 [mailto-scheme]: http://en.wikipedia.org/wiki/Mailto
+[mailmate]: http://freron.com/
 [github-issues]: https://github.com/deanishe/alfred-mailto/issues
 [github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
 [fluidapp]: http://fluidapp.com/

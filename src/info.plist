@@ -8,6 +8,17 @@
 	<string>Communication</string>
 	<key>connections</key>
 	<dict>
+		<key>419A11FA-3FCE-43E4-A3DA-6D8F3B18152B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>8550C579-13D1-4CC6-984E-11A6ADEC72EA</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
 		<array>
 			<dict>
@@ -37,6 +48,14 @@
 				<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
 				<key>modifiers</key>
 				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>419A11FA-3FCE-43E4-A3DA-6D8F3B18152B</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
 				<key>modifiersubtext</key>
 				<string></string>
 			</dict>
@@ -152,6 +171,23 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>/usr/bin/python mailto.py {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>419A11FA-3FCE-43E4-A3DA-6D8F3B18152B</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Rapidly create a list of recipients for a new email and compose it with the email client of your choice.
@@ -159,6 +195,11 @@
 You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (use "mailto" query) for more information.</string>
 	<key>uidata</key>
 	<dict>
+		<key>419A11FA-3FCE-43E4-A3DA-6D8F3B18152B</key>
+		<dict>
+			<key>ypos</key>
+			<real>190</real>
+		</dict>
 		<key>8550C579-13D1-4CC6-984E-11A6ADEC72EA</key>
 		<dict>
 			<key>ypos</key>

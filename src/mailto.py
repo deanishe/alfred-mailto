@@ -582,7 +582,7 @@ class MailToApp(object):
 
         else:
             appname = 'System Default'
-            path = client.system_default_app['path']
+            path = client.system_default_app.get('path', '')
 
         items.append(
             dict(
@@ -708,9 +708,21 @@ class MailToApp(object):
         log.debug('Choosing email client')
         log.debug('query : {}'.format(query))
         # apps list a list of tuples [(name, path), ...]
-        apps = [t for t in client.all_email_apps if os.path.exists(t[1])]
+        apps = [d for d in client.all_email_apps if os.path.exists(d['path'])]
 
         log.debug('{} email clients on system'.format(len(apps)))
+
+        if client.empty:
+            if not client.updating:
+                client.update(force=True)
+
+            self.wf.add_item(
+                'Application list is currently empty',
+                'Please wait a few moments for the update to finish',
+                icon=ICON_WARNING,
+            )
+            self.wf.send_feedback()
+            return
 
         if not query:  # Show current setting
             if not self.wf.settings.get('default_app'):  # System default
@@ -718,6 +730,7 @@ class MailToApp(object):
                 self.wf.add_item(
                     'Current Email Client: System Default',
                     app['path'],
+                    # modifier_subtitles={'cmd': app['bundleid']},
                     icon=app['path'],
                     icontype='fileicon'
                 )
@@ -726,6 +739,7 @@ class MailToApp(object):
                 self.wf.add_item(
                     'Current Email Client: {}'.format(app['name']),
                     app['path'],
+                    # modifier_subtitles={'cmd': app['bundleid']},
                     icon=app['path'],
                     icontype='fileicon'
                 )
@@ -734,14 +748,16 @@ class MailToApp(object):
                 self.wf.add_item(
                     'System Default ({})'.format(app['name']),
                     app['path'],
+                    modifier_subtitles={'cmd': app['bundleid']},
                     arg='setclient DEFAULT',
                     valid=True,
+                    copytext=app['bundleid'],
                     icon=app['path'],
                     icontype='fileicon'
                 )
 
         if query:
-            apps = self.wf.filter(query, apps, lambda t: t[0],
+            apps = self.wf.filter(query, apps, lambda d: d['name'],
                                   min_score=30)
 
         if not apps:
@@ -749,14 +765,16 @@ class MailToApp(object):
                              'Try another query',
                              icon=ICON_WARNING)
 
-        for name, path in apps:
-            arg = 'setclient {}'.format(quote(path))
+        for app in apps:
+            arg = 'setclient {}'.format(quote(app['path']))
             # log.debug('arg for `{}` : {}'.format(name, arg))
-            self.wf.add_item(name,
-                             path,
+            self.wf.add_item(app['name'],
+                             app['path'],
+                             modifier_subtitles={'cmd': app['bundleid']},
                              valid=True,
+                             copytext=app['bundleid'],
                              arg=arg,
-                             icon=path,
+                             icon=app['path'],
                              icontype='fileicon')
 
         self.wf.send_feedback()

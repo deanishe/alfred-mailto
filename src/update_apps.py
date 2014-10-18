@@ -72,8 +72,8 @@ def get_system_default_handler():
 
 def main(wf):
     start_time = time()
-    wf.cache_data('all_apps', get_email_handlers())
     wf.cache_data('system_default_app', get_system_default_handler())
+    wf.cache_data('all_apps', get_email_handlers())
     log.debug('Client application caches updated in {:0.3f} seconds'.format(
               time() - start_time))
 
