@@ -27,9 +27,9 @@ your email client of choice. Also works with Groups/Distribution Lists.
     - [Configuring groups and distribution lists](#configuring-groups-and-distribution-lists)
     - [Fluid apps](#fluid-apps)
         - [Roundcube webmail](#roundcube-webmail)
-    - [Updates, GitHub and Packal](#updates-github-and-packal)
-- [Bugs, feature requests, suggestions](#bugs-feature-requests-suggestions)
-- [Thanks, licensing etc.](#thanks-licensing-etc)
+    - [Updates, GitHub and Packal](#updates--github-and-packal)
+- [Bugs, feature requests, suggestions](#bugs--feature-requests--suggestions)
+- [Thanks, licensing etc.](#thanks--licensing-etc)
 
 
 ## Download and installation ##
