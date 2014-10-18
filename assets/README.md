@@ -1,4 +1,3 @@
-# Assets #
 
 The source files for the workflow's icons.
 
