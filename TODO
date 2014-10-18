@@ -2,23 +2,28 @@
 Database:
 
 Configuration:
-	- Delete v1 settings on first run (or bad things will happen) @done(14-10-18 13:31)
 	- Turn off update checks
+		This really has to be implemented in Alfred-Workflow if `workflow:update` is still to work.
 
 Documetation:
-	- Update README for Version 2
-		- Create animated GIF showing usage @done(14-10-16 19:16)
-	- Change image URLs after upload
-	-	Publish docs to `gh-pages` @done(14-10-18 20:39)
 
-Feature requests:
+New features:
 	- Allow to/cc/bcc fields
 		Adding 'to', 'cc' or 'bcc' as a recipient would add following recipients to that field
+		- Add indicator to result titles that cc/bcc mode is active
+			i.e. show "cc Lance Uppercut" instead of "Lance Uppercut"
+		- Warn if client doesn't like cc/bcc in mailto: URIs
+			- Test if there *are* any clients that don't like cc/bcc in mailto: URIs
 
 Bugs:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	- Update README for Version 2 @done(14-10-19 00:49) @project(Documetation)
+	- Change image URLs after upload @done(14-10-19 00:49) @project(Documetation)
+	-	Publish docs to `gh-pages` @done(14-10-18 20:39) @project(Documetation)
+	- Delete v1 settings on first run (or bad things will happen) @done(14-10-18 13:31) @project(Configuration)
+	- Create animated GIF showing usage @done(14-10-16 19:16) @project(Documetation)
 	- Add nickname support @done(14-10-07 12:51) @project(Database)
 		Pull contact nicknames from Contacts db
 	- Make cached contacts data more useable @done(14-10-07 12:35) @project(Database)

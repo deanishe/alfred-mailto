@@ -643,14 +643,11 @@ class MailToApp(object):
         if self.wf.settings.get('show_help', True):
             title = 'Help Text: ON'
             icon = ICON_ON
-            subtitle = 'Action hints will be shown in subtitles'
+            subtitle = 'Action hints will be shown in subtitles' + help_text
         else:
             title = 'Help Text: OFF'
             icon = ICON_OFF
             subtitle = 'Subtitles will show no action hints'
-
-        if self.wf.settings.get('show_help', True):
-            subtitle += help_text
 
         items.append(
             dict(
@@ -718,7 +715,7 @@ class MailToApp(object):
 
             self.wf.add_item(
                 'Application list is currently empty',
-                'Please wait a few moments for the update to finish',
+                'Check back in a few seconds after the update has finished',
                 icon=ICON_WARNING,
             )
             self.wf.send_feedback()

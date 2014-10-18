@@ -253,8 +253,6 @@ class Client(object):
             log.debug('Updating application caches ...')
             cmd = ['/usr/bin/python', wf.workflowfile('update_apps.py')]
             run_in_background('update-apps', cmd)
-        # self.get_all_email_apps(force=True)
-        # self.get_system_default_app(force=True)
 
     @property
     def updating(self):
