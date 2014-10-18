@@ -35,17 +35,17 @@ MAX_APP_CACHE_AGE = ONE_DAY
 
 
 # Client-specific formatting rules
-#               spaces, names, MIME, no commas
-DEFAULT_RULES = (True, True, True, False)
+#               spaces, names, MIME, no commas, inline to
+DEFAULT_RULES = (True, True, True, False, False)
 
 
 RULES = {
-    'it.bloop.airmail': (False, False, False, False),
-    'com.eightloops.Unibox': (True, True, False, True),
-    'com.google.Chrome': (True, True, False, False),
-    'com.freron.MailMate': (True, True, False, False),
-    'com.dropbox.mbd.external-beta': (False, False, False, False),
-    'com.fluidapp.FluidApp.*': (True, True, False, False),
+    'it.bloop.airmail': (False, False, False, False, True),
+    'com.eightloops.Unibox': (True, True, False, True, False),
+    'com.google.Chrome': (True, True, False, False, False),
+    'com.freron.MailMate': (True, True, False, False, False),
+    'com.dropbox.mbd.external-beta': (False, True, False, True, False),
+    'com.fluidapp.FluidApp.*': (True, True, False, False, False),
 }
 
 # Where to search for applications
@@ -78,7 +78,8 @@ class Formatter(object):
         (self.use_spaces,
          self.use_names,
          self.use_mime,
-         self.use_no_commas) = self.rules
+         self.use_no_commas,
+         self.inline_to) = self.rules
         log.debug(u'Loaded rules {!r} for client {!r}'.format(self.rules,
                                                               client))
 
@@ -135,7 +136,9 @@ class Formatter(object):
 
         if encoded:  # also needs quoting
             result = quote(result, safe='@')
-        return b'mailto:{}'.format(result)
+        if self.inline_to:
+            return b'mailto:{}'.format(result)
+        return b'mailto:?to={}'.format(result)
 
 
 #   .oooooo.   oooo   o8o                            .
