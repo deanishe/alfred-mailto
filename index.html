@@ -779,18 +779,16 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </style>
 
 </head>
-<body class="normal firstload">
+<body class="normal">
   <div id="wrapper">
       <h1 id="alfred-mailto">Alfred-MailTo</h1>
 
 <p>A Workflow for <a href="http://www.alfredapp.com/">Alfred 2</a>.</p>
 
-<p>Quickly select recipients from your Mac&#8217;s Contacts database and send them to
+<p>Quickly select recipients from your Mac&rsquo;s Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.</p>
 
-<figure>
-<img src="../assets/demo.gif" alt="" />
-</figure>
+<p><img src="../../assets/demo.gif" alt="" /></p>
 
 <h2 id="contents">Contents</h2>
 
@@ -800,23 +798,27 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 
 <ul>
 <li><a href="#all-options">All options</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#email-clients">Email clients</a>
 
 <ul>
 <li><a href="#supported-email-clients">Supported email clients</a></li>
 <li><a href="#unsupported-clients">Unsupported clients</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#supported-account-types">Supported account types</a>
 
 <ul>
 <li><a href="#google-contacts">Google Contacts</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#fluid-apps">Fluid apps</a></li>
 <li><a href="#updates">Updates</a></li>
 <li><a href="#bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</a></li>
 <li><a href="#thanks-licensing-etc">Thanks, licensing etc.</a></li>
 </ul>
+
 
 <h2 id="download-and-installation">Download and installation</h2>
 
@@ -828,12 +830,12 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <h2 id="usage">Usage</h2>
 
 <p><strong>Note:</strong> The first time you run MailTo, you will probably be asked to grant
-access to your Contacts. Obviously enough, if you refuse access, MailTo won&#8217;t
+access to your Contacts. Obviously enough, if you refuse access, MailTo won&rsquo;t
 work.</p>
 
 <h3 id="quickstart">Quickstart</h3>
 
-<p>Use the <code>@</code> keyword in Alfred to access MailTo and search your Mac&#8217;s Address
+<p>Use the <code>@</code> keyword in Alfred to access MailTo and search your Mac&rsquo;s Address
 Book.</p>
 
 <p>Recipients will be suggested from matching contacts and groups in the
@@ -849,42 +851,45 @@ or <code>⌘+NUM</code> to add the address to the recipient list and start compo
 
 <ul>
 <li><code>@ &lt;query&gt;</code> — Search your Contacts by name, nickname, email address. The
- search is fairly smart and will match &#8220;bs&#8221; to &#8220;Bob Smith&#8221;. You can also enter
- email addresses that aren&#8217;t in your Contacts.
+search is fairly smart and will match &ldquo;bs&rdquo; to &ldquo;Bob Smith&rdquo;. You can also enter
+email addresses that aren&rsquo;t in your Contacts.
 
 <ul>
 <li><code>⇥</code> — Add selected contact to list of recipients and search for another
- contact.</li>
+contact.</li>
 <li><code>↩</code> or <code>⌘+NUM</code> — Add selected contact to list of recipients and send to
- your email client.</li>
-</ul></li>
+your email client.</li>
+</ul>
+</li>
 <li><code>mailto [&lt;query&gt;]</code> — Show and edit configuration.
 
 <ul>
 <li><code>Force Reload</code> — <code>↩</code> to force MailTo to update its cache of your
- contacts and email clients on your system. By default, MailTo will cache
- your contacts for one hour and the list of email clients on your system
- for one day. See <a href="#cache-updates">cache updates</a> for more information.</li>
+contacts and email clients on your system. By default, MailTo will cache
+your contacts for one hour and the list of email clients on your system
+for one day. See <a href="#cache-updates">cache updates</a> for more information.</li>
 <li><code>Email Client: …</code> — Displays your currently selected email client.
- By default, MailTo uses your default system client, but you can change
- to any app on your system that supports the <code>mailto:</code> protocol. <code>↩</code> to
- view and search a list of your apps and <code>↩</code> again to select one.</li>
+By default, MailTo uses your default system client, but you can change
+to any app on your system that supports the <code>mailto:</code> protocol. <code>↩</code> to
+view and search a list of your apps and <code>↩</code> again to select one.</li>
 <li><code>Format: (Name &amp; Email | Email Only)</code> — How MailTo sends the list of
- recipients to your email client. Default is <code>Name &amp; Email</code>, whereby
- MailTo will use email addresses only if the selected client is known
- not to support names in <code>mailto:</code> URIs (see
- <a href="#supported-email-clients">Supported email clients</a>). <code>↩</code> to toggle
- between the two formats.</li>
+recipients to your email client. Default is <code>Name &amp; Email</code>, whereby
+MailTo will use email addresses only if the selected client is known
+not to support names in <code>mailto:</code> URIs (see
+<a href="#supported-email-clients">Supported email clients</a>). <code>↩</code> to toggle
+between the two formats.</li>
 <li><code>Update Notifications: (ON | OFF)</code> — If <code>ON</code> (the default), MailTo will
- show a notice of any available update at the top of its search results
- list. If <code>OFF</code>, you&#8217;ll have to go into the Configuration (<code>mailto</code>) to
- see if a new version is available. <code>↩</code> to toggle on/off.</li>
+show a notice of any available update at the top of its search results
+list. If <code>OFF</code>, you&rsquo;ll have to go into the Configuration (<code>mailto</code>) to
+see if a new version is available. <code>↩</code> to toggle on/off.</li>
 <li><code>Help Text: (ON | OFF)</code> — If <code>ON</code> (the default), additional help text
- will be shown in the item subtitles in Alfred. Turning off will make
- MailTo look a bit cleaner. <code>↩</code> to toggle on/off.</li>
+will be shown in the item subtitles in Alfred. Turning off will make
+MailTo look a bit cleaner. <code>↩</code> to toggle on/off.</li>
 <li><code>View MailTo Help</code> — <code>↩</code> to open the MailTo help file in your browser.</li>
-</ul></li>
 </ul>
+</li>
+</ul>
+
 
 <h2 id="email-clients">Email clients</h2>
 
@@ -893,7 +898,7 @@ or <code>⌘+NUM</code> to add the address to the recipient list and start compo
 
 <p>In <em>practice</em>, support for <code>mailto:</code> varies widely between clients. Pretty
 much any client will accept a URI containing only email addresses, but many
-choke if the URI also contains recipients&#8217; names, e.g.
+choke if the URI also contains recipients' names, e.g.
 <code>Bob Jones &lt;bob.jones@example.com&gt;</code> instead of just <code>bob.jones@example.com</code>.</p>
 
 <p>Things rapidly go downhill when addressee names contain non-ASCII letters or
@@ -903,14 +908,14 @@ commas.</p>
 generate URIs containing only email addresses (no names) if the client is known
 to choke on them.</p>
 
-<p>If your email weapon-of-choice isn&#8217;t working properly, try forcing MailTo to
+<p>If your email weapon-of-choice isn&rsquo;t working properly, try forcing MailTo to
 use email addresses only (enter <code>mailto</code> in Alfred and toggle <code>Format</code> to
 <code>Email Only</code> in MailTo Configuration), and <a href="https://github.com/deanishe/alfred-mailto/issues">file a bug report</a> or
 submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request</a>.</p>
 
 <h3 id="supported-email-clients">Supported email clients</h3>
 
-<p>The following email clients currently work &#8220;out of the box&#8221;:</p>
+<p>The following email clients currently work &ldquo;out of the box&rdquo;:</p>
 
 <ul>
 <li>Apple Mail</li>
@@ -921,9 +926,10 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 <li>Unibox</li>
 <li>MailMate</li>
 <li>Mailbox Beta (email addresses only)</li>
-<li>Google Chrome (if you&#8217;ve <a href="https://support.google.com/chrome/answer/1382847?hl=en">set a handler</a>)</li>
+<li>Google Chrome (if you&rsquo;ve <a href="https://support.google.com/chrome/answer/1382847?hl=en">set a handler</a>)</li>
 <li>Fluid single-session browsers (see <a href="#fluid-apps">note</a>)</li>
 </ul>
+
 
 <h3 id="unsupported-clients">Unsupported clients</h3>
 
@@ -932,6 +938,7 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 <ul>
 <li>Safari (it will open your system default mail client instead)</li>
 </ul>
+
 
 <h2 id="supported-account-types">Supported account types</h2>
 
@@ -945,7 +952,8 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 <li>Google contacts (see <a href="#google-contacts">below</a>)</li>
 </ul>
 
-<p>I don&#8217;t know about any other account types, as I don&#8217;t have any to test
+
+<p>I don&rsquo;t know about any other account types, as I don&rsquo;t have any to test
 MailTo with…</p>
 
 <p>(If anyone knows how to get an LDAP server working with Contacts.app, please
@@ -964,30 +972,30 @@ of MailTo.</p>
 <h2 id="fluid-apps">Fluid apps</h2>
 
 <p><a href="http://fluidapp.com/">Fluid</a> is an application that turns web applications into native
-applications. It generates so-called &#8220;single-session browsers&#8221;, which are
+applications. It generates so-called &ldquo;single-session browsers&rdquo;, which are
 basically browser apps designed to visit only one website.</p>
 
 <p>By default, all Fluid-generated apps can handle <code>mailto:</code> URIs (and will show
-up in MailTo&#8217;s list of email clients), but only via Gmail (which is
+up in MailTo&rsquo;s list of email clients), but only via Gmail (which is
 pre-configured by Fluid).</p>
 
 <p>To add a different webmail service, first you need to figure out the URL to
 send the email address(es) to.</p>
 
-<h3 id="roundcubewebmail">Roundcube webmail</h3>
+<h3 id="roundcube-webmail">Roundcube webmail</h3>
 
 <p>For a <a href="http://roundcube.net/">Roundcube</a> installation, it would be something like:</p>
 
 <p><code>https://mail.example.com/?_task=mail&amp;_action=compose&amp;to=</code></p>
 
-<p>Once you&#8217;ve got your URL, open your Fluid app&#8217;s Preferences and go to <code>URL
+<p>Once you&rsquo;ve got your URL, open your Fluid app&rsquo;s Preferences and go to <code>URL
 Handler Preferences</code>. Add a new group for your webmail service and add the
 pattern <code>mailto:*</code>. Then copy the JavaScript from the <code>Gmail &gt; mailto:*</code>
-script box into your own <code>mailto:*</code> handler&#8217;s box. Finally, change the
-URL in the <code>outURLString</code> line to your own webmail&#8217;s URL. For a Roundcube
-installation, it&#8217;d look like this:</p>
+script box into your own <code>mailto:*</code> handler&rsquo;s box. Finally, change the
+URL in the <code>outURLString</code> line to your own webmail&rsquo;s URL. For a Roundcube
+installation, it&rsquo;d look like this:</p>
 
-<pre><code class="javascript">function transform(inURLString) {
+<pre><code>function transform(inURLString) {
     inURLString = inURLString.replace(&apos;mailto:&apos;, &apos;&apos;);
     inURLString = inURLString.replace(&apos;&amp;amp;&apos;, &apos;&amp;&apos;);
 
@@ -1005,44 +1013,46 @@ installation, it&#8217;d look like this:</p>
     return outURLString;
 }</code></pre>
 
-<p>Don&#8217;t forget to deactivate (uncheck) the <code>Gmail</code> <code>mailto:*</code> script!</p>
+
+<p>Don&rsquo;t forget to deactivate (uncheck) the <code>Gmail</code> <code>mailto:*</code> script!</p>
 
 <h2 id="updates">Updates</h2>
 
 <p>MailTo has a built-in updater and will offer to update itself via GitHub if a
 newer version is available.</p>
 
-<p>You can <a href="#all-options">turn off update notifications</a> if you prefer (by default,
+<p>You can [turn off update notifications][all-options] if you prefer (by default,
 MailTo will show an update notification in your results list).</p>
 
 <p>If you use the <a href="http://www.packal.org/workflow/packal-updater">Packal Updater</a>, you should turn off update
 notifications and leave the updating to the Packal Updater. An update
 notification will still be shown in the configuration screen (keyword <code>mailto</code>),
-but it&#8217;s much easier to avoid selecting that one by accident.</p>
+but it&rsquo;s much easier to avoid selecting that one by accident.</p>
 
 <p>Packal adds additional metadata to the workflows it distributes to enable
 updates. This metadata is missing in the GitHub version, so the Packal Updater
 will no longer update MailTo for you until you reinstall it from Packal.</p>
 
-<h2 id="bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</h2>
+<h2 id="bugs--feature-requests--suggestions">Bugs, feature requests, suggestions</h2>
 
 <p>Please report any bugs and submit any feature requests via
 <a href="https://github.com/deanishe/alfred-mailto/issues">GitHub issues</a> or in the thread on the
 <a href="http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/">Alfred Forum</a>.</p>
 
-<h2 id="thanks-licensing-etc">Thanks, licensing etc.</h2>
+<h2 id="thanks--licensing-etc.">Thanks, licensing etc.</h2>
 
 <ul>
 <li>The MailTo code is released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
 <li>MailTo is heavily based on <a href="https://github.com/deanishe/alfred-workflow/">Alfred-Workflow</a>, also
- released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a> and also by <a href="http://twitter.com/deanishe">me</a>.</li>
-<li>The icons are almost all from <a href="http://twitter.com/davegandy">Dave Gandy</a>&#8217;s
- <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> (<a href="http://scripts.sil.org/OFL">SIL Open Font License</a>) via
- <a href="http://twitter.com/sethlilly">Seth Lilly</a>&#8217;s also awesome
- <a href="https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch">Font Awesome Symbols for Sketch</a>
- (<a href="http://opensource.org/licenses/MIT">MIT licence</a>). Any icons that are not from Font Awesome, you
- may do with as you please.</li>
+released under the <a href="http://opensource.org/licenses/MIT">MIT licence</a> and also by <a href="http://twitter.com/deanishe">me</a>.</li>
+<li>The icons are almost all from <a href="http://twitter.com/davegandy">Dave Gandy</a>&rsquo;s
+<a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> (<a href="http://scripts.sil.org/OFL">SIL Open Font License</a>) via
+<a href="http://twitter.com/sethlilly">Seth Lilly</a>&rsquo;s also awesome
+<a href="https://github.com/sethlilly/Font-Awesome-Symbols-for-Sketch">Font Awesome Symbols for Sketch</a>
+(<a href="http://opensource.org/licenses/MIT">MIT licence</a>). Any icons that are not from Font Awesome, you
+may do with as you please.</li>
 </ul>
+
 
 <div style="display:none">
 <!--This seemingly unnecessary div markup is the only thing keeping this script working after Markdown conversion. Trust me.-->
@@ -1050,6 +1060,7 @@ will no longer update MailTo for you until you reinstall it from Packal.</p>
 </script>
 <script>hljs.initHighlightingOnLoad();</script>
 </div>
+
 <!-- ##END MARKED WRAPPER## -->
     </div>
 </body>
