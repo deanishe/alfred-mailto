@@ -124,6 +124,7 @@ class MailToApp(object):
     # dP       `88888P' dP    dP
 
     def run(self, wf):
+        self.wf = wf
         # Check if v1 was installed and delete its data if if was
         filepath = wf.datafile(V2_HAS_RUN_FILENAME)
         if not os.path.exists(filepath):
@@ -134,8 +135,6 @@ class MailToApp(object):
         # Copy client_rules.json.template to <datadir> if it doesn't exist
         self.client_rules_path = wf.datafile('client_rules.json')
         self._create_client_rules()
-
-        self.wf = wf
         self.args = self._parse_args()
         log.debug('args : {}'.format(self.args))
         method_name = 'do_{}'.format(self.args.action)
@@ -406,9 +405,11 @@ class MailToApp(object):
 
     def do_reload(self):
         """Force update of contacts cache"""
-        from contacts import Contacts
         log.debug('Forcing cache update ...')
+        from contacts import Contacts
+        from client import Client
         Contacts().update(force=True)
+        Client().update(force=True)
         self.notify('Refreshing contacts and app caches…')
         run_alfred('{} '.format(CONFIG_KEYWORD))
         return 0

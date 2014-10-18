@@ -248,10 +248,10 @@ def main(wf):
              people_count, group_count, time() - start))
 
     # Update client application caches
-    start = time()
-    Client().update()
-    log.debug('Client application caches updated in {:0.3f} seconds'.format(
-              time() - start))
+    # start = time()
+    # Client().update()
+    # log.debug('Client application caches updated in {:0.3f} seconds'.format(
+    #           time() - start))
 
     return 0
 

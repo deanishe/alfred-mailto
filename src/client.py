@@ -21,9 +21,10 @@ import re
 from time import time
 from urllib import quote
 
+from workflow.background import run_in_background, is_running
 from workflow import Workflow
 
-from common import command_output, ONE_DAY
+from common import ONE_DAY, appname, bundleid
 import verbose_json as json
 
 wf = Workflow()
@@ -181,7 +182,9 @@ class Client(object):
     """
 
     def __init__(self):
-        pass
+        self.all_email_apps = []
+        self.system_default_app = None
+        self.update()
 
     def get_default_app(self):
         """Return info dict on default email client or None
@@ -198,8 +201,8 @@ class Client(object):
     def set_default_app(self, app_path):
         """Set default email client to application at ``app_path``"""
         d = {'path': app_path}
-        d['name'] = self.appname(app_path)
-        d['bundleid'] = self.bundleid(app_path)
+        d['name'] = appname(app_path)
+        d['bundleid'] = bundleid(app_path)
         wf.settings['default_app'] = d
 
     default_app = property(get_default_app, set_default_app)
@@ -228,105 +231,30 @@ class Client(object):
         formatter = Formatter(bundleid)
         return formatter.get_url(recipients, wf.settings.get('use_name', True))
 
-    def update(self):
-        """Force update of system default app and list of mailto handlers"""
-        log.debug('Updating application caches ...')
-        self.get_all_email_apps(force=True)
-        self.get_system_default_app(force=True)
+    def update(self, force=False):
+        """Load apps from cache, update if required"""
+        self.all_email_apps = wf.cached_data('all_apps', max_age=0)
+        self.system_default_app = wf.cached_data('system_default_app',
+                                                 max_age=0)
 
-    # dP     dP           dP
-    # 88     88           88
-    # 88aaaaa88a .d8888b. 88 88d888b. .d8888b. 88d888b. .d8888b.
-    # 88     88  88ooood8 88 88'  `88 88ooood8 88'  `88 Y8ooooo.
-    # 88     88  88.  ... 88 88.  .88 88.  ... 88             88
-    # dP     dP  `88888P' dP 88Y888P' `88888P' dP       `88888P'
-    #                        88
-    #                        dP
-
-    def get_all_email_apps(self, force=False):
-        """Return list of all applications that support mailto:
-
-        [('app name', '/app/path'), ...]
-
-        """
+        do_update = False
         if force:
-            wf.cache_data('all_apps', None)
-        return wf.cached_data('all_apps',
-                              self._find_email_handlers,
-                              MAX_APP_CACHE_AGE)
+            do_update = True
+        elif not wf.cached_data_fresh('all_apps', MAX_APP_CACHE_AGE):
+            do_update = True
+        elif not wf.cached_data_fresh('system_default_app', MAX_APP_CACHE_AGE):
+            do_update = True
+        # Update if required
+        if do_update:
+            log.debug('Updating application caches ...')
+            cmd = ['/usr/bin/python', wf.workflowfile('update_apps.py')]
+            run_in_background('update-apps', cmd)
+        # self.get_all_email_apps(force=True)
+        # self.get_system_default_app(force=True)
 
-    all_email_apps = property(get_all_email_apps)
-
-    def get_system_default_app(self, force=False):
-        """Return bundleid of system default email client"""
-        if force:
-            wf.cache_data('system_default_app', None)
-        return wf.cached_data('system_default_app',
-                              self._find_system_default_handler,
-                              MAX_APP_CACHE_AGE)
-
-    system_default_app = property(get_system_default_app)
-
-    def appname(self, app_path):
-        """Return app name for application at ``app_path``"""
-        return os.path.splitext(os.path.basename(app_path))[0]
-
-    def bundleid(self, app_path):
-        """Return bundle ID for application at ``app_path``"""
-        cmd = ['mdls', '-name', 'kMDItemCFBundleIdentifier', app_path]
-        output = command_output(cmd)
-
-        m = match_bundle_id(output)
-
-        if not m:
-            raise ValueError(
-                'No bundle ID found for application `{}`'.format(app_path))
-
-        return m.group(1)
-
-    def _find_email_handlers(self):
-        """Find all apps that can handle mailto URLs"""
-        from LaunchServices import (LSCopyApplicationURLsForURL,
-                                    kLSRolesAll,
-                                    CFURLCreateWithString)
-
-        url = CFURLCreateWithString(None, 'mailto:test@example.com', None)
-        apps = set()
-
-        nsurls = LSCopyApplicationURLsForURL(url, kLSRolesAll)
-        paths = set([self._nsurl_to_path(nsurl) for nsurl in nsurls])
-
-        for path in paths:
-            apps.add((self.appname(path), path))
-            log.debug('mailto handler : {}'.format(
-                      path))
-
-        apps = sorted(apps)
-
-        log.debug('{} email clients found'.format(len(apps)))
-
-        return apps
-
-    def _find_system_default_handler(self):
-        """Return app info for system default mailto handler"""
-        from LaunchServices import (LSGetApplicationForURL,
-                                    kLSRolesAll,
-                                    CFURLCreateWithString)
-        url = CFURLCreateWithString(None, 'mailto:test@example.com', None)
-        app = {}
-        ok, info, nsurl = LSGetApplicationForURL(url, kLSRolesAll,
-                                                 None, None)
-
-        app['path'] = self._nsurl_to_path(nsurl)
-        app['name'] = self.appname(app['path'])
-        app['bundleid'] = self.bundleid(app['path'])
-
-        log.debug('System default mailto handler : {}'.format(app))
-        return app
-
-    def _nsurl_to_path(self, nsurl):
-        """Convert a file:// NSURL object to a Unicode path"""
-        return wf.decode(nsurl.path()).rstrip('/')
+    @property
+    def updating(self):
+        return is_running('update-apps')
 
 
 if __name__ == '__main__':

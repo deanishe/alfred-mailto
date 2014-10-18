@@ -14,6 +14,7 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 
+import os
 import subprocess
 
 from workflow import Workflow
@@ -37,6 +38,22 @@ end tell
 def _applescriptify(text):
     """Replace double quotes in text"""
     return text.replace('"', '" + quote + "')
+
+
+def appname(app_path):
+    """Return app name for application at ``app_path``"""
+    return os.path.splitext(os.path.basename(app_path))[0]
+
+
+def bundleid(app_path):
+    """Return bundle ID for application at ``app_path``"""
+    cmd = ['mdls', '-name', 'kMDItemCFBundleIdentifier', '-raw', app_path]
+    return command_output(cmd)
+
+
+def nsurl_to_path(nsurl):
+    """Convert a file:// NSURL object to a Unicode path"""
+    return wf.decode(nsurl.path()).rstrip('/')
 
 
 def reveal_in_finder(path):

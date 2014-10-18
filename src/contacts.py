@@ -56,8 +56,8 @@ class Contacts(object):
         # Update if required
         if not wf.cached_data_fresh('contacts', MAX_CACHE_AGE) or force:
             log.debug('Updating contacts cache ...')
-            cmd = ['/usr/bin/python', wf.workflowfile('update_caches.py')]
-            run_in_background('update', cmd)
+            cmd = ['/usr/bin/python', wf.workflowfile('update_contacts.py')]
+            run_in_background('update-contacts', cmd)
 
     @property
     def empty(self):
@@ -65,7 +65,7 @@ class Contacts(object):
 
     @property
     def updating(self):
-        return is_running('update')
+        return is_running('update-contacts')
 
     def name_for_email(self, email):
         """Return name associated with email or None"""
