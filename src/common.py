@@ -26,11 +26,24 @@ ONE_HOUR = 3600
 ONE_WEEK = ONE_DAY * 7
 ONE_MONTH = ONE_DAY * 30
 ALFRED_SCRIPT = 'tell application "Alfred 2" to search "{}"'
+REVEAL_SCRIPT = '''
+tell application "Finder"
+    reveal POSIX file "{}"
+    activate
+end tell
+'''
 
 
 def _applescriptify(text):
     """Replace double quotes in text"""
     return text.replace('"', '" + quote + "')
+
+
+def reveal_in_finder(path):
+    """Tell Finder to show file at path"""
+    cmd = ['/usr/bin/osascript', '-e', REVEAL_SCRIPT.format(path)]
+    log.debug('Running command : {}'.format(cmd))
+    command_output(cmd)
 
 
 def run_alfred(query):

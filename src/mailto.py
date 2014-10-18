@@ -13,6 +13,7 @@
 Usage:
     mailto.py search <query>
     mailto.py config [<query>]
+    mailto.py edit_client_rules
     mailto.py setclient <app_path>
     mailto.py toggle (format|update|help)
     mailto.py compose [<recipients>]
@@ -27,12 +28,13 @@ from argparse import ArgumentParser
 import os
 from pipes import quote
 import re
+import shutil
 import subprocess
 import sys
 
 from workflow import Workflow
 
-from common import run_alfred
+from common import run_alfred, reveal_in_finder
 
 # Placeholder
 log = None
@@ -46,6 +48,10 @@ email_valid = re.compile(r'[^@]+@[^@]+\.[^@]+').match
 # Grab version number from `version` file
 with open(os.path.join(os.path.dirname(__file__), 'version')) as file_obj:
     __version__ = file_obj.read().strip()
+
+# Will be opened in your browser when the help item in configuration
+# is actioned
+HELP_URL = 'http://www.deanishe.net/alfred-mailto/'
 
 # Alfred keyword to open settings. This is used with the `run_alfred`
 # function to re-open the configuration after toggling a setting
@@ -83,6 +89,9 @@ ICON_GROUP = 'icons/group.icns'
 ICON_HELP = 'icons/help.icns'
 ICON_PERSON = 'icons/person.icns'
 ICON_RELOAD = 'icons/reload.icns'
+ICON_ON = 'icons/toggle_on.icns'
+ICON_OFF = 'icons/toggle_off.icns'
+ICON_RULES = 'icons/rules.icns'
 ICON_VERSION_NEW = 'icons/update-available.icns'
 ICON_VERSION_OK = 'icons/update-none.icns'
 ICON_WARNING = 'icons/warning.icns'
@@ -107,7 +116,7 @@ class MailToApp(object):
     """
 
     def __init__(self):
-        self.wf = wf
+        self.wf = None
 
     # 88d888b. dP    dP 88d888b.
     # 88'  `88 88    88 88'  `88
@@ -121,6 +130,10 @@ class MailToApp(object):
             log.debug('First run of v2. Deleting old data…')
             wf.reset()
             open(filepath, 'wb').write('')
+
+        # Copy client_rules.json.template to <datadir> if it doesn't exist
+        self.client_rules_path = wf.datafile('client_rules.json')
+        self._create_client_rules()
 
         self.wf = wf
         self.args = self._parse_args()
@@ -371,6 +384,19 @@ class MailToApp(object):
         cmd.append(url)
         command_output(cmd)
 
+    #                dP oo   dP                        dP
+    #                88      88                        88
+    # .d8888b. .d888b88 dP d8888P    88d888b. dP    dP 88 .d8888b. .d8888b.
+    # 88ooood8 88'  `88 88   88      88'  `88 88    88 88 88ooood8 Y8ooooo.
+    # 88.  ... 88.  .88 88   88      88       88.  .88 88 88.  ...       88
+    # `88888P' `88888P8 dP   dP      dP       `88888P' dP `88888P' `88888P'
+
+    def do_edit_client_rules(self):
+        """Open user's `client_rules.json` in Finder"""
+        self._create_client_rules()
+        reveal_in_finder(self.client_rules_path)
+        self.notify('Revealing client rules file in Finder')
+
     #                   dP                         dP
     #                   88                         88
     # 88d888b. .d8888b. 88 .d8888b. .d8888b. .d888b88
@@ -418,9 +444,8 @@ class MailToApp(object):
 
     def do_help(self):
         """Open help file in browser"""
-        log.debug('Opening help.html in browser ...')
-        cmd = ['open', wf.workflowfile('help/index.html')]
-        subprocess.call(cmd)
+        log.debug('Opening {} in browser ...'.format(HELP_URL))
+        subprocess.call(['open', HELP_URL])
 
     #                            .8888b oo
     #                            88   "
@@ -593,9 +618,11 @@ class MailToApp(object):
         # Update notification
         if self.wf.settings.get('notify_updates', True):
             title = 'Update Notifications: ON'
+            icon = ICON_ON
             subtitle = 'You will be notifed when a new version is available'
         else:
             title = 'Update Notifications: OFF'
+            icon = ICON_OFF
             subtitle = "You will have to check here for a new version"
 
         if self.wf.settings.get('show_help', True):
@@ -607,16 +634,18 @@ class MailToApp(object):
                 subtitle=subtitle,
                 valid=True,
                 arg='toggle notify_updates',
-                icon=ICON_CONFIG,
+                icon=icon,
             )
         )
 
         # Additional help text in subtitle
         if self.wf.settings.get('show_help', True):
             title = 'Help Text: ON'
+            icon = ICON_ON
             subtitle = 'Action hints will be shown in subtitles'
         else:
             title = 'Help Text: OFF'
+            icon = ICON_OFF
             subtitle = 'Subtitles will show no action hints'
 
         if self.wf.settings.get('show_help', True):
@@ -629,6 +658,24 @@ class MailToApp(object):
                 # autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
                 valid=True,
                 arg='toggle help_text',
+                icon=icon,
+            )
+        )
+
+        # Edit client rules
+        title = 'Edit Client Formatting Rules'
+        subtitle = 'Override the defaults or configure a new email client'
+
+        if not self.wf.settings.get('show_help', True):
+            subtitle = None
+
+        items.append(
+            dict(
+                title=title,
+                subtitle=subtitle,
+                # autocomplete=' {} Format {} '.format(SEPARATOR, SEPARATOR),
+                valid=True,
+                arg='edit_client_rules',
                 icon=ICON_CONFIG,
             )
         )
@@ -820,6 +867,14 @@ class MailToApp(object):
     #                        88
     #                        dP
 
+    def _create_client_rules(self):
+        """Copy `client_rules.json.template` to datadir"""
+        if not os.path.exists(self.client_rules_path):
+            srcpath = self.wf.workflowfile('client_rules.json.template')
+            shutil.copy(srcpath, self.client_rules_path)
+            log.debug('Created empty client rules file at {}'.format(
+                      self.client_rules_path))
+
     def notify(self, message):
         """Simple wrapper around ``print`` that encodes output"""
         if isinstance(message, unicode):
@@ -833,6 +888,7 @@ class MailToApp(object):
             'action',
             choices=('search',
                      'config',
+                     'edit_client_rules',
                      'setclient',
                      'toggle',
                      'compose',

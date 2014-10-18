@@ -24,6 +24,7 @@ from urllib import quote
 from workflow import Workflow
 
 from common import command_output, ONE_DAY
+import verbose_json as json
 
 wf = Workflow()
 log = wf.logger
@@ -41,29 +42,27 @@ MAX_APP_CACHE_AGE = ONE_DAY
 #             If `False`, names will never be sent. Of the tested clients,
 #             only Airmail chokes on names, but it's smart enough to retrive
 #             the name from your Contacts.app database
-# MIME      = MIME-encode non-ASCII characters in names. No known client
+# mime      = MIME-encode non-ASCII characters in names. No known client
 #             requires this. If encoded, the recipient will also be
 #             URL-quoted
-# no commas = Client chokes on commas in a recipient's name. For most
+# no_commas = Client chokes on commas in a recipient's name. For most
 #             clients, it's sufficient to enclose such names in ""
-# inline to = Client requires URI of form `mailto:email.address@domain.com`
+# inline_to = Client requires URI of form `mailto:email.address@domain.com`
 #             not `mailto:?to=email.address@domain.com`. Airmail and
 #             Mailbox (Beta) disagree here. No other client cares.
 
-#               spaces, names, MIME, no commas, inline to
-DEFAULT_RULES = (True, True, True, False, False)
-
-
-# Client-specific rules keyed by application bundle ID. Note, the
-# bundle ID can contain wildcards (e.g. the FluidApp bundle ID)
-RULES = {
-    'it.bloop.airmail': (False, False, False, False, True),
-    'com.eightloops.Unibox': (True, True, False, True, False),
-    'com.google.Chrome': (True, True, False, False, False),
-    'com.freron.MailMate': (True, True, False, False, False),
-    'com.dropbox.mbd.external-beta': (False, True, False, True, False),
-    'com.fluidapp.FluidApp.*': (True, True, False, False, False),
+DEFAULT_RULES = {
+    "spaces": True,
+    "names": True,
+    "mime": True,
+    "no_commas": False,
+    "inline_to": False
 }
+
+# Client-specific rules are loaded from the `client_rules.json` file
+# adjacent to this file and the file of the same name in the workflow's
+# data directory (if it exists and contains anything).
+# The file in the data directory overrides the default one.
 
 
 # oooooooooooo                                                    .       .
@@ -74,6 +73,7 @@ RULES = {
 #  888         888   888  888      888   888   888  d8(  888    888 .   888 . 888    .o  888
 # o888o        `Y8bod8P' d888b    o888o o888o o888o `Y888""8o   "888"   "888" `Y8bod8P' d888b
 
+
 class Formatter(object):
     """Format the mailto: URL according to client-specific rules
 
@@ -83,17 +83,27 @@ class Formatter(object):
 
     def __init__(self, client):
         self.client = client
+        # Load rules
+        client_rules = {}
+        for path in [wf.workflowfile('client_rules.json'),
+                     wf.datafile('client_rules.json')]:
+            if not os.path.exists(path):
+                continue
+            log.debug(
+                'Loading client formatting rules from {} ...'.format(path))
+            with open(path) as fp:
+                client_rules.update(json.load(fp))
         self.rules = DEFAULT_RULES
         # Get rules for selected client
-        for bundle_id in RULES:
+        for bundle_id in client_rules:
             if fnmatch(client, bundle_id):
-                self.rules = RULES.get(bundle_id)
+                self.rules = client_rules.get(bundle_id)
+                break
 
-        (self.use_spaces,
-         self.use_names,
-         self.use_mime,
-         self.use_no_commas,
-         self.inline_to) = self.rules
+        for key in ('spaces', 'names', 'mime', 'no_commas', 'inline_to'):
+            value = self.rules[key]
+            setattr(self, 'use_{}'.format(key), value)
+
         log.debug(u'Loaded rules {!r} for client {!r}'.format(self.rules,
                                                               client))
 
@@ -150,7 +160,7 @@ class Formatter(object):
 
         if encoded:  # also needs quoting
             result = quote(result, safe='@')
-        if self.inline_to:
+        if self.use_inline_to:
             return b'mailto:{}'.format(result)
         return b'mailto:?to={}'.format(result)
 
