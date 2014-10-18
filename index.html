@@ -958,6 +958,49 @@ submit a <a href="https://github.com/deanishe/alfred-mailto/pulls">pull request<
 
 <p>Anything not listed above hasn&rsquo;t been tested because I don&rsquo;t own a copy.</p>
 
+<p>If your client doesn&rsquo;t work with the default settings, you can try your
+hand at adding rules for that client by editing the <code>client_rules.json</code>
+file in MailTo&rsquo;s data directory. To access the file, open the configuration
+options with <code>mailto</code> and select <code>Edit Client Formatting Rules</code>.
+<code>client_rules.json</code> will be revealed in Finder.</p>
+
+<p>The file is well documented, and you can try different combinations of
+options to see if you can find one that works with your client. If you do,
+please share them in a <a href="https://github.com/deanishe/alfred-mailto/issues">GitHub issue</a> or
+<a href="https://github.com/deanishe/alfred-mailto/pulls">pull request</a> (add the configuration to the default
+<code>client_rules.json</code> in the <code>src</code> directory). A sample configuration looks
+like this (this is the default configuration for <a href="http://freron.com/">MailMate</a>):</p>
+
+<pre><code class="javascript">{
+  &quot;com.freron.MailMate&quot;: {
+    &quot;spaces&quot;: true,
+    &quot;names&quot;: true,
+    &quot;mime&quot;: false,
+    &quot;no_commas&quot;: false,
+    &quot;inline_to&quot;: false
+  },
+  // other apps here
+  // ...
+}</code></pre>
+
+
+<p><strong>Note:</strong> To configure an app, you must use its bundle ID, not its name (i.e.
+<code>com.freron.MailMate</code>, not <code>MailMate</code>). To get the bundle ID of an application,
+you can use MailTo&rsquo;s <a href="#all-options">configuration</a>.</p>
+
+<p>Use <code>mailto</code> to bring up the configuration menu, and choose <code>Email Client: …</code>.
+This will display a list off all compatible apps on your system. Search or
+scroll down the list to select the app you want. Hold <code>⌘</code> to display its
+bundle ID as the subtitle or press <code>⌘+C</code> to copy the bundle ID to the
+clipboard.</p>
+
+<p>Alternatively, you can use the following command in Terminal to get the
+bundle ID of an application:</p>
+
+<pre><code class="bash">mdls -name kMDItemCFBundleIdentifier -raw /Applications/MailMate.app
+# com.freron.MailMate</code></pre>
+
+
 <h2 id="supported-account-types">Supported account types</h2>
 
 <p>MailTo uses the <a href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/AddressBook/AddressBook.html">official Address Book API</a> to read your contacts.</p>
