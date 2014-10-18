@@ -13,17 +13,22 @@ Read Contacts database and cache relevant information.
 
 Generates a JSON dict:
 {
-    'names': [
-        ['name', ['email1', 'email2', ...]],
+    'contacts': [
+        {
+            'name': "Person's or company name",  # may be empty
+            'email': 'email.address@example.com',
+            'nickname': "Contact's nickname",
+            'company': "Name of contact's company",
+            'is_group': True/False,
+            'is_company': True/False,
+            'key': nickname + name + email,
+        },
         ...
     ],
-    'emails': [
-        ['email', 'name'],
+    'email_name_map': {
+        'email.address@example.com': "Person's or company name",
         ...
-    ],
-    'groups': [
-        ['name', ['email1', 'email2', ...]]
-    ]
+    }
 }
 """
 
@@ -239,7 +244,7 @@ def main(wf):
 
     wf.cache_data('contacts', cache_data)
 
-    log.info('{} people, {} groups loaded in {:0.2f} seconds'.format(
+    log.info('{} people, {} groups cached in {:0.2f} seconds'.format(
              people_count, group_count, time() - start))
 
     # Update client application caches
