@@ -107,4 +107,4 @@ To report a bug or submit a feature request, please create
 [github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
 [packal-updater]: http://www.packal.org/workflow/packal-updater
 [chrome-handlers]: https://support.google.com/chrome/answer/1382847?hl=en
-[online-help]: http://www.deanishe.net/mailto/
+[online-help]: http://www.deanishe.net/alfred-mailto/
