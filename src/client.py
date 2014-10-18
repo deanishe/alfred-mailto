@@ -35,10 +35,27 @@ MAX_APP_CACHE_AGE = ONE_DAY
 
 
 # Client-specific formatting rules
+# `True` means use the feature, `False` means don't use the feature
+# spaces    = delimit recipients with `, `, not just `,`
+# names     = also include recipient names in the mailto: URI.
+#             If `False`, names will never be sent. Of the tested clients,
+#             only Airmail chokes on names, but it's smart enough to retrive
+#             the name from your Contacts.app database
+# MIME      = MIME-encode non-ASCII characters in names. No known client
+#             requires this. If encoded, the recipient will also be
+#             URL-quoted
+# no commas = Client chokes on commas in a recipient's name. For most
+#             clients, it's sufficient to enclose such names in ""
+# inline to = Client requires URI of form `mailto:email.address@domain.com`
+#             not `mailto:?to=email.address@domain.com`. Airmail and
+#             Mailbox (Beta) disagree here. No other client cares.
+
 #               spaces, names, MIME, no commas, inline to
 DEFAULT_RULES = (True, True, True, False, False)
 
 
+# Client-specific rules keyed by application bundle ID. Note, the
+# bundle ID can contain wildcards (e.g. the FluidApp bundle ID)
 RULES = {
     'it.bloop.airmail': (False, False, False, False, True),
     'com.eightloops.Unibox': (True, True, False, True, False),
@@ -47,9 +64,6 @@ RULES = {
     'com.dropbox.mbd.external-beta': (False, True, False, True, False),
     'com.fluidapp.FluidApp.*': (True, True, False, False, False),
 }
-
-# Where to search for applications
-APPLICATION_PATHS = ('/Applications', os.path.expanduser('~/Applications'))
 
 
 # oooooooooooo                                                    .       .
@@ -150,7 +164,11 @@ class Formatter(object):
 #  `Y8bood8P'  o888o o888o `Y8bod8P' o888o o888o   "888"
 
 class Client(object):
-    """Email client manager"""
+    """Email client manager
+
+    Maintains a list of all email clients on the system, which is the
+    system default and which is the default for MailTo (if one is set)
+    """
 
     def __init__(self):
         pass

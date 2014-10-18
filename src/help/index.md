@@ -135,6 +135,10 @@ The following do **not** work:
 
 - Safari (it will open your system default mail client instead)
 
+### Other clients ###
+
+Anything not listed above hasn't been tested because I don't own a copy.
+
 
 ## Supported account types ##
 
