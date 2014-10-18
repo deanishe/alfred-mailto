@@ -795,6 +795,7 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <h2 id="contents">Contents</h2>
 
 <ul>
+<li><a href="#download-and-installation">Download and installation</a></li>
 <li><a href="#usage">Usage</a>
 
 <ul>
@@ -816,6 +817,13 @@ your email client of choice. Also works with Groups/Distribution Lists.</p>
 <li><a href="#bugs-feature-requests-suggestions">Bugs, feature requests, suggestions</a></li>
 <li><a href="#thanks-licensing-etc">Thanks, licensing etc.</a></li>
 </ul>
+
+<h2 id="download-and-installation">Download and installation</h2>
+
+<p>You can install MailTo either from <a href="https://github.com/deanishe/alfred-mailto/releases/latest">GitHub releases</a> or
+<a href="http://www.packal.org/workflow/mailto">the Packal website</a>.</p>
+
+<p>Install by double-clicking <code>MailTo.alfredworkflow</code>.</p>
 
 <h2 id="usage">Usage</h2>
 
@@ -892,7 +900,7 @@ choke if the URI also contains recipients&#8217; names, e.g.
 commas.</p>
 
 <p>MailTo knows how to handle all the clients listed below and will automatically
-generate URIs containing only email addresses (no names) if the client in know
+generate URIs containing only email addresses (no names) if the client is known
 to choke on them.</p>
 
 <p>If your email weapon-of-choice isn&#8217;t working properly, try forcing MailTo to
@@ -979,7 +987,7 @@ script box into your own <code>mailto:*</code> handler&#8217;s box. Finally, cha
 URL in the <code>outURLString</code> line to your own webmail&#8217;s URL. For a Roundcube
 installation, it&#8217;d look like this:</p>
 
-<pre><code class="javascript">function transform(inURLString) {
+<pre><code>function transform(inURLString) {
     inURLString = inURLString.replace(&apos;mailto:&apos;, &apos;&apos;);
     inURLString = inURLString.replace(&apos;&amp;amp;&apos;, &apos;&amp;&apos;);
 

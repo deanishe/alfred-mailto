@@ -14,6 +14,7 @@ your email client of choice. Also works with Groups/Distribution Lists.
 
 ## Contents ##
 
+- [Download and installation](#download-and-installation)
 - [Usage](#usage)
     - [All options](#all-options)
 - [Email clients](#email-clients)
@@ -27,11 +28,20 @@ your email client of choice. Also works with Groups/Distribution Lists.
 - [Thanks, licensing etc.](#thanks-licensing-etc)
 
 
+## Download and installation [download-and-installation] ##
+
+You can install MailTo either from [GitHub releases][github-releases] or
+[the Packal website][packal-page].
+
+Install by double-clicking `MailTo.alfredworkflow`.
+
+
 ## Usage [usage] ##
 
 **Note:** The first time you run MailTo, you will probably be asked to grant
 access to your Contacts. Obviously enough, if you refuse access, MailTo won't
 work.
+
 
 ### Quickstart ###
 
@@ -46,6 +56,7 @@ or `⌘+NUM` to add the address to the recipient list and start composing a mail
 You can add multiple recipients by adding a comma between them.
 
 Use `mailto` to view/change settings.
+
 
 ### All options [all-options] ###
 
@@ -95,13 +106,14 @@ Things rapidly go downhill when addressee names contain non-ASCII letters or
 commas.
 
 MailTo knows how to handle all the clients listed below and will automatically
-generate URIs containing only email addresses (no names) if the client in know
+generate URIs containing only email addresses (no names) if the client is known
 to choke on them.
 
 If your email weapon-of-choice isn't working properly, try forcing MailTo to
 use email addresses only (enter `mailto` in Alfred and toggle `Format` to
 `Email Only` in MailTo Configuration), and [file a bug report][github-issues] or
 submit a [pull request][github-pulls].
+
 
 ### Supported email clients [supported-email-clients] ###
 
@@ -118,11 +130,13 @@ The following email clients currently work "out of the box":
 - Google Chrome (if you've [set a handler][chrome-handlers])
 - Fluid single-session browsers (see [note](#fluid-apps))
 
+
 ### Unsupported clients [unsupported-clients] ###
 
 The following do **not** work:
 
 - Safari (it will open your system default mail client instead)
+
 
 ## Supported account types [supported-account-types] ##
 
@@ -139,6 +153,7 @@ MailTo with…
 
 (If anyone knows how to get an LDAP server working with Contacts.app, please
 drop [me][deanishe] a line.)
+
 
 ### Google Contacts [google-contacts] ###
 

@@ -15,6 +15,8 @@ your email client of choice. Also works with Groups/Distribution Lists.
 You can install MailTo either from [GitHub releases][github-releases] or
 [the Packal website][packal-page].
 
+Install by double-clicking `MailTo.alfredworkflow`.
+
 
 ## Usage [usage] ##
 
