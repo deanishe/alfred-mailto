@@ -8,20 +8,26 @@ A Workflow for [Alfred 2][alfred].
 Quickly select recipients from your Mac's Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.
 
-![](../../assets/demo.gif)
+<a name="demo"></a>
+![](demo.gif)
 
 ## Contents ##
 
 - [Download and installation](#download-and-installation)
 - [Usage](#usage)
+    - [Quickstart](#quickstart)
     - [All options](#all-options)
 - [Email clients](#email-clients)
     - [Supported email clients](#supported-email-clients)
     - [Unsupported clients](#unsupported-clients)
+    - [Other clients](#other-clients)
 - [Supported account types](#supported-account-types)
     - [Google Contacts](#google-contacts)
-- [Fluid apps](#fluid-apps)
-- [Updates](#updates)
+- [Miscellany](#miscellany)
+    - [Configuring groups and distribution lists](#configuring-groups-and-distribution-lists)
+    - [Fluid apps](#fluid-apps)
+        - [Roundcube webmail](#roundcube-webmail)
+    - [Updates, GitHub and Packal](#updates-github-and-packal)
 - [Bugs, feature requests, suggestions](#bugs-feature-requests-suggestions)
 - [Thanks, licensing etc.](#thanks-licensing-etc)
 
@@ -47,7 +53,7 @@ Use the `@` keyword in Alfred to access MailTo and search your Mac's Address
 Book.
 
 Recipients will be suggested from matching contacts and groups in the
-[accounts](#supported-account-types) configured in your `Contacts` app.
+[accounts](#supported-account-types) configured in your Contacts database.
 Hit `⇥` to autocomplete the recipient list from the selected result, or `↩`
 or `⌘+NUM` to add the address to the recipient list and start composing a mail.
 
@@ -65,11 +71,11 @@ Use `mailto` to view/change settings.
       contact.
     - `↩` or `⌘+NUM` — Add selected contact to list of recipients and send to
       your email client.
-- `mailto [<query>]` — Show and edit configuration.
+- `mailto [<query>]` — Show, filter and edit configuration.
     - `Force Reload` — `↩` to force MailTo to update its cache of your
       contacts and email clients on your system. By default, MailTo will cache
       your contacts for one hour and the list of email clients on your system
-      for one day. See [cache updates](#cache-updates) for more information.
+      for one day.
     - `Email Client: …` — Displays your currently selected email client.
       By default, MailTo uses your default system client, but you can change
       to any app on your system that supports the `mailto:` protocol. `↩` to
@@ -135,6 +141,7 @@ The following do **not** work:
 
 - Safari (it will open your system default mail client instead)
 
+
 ### Other clients ###
 
 Anything not listed above hasn't been tested because I don't own a copy.
@@ -147,14 +154,16 @@ MailTo uses the [official Address Book API][ab-api] to read your contacts.
 The following account types are *definitely* supported:
 
 - Local contacts
-- iCloud contacts
-- Google contacts (see [below](#google-contacts))
+- iCloud
+- Google (see [below](#google-contacts))
+- Facebook
+- CardDAV
 
 I don't know about any other account types, as I don't have any to test
-MailTo with…
+with…
 
-(If anyone knows how to get an LDAP server working with Contacts.app, please
-drop [me][deanishe] a line.)
+Please let [me][deanishe] know if you have a different kind of account,
+e.g. Exchange or LDAP, and whether or not it works.
 
 
 ### Google Contacts ###
@@ -167,8 +176,32 @@ are ignored by Contacts.app.
 This is a limitation of the Contacts.app–Google Contacts integration, not
 of MailTo.
 
+## Miscellany ##
 
-## Fluid apps ##
+### Configuring groups and distribution lists ###
+
+You can use groups in your Contacts database as mailing lists/distribution
+lists. When you add a contact to a group, their primary email address will
+be used when you send an email to that group (the primary email is the one
+listed first in Contacts.app).
+
+If you'd like to change the email address associated with a group, open
+Contacts.app and select the `Edit > Edit Distribution List…` menu item:
+
+![](distribution_lists_menu.png "")
+
+Select the group you'd like to edit from the list on the left and then
+click on the email addresses you'd like to associate with the group:
+
+![](distribution_lists_window.png "")
+
+In this example, I've associated Jürgen's `versuchgroup@example.com` email
+address with the group. If you watch the [demo animation](#demo), you can
+see that when I send an email to `Test Group`, that's the address that's
+used for Jürgen.
+
+
+### Fluid apps ###
 
 [Fluid][fluidapp] is an application that turns web applications into native
 applications. It generates so-called "single-session browsers", which are
@@ -182,7 +215,7 @@ To add a different webmail service, first you need to figure out the URL to
 send the email address(es) to.
 
 
-### Roundcube webmail ###
+#### Roundcube webmail ####
 
 For a [Roundcube][roundcube] installation, it would be something like:
 
@@ -218,12 +251,12 @@ function transform(inURLString) {
 Don't forget to deactivate (uncheck) the `Gmail` `mailto:*` script!
 
 
-## Updates ##
+### Updates, GitHub and Packal ###
 
 MailTo has a built-in updater and will offer to update itself via GitHub if a
 newer version is available.
 
-You can [turn off update notifications][all-options] if you prefer (by default,
+You can [turn off update notifications](#all-options) if you prefer (by default,
 MailTo will show an update notification in your results list).
 
 If you use the [Packal Updater][packal-updater], you should turn off update

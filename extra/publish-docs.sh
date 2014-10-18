@@ -8,6 +8,6 @@ if [[ -z "$1" ]]; then
 fi
 
 basedir=$(cd $(dirname $0)/../; pwd)
-docdir="${basedir}/src/help"
+docdir="${basedir}/docs"
 
 ghp-import -n -p -m "$1" "${docdir}"

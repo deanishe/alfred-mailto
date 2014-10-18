@@ -7,7 +7,7 @@ A Workflow for [Alfred 2][alfred].
 Quickly select recipients from your Mac's Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.
 
-![](assets/demo.gif)
+![](docs/demo.gif)
 
 
 ## Download and installation ##
