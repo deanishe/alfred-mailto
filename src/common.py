@@ -47,8 +47,9 @@ def appname(app_path):
 
 def bundleid(app_path):
     """Return bundle ID for application at ``app_path``"""
-    cmd = ['mdls', '-name', 'kMDItemCFBundleIdentifier', '-raw', app_path]
-    return command_output(cmd)
+    from Foundation import NSBundle
+    bundle = NSBundle.bundleWithPath_(app_path)
+    return bundle.bundleIdentifier()
 
 
 def nsurl_to_path(nsurl):
