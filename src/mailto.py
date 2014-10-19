@@ -151,6 +151,8 @@ class MailToApp(object):
 
     def do_search(self):
         """Search contacts"""
+        from client import Client
+        client = Client()
 
         log.debug('Searching contacts')
 
@@ -172,6 +174,15 @@ class MailToApp(object):
                              arg='compose',
                              icon=ICON_COMPOSE)
 
+            self.wf.send_feedback()
+            return 0
+
+        if client.empty:
+            title, subtitle = ('App cache not yet initialised',
+                               'Try again in a few seconds…')
+            if not self.wf.settings.get('show_help', True):
+                subtitle = None
+            self.wf.add_item(title, subtitle, icon=ICON_WARNING)
             self.wf.send_feedback()
             return 0
 
