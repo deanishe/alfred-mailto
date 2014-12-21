@@ -332,10 +332,8 @@ class MailToApp(object):
 
                 query = emails[-1]
 
-        log.debug(
-            ('existing : {!r} emails : {!r} '
-             'invalid_emails : {!r} query : {!r}').format(
-                existing, emails, invalid_emails, query))
+        msg = 'existing : {!r} emails : {!r} invalid_emails : {!r} query : {!r}'
+        log.debug(msg.format(existing, emails, invalid_emails, query))
 
         return (query, invalid_emails, existing)
 
@@ -933,6 +931,7 @@ if __name__ == '__main__':
         default_settings=DEFAULT_SETTINGS,
         # libraries=[os.path.join(os.path.dirname(__file__), 'libs')],
     )
+    wf.magic_prefix = 'wf:'
     log = wf.logger
     app = MailToApp()
     sys.exit(wf.run(app.run))
