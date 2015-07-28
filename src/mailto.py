@@ -15,7 +15,7 @@ Usage:
     mailto.py config [<query>]
     mailto.py edit_client_rules
     mailto.py setclient <app_path>
-    mailto.py toggle (format|update|help)
+    mailto.py toggle (format|notify_updates|help_text|notify_cache_updates)
     mailto.py compose [<recipients>]
     mailto.py reload
     mailto.py update
@@ -45,10 +45,6 @@ log = None
 # commonly used
 email_valid = re.compile(r'[^@]+@[^@]+\.[^@]+').match
 
-# Grab version number from `version` file
-with open(os.path.join(os.path.dirname(__file__), 'version')) as file_obj:
-    __version__ = file_obj.read().strip()
-
 # Will be opened in your browser when the help item in configuration
 # is actioned
 HELP_URL = 'http://www.deanishe.net/alfred-mailto/'
@@ -71,11 +67,11 @@ DEFAULT_SETTINGS = {
     'use_name': True,  # Use contact names and emails by default
     'notify_updates': True,  # Show user when a new version is available
     'show_help': True,  # Show help text in subtitles
+    'notify_cache_updates': False,  # Show user when cache is updating
 }
 
 UPDATE_SETTINGS = {
     'github_slug': 'deanishe/alfred-mailto',
-    'version': __version__,
     'interval': 1,  # day(s)
 }
 
@@ -288,7 +284,7 @@ class MailToApp(object):
         contacts = Contacts()
         warning = None
 
-        if contacts.updating:
+        if contacts.updating and self.wf.settings.get('notify_cache_updates'):
             self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
 
             if contacts.empty:
@@ -332,7 +328,8 @@ class MailToApp(object):
 
                 query = emails[-1]
 
-        msg = 'existing : {!r} emails : {!r} invalid_emails : {!r} query : {!r}'
+        msg = ('existing : {!r} emails : {!r} '
+               'invalid_emails : {!r} query : {!r}')
         log.debug(msg.format(existing, emails, invalid_emails, query))
 
         return (query, invalid_emails, existing)
@@ -358,7 +355,8 @@ class MailToApp(object):
                     subtitle,
                     valid=True,
                     arg='update',
-                    icon=ICON_VERSION_NEW,)
+                    icon=ICON_VERSION_NEW,
+                )
 
     # .d8888b. .d8888b. 88d8b.d8b. 88d888b. .d8888b. .d8888b. .d8888b.
     # 88'  `"" 88'  `88 88'`88'`88 88'  `88 88'  `88 Y8ooooo. 88ooood8
@@ -563,7 +561,7 @@ class MailToApp(object):
 
             items.append(
                 dict(
-                    title='MailTo is up to date (v{})'.format(__version__),
+                    title='MailTo is up to date (v{})'.format(self.wf.version),
                     subtitle='↩ to check for update now',
                     valid=True,
                     arg='update',
@@ -578,7 +576,30 @@ class MailToApp(object):
                 subtitle='↩ to reload contacts and applications now',
                 valid=True,
                 arg='reload',
-                icon=ICON_RELOAD
+                icon=ICON_RELOAD,
+            )
+        )
+
+        # Notify user when cache is updating
+        if self.wf.settings.get('notify_cache_updates'):
+            title = 'Notify of cache update: ON'
+            subtitle = "'Updating contacts' item will be shown in results"
+            icon = ICON_ON
+        else:
+            title = 'Notify of cache update: OFF'
+            subtitle = "'Updating contacts' item will not be shown in results"
+            icon = ICON_OFF
+
+        if self.wf.settings.get('show_help', True):
+            subtitle += help_text
+
+        items.append(
+            dict(
+                title=title,
+                subtitle=subtitle,
+                valid=True,
+                arg='toggle notify_cache_updates',
+                icon=icon,
             )
         )
 
@@ -633,7 +654,7 @@ class MailToApp(object):
         else:
             title = 'Update Notifications: OFF'
             icon = ICON_OFF
-            subtitle = "You will have to check here for a new version"
+            subtitle = "You will have to check here for a new version manually"
 
         if self.wf.settings.get('show_help', True):
             subtitle += help_text
@@ -867,6 +888,22 @@ class MailToApp(object):
         # Re-open settings
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
+    def toggle_notify_cache_updates(self):
+        """Turn cache update notifications on/off"""
+        if self.wf.settings.get('cache_notify_updates', True):
+            self.wf.settings['cache_notify_updates'] = False
+            msg = 'Turned cache update notifications off'
+
+        else:
+            self.wf.settings['cache_notify_updates'] = True
+            msg = 'Turned cache update notifications on'
+
+        log.debug(msg)
+        self.notify(msg)
+
+        # Re-open settings
+        run_alfred('{} '.format(CONFIG_KEYWORD))
+
     def toggle_help_text(self):
         """Turn additional usage notes in subtitles on/off"""
         if self.wf.settings.get('show_help', True):
@@ -931,7 +968,7 @@ if __name__ == '__main__':
         default_settings=DEFAULT_SETTINGS,
         # libraries=[os.path.join(os.path.dirname(__file__), 'libs')],
     )
-    wf.magic_prefix = 'wf:'
+    # wf.magic_prefix = 'wf:'
     log = wf.logger
     app = MailToApp()
     sys.exit(wf.run(app.run))
