@@ -779,6 +779,7 @@ class MailToApp(object):
                     arg='setclient DEFAULT',
                     valid=True,
                     copytext=app['bundleid'],
+                    largetext=app['bundleid'],
                     icon=app['path'],
                     icontype='fileicon'
                 )
@@ -800,6 +801,7 @@ class MailToApp(object):
                              modifier_subtitles={'cmd': app['bundleid']},
                              valid=True,
                              copytext=app['bundleid'],
+                             largetext=app['bundleid'],
                              arg=arg,
                              icon=app['path'],
                              icontype='fileicon')
