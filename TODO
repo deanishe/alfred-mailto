@@ -1,0 +1,48 @@
+
+Database:
+
+Configuration:
+	- Turn off update checks
+		This really has to be implemented in Alfred-Workflow if `workflow:update` is still to work.
+
+Documetation:
+
+New features:
+	- Allow to/cc/bcc fields
+		Adding 'to', 'cc' or 'bcc' as a recipient would add following recipients to that field
+		- Add indicator to result titles that cc/bcc mode is active
+			i.e. show "cc Lance Uppercut" instead of "Lance Uppercut"
+		- Warn if client doesn't like cc/bcc in mailto: URIs
+			- Test if there *are* any clients that don't like cc/bcc in mailto: URIs
+
+Bugs:
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+	- Update README for Version 2 @done(14-10-19 00:49) @project(Documetation)
+	- Change image URLs after upload @done(14-10-19 00:49) @project(Documetation)
+	-	Publish docs to `gh-pages` @done(14-10-18 20:39) @project(Documetation)
+	- Delete v1 settings on first run (or bad things will happen) @done(14-10-18 13:31) @project(Configuration)
+	- Create animated GIF showing usage @done(14-10-16 19:16) @project(Documetation)
+	- Add nickname support @done(14-10-07 12:51) @project(Database)
+		Pull contact nicknames from Contacts db
+	- Make cached contacts data more useable @done(14-10-07 12:35) @project(Database)
+	- Generate search key when caching contacts @done(14-10-07 12:35) @project(Database)
+	-	Put email > name map in cache @done(14-10-07 12:35) @project(Database)
+	- Doesn't use name when contact is a company @done(14-10-05 00:06) @project(Bugs)
+	- Remember preferred email address for contacts @consider @done(14-10-05 00:05) @project(Feature requests)
+		http://www.alfredforum.com/topic/3345-mailto-select-contacts-and-compose-in-your-favourite-email-app/?p=19658
+		This should work via UID, right?
+	- Use AddressBook API to find contacts @done(14-10-04 23:57) @project(Feature requests)
+		This will also find contacts in Exchange accounts
+- mailto: scheme must be different for different clients @done(13-12-05 20:53) @project(Bugs)
+- Unibox doesn't understand quoted ("") names with commas @done(13-12-05 20:53) @project(Bugs)
+- Sparrow doesn't like URL-quoting @done(13-12-05 20:53) @project(Bugs)
+- Some problem with the encoding and Sparrow :( @done(13-12-05 20:53) @project(Bugs)
+- MailMate requires space between recipients @done(13-12-05 20:53) @project(Bugs)
+- Airmail requires email only, no space between addresses @done(13-12-05 20:53) @project(Bugs)
+- Show current client when setting client @done (13-11-03 17:35) @project(Improvements)
+- usename -> mailtoformat @done (13-11-03 17:18) @project(Better config keywords)
+- mailtoconf to show settings @done (13-11-03 17:18) @project(Better config keywords)
+- client -> mailtoclient @done (13-11-03 17:18) @project(Better config keywords)
+- Change keywords to unique ones @done (13-11-03 17:18) @project(Better config keywords)

@@ -1,0 +1,67 @@
+// Client-specific formatting rules
+// `True` means use the feature, `False` means don't use the feature
+// spaces    = delimit recipients with `, `, not just `,`
+// names     = also include recipient names in the mailto: URI.
+//             If `False`, names will never be sent. Of the tested clients,
+//             only Airmail chokes on names, but it's smart enough to retrive
+//             the name from your Contacts.app database
+// mime      = MIME-encode non-ASCII characters in names. No known client
+//             requires this. If encoded, the recipient will also be
+//             URL-quoted
+// no_commas = Client chokes on commas in a recipient's name. For most
+//             clients, it's sufficient to enclose such names in ""
+// inline_to = Client requires URI of form `mailto:email.address@domain.com`
+//             not `mailto:?to=email.address@domain.com`. Airmail and
+//             Mailbox (Beta) disagree here. No other client cares.
+
+//               spaces, names, MIME, no commas, inline to
+{
+  // Airmail 1
+  "it.bloop.airmail": {
+    "spaces": false,
+    "names": false,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": true
+  },
+  // Unibox
+  "com.eightloops.Unibox": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": true,
+    "inline_to": false
+  },
+  // Google Chrome
+  "com.google.Chrome": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  },
+  // MailMate
+  "com.freron.MailMate": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  },
+  // Mailbox (Beta)
+  "com.dropbox.mbd.external-beta": {
+    "spaces": false,
+    "names": true,
+    "mime": false,
+    "no_commas": true,
+    "inline_to": false
+  },
+  // Fluid single-session browser apps
+  "com.fluidapp.FluidApp.*": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  }
+}

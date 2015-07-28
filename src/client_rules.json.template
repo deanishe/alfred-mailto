@@ -1,0 +1,55 @@
+/*
+
+Add your client-specific formatting rules to the mapping below.
+
+The key should be the bundle ID of the application you want to configure,
+and the value should be another mapping that contains the following
+keys. See the examples below.
+
+Note that the bundle ID may contain wildcards, so "com.fluidapp.FluidApp.*"
+will match and app created by Fluid.
+
+Client-specific formatting rules
+`True` means use the feature, `False` means don't use the feature
+spaces    = delimit recipients with `, `, not just `,`
+names     = also include recipient names in the mailto: URI.
+            If `False`, names will never be sent. Of the tested clients,
+            only Airmail chokes on names, but it's smart enough to retrive
+            the name from your Contacts.app database
+mime      = MIME-encode non-ASCII characters in names. No known client
+            requires this. If encoded, the recipient will also be
+            URL-quoted
+no_commas = Client chokes on commas in a recipient's name. For most
+            clients, it's sufficient to enclose such names in ""
+inline_to = Client requires URI of form `mailto:email.address@domain.com`
+            not `mailto:?to=email.address@domain.com`. Airmail and
+            Mailbox (Beta) disagree here. No other client cares.
+
+              spaces, names, MIME, no commas, inline to
+
+Examples for Google Chrome and MailMate (these are from the default
+settings, so no need to add them here).
+
+{
+  // Google Chrome
+  "com.google.Chrome": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  },
+  // MailMate
+  "com.freron.MailMate": {
+    "spaces": true,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": false
+  }
+}
+*/
+
+{
+
+}
