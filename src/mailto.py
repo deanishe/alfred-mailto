@@ -758,6 +758,8 @@ class MailToApp(object):
                     'Current Email Client: System Default',
                     app['path'],
                     # modifier_subtitles={'cmd': app['bundleid']},
+                    copytext=app['bundleid'],
+                    largetext=app['bundleid'],
                     icon=app['path'],
                     icontype='fileicon'
                 )
@@ -767,6 +769,8 @@ class MailToApp(object):
                     'Current Email Client: {}'.format(app['name']),
                     app['path'],
                     # modifier_subtitles={'cmd': app['bundleid']},
+                    copytext=app['bundleid'],
+                    largetext=app['bundleid'],
                     icon=app['path'],
                     icontype='fileicon'
                 )

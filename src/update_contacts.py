@@ -40,7 +40,7 @@ from time import time
 import AddressBook as AB
 
 from workflow import Workflow
-from client import Client
+
 
 log = None
 
@@ -246,12 +246,6 @@ def main(wf):
 
     log.info('{} people, {} groups cached in {:0.2f} seconds'.format(
              people_count, group_count, time() - start))
-
-    # Update client application caches
-    # start = time()
-    # Client().update()
-    # log.debug('Client application caches updated in {:0.3f} seconds'.format(
-    #           time() - start))
 
     return 0
 
