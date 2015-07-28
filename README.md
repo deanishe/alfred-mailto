@@ -69,6 +69,20 @@ To report a bug or submit a feature request, please create
   may do with as you please.
 
 
+## Changelog ##
+
+
+### v2.1 (2015-07-28) ###
+
+First non-beta release of v2.
+
+
+### v2.1.1 (2015-07-28) ###
+
+- Fix typos in `client_rules.json.template`
+- Make holding `⌘` down on an email client work as advertised
+- Pressing `⌘+L` on an email client shows bundle ID as Large Text
+
 
 [alfred-workflow]: https://github.com/deanishe/alfred-workflow/
 [alfred]: http://www.alfredapp.com/
