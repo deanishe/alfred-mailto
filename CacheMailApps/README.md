@@ -1,6 +1,6 @@
 # CacheMailApps #
 
-Objective-C reimplementation of the Python file (update_apps.py).
+Objective-C reimplementation of the Python script `update_apps.py`.
 
 Turns out it's not usefully faster :disappointed:
 
