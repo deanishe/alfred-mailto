@@ -7,7 +7,7 @@ A Workflow for [Alfred 2][alfred].
 Quickly select recipients from your Mac's Contacts database and send them to
 your email client of choice. Also works with Groups/Distribution Lists.
 
-![](docs/demo.gif)
+![][demo]
 
 
 ## Download and installation ##
@@ -93,10 +93,11 @@ First non-beta release of v2.
 [github-issues]: https://github.com/deanishe/alfred-mailto/issues
 [github-pulls]: https://github.com/deanishe/alfred-mailto/pulls
 [github-releases]: https://github.com/deanishe/alfred-mailto/releases/latest
-[help-supported-clients]: http://www.deanishe.net/alfred-mailto/#supported-clients
+[help-supported-clients]: http://www.deanishe.net/alfred-mailto/#supportedemailclients
 [mit-licence]: http://opensource.org/licenses/MIT
 [help]: http://www.deanishe.net/alfred-mailto/
 [packal-page]: http://www.packal.org/workflow/mailto
 [packal-updater]: http://www.packal.org/workflow/packal-updater
 [seth-lilly]: http://twitter.com/sethlilly
 [sil-licence]: http://scripts.sil.org/OFL
+[demo]: https://github.com/deanishe/alfred-mailto/raw/master/docs/demo.gif
