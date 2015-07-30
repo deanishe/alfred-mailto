@@ -148,7 +148,7 @@ class MailToApp(object):
     def do_search(self):
         """Search contacts"""
         from client import Client
-        client = Client()
+        client = Client(self.wf)
 
         log.debug('Searching contacts')
 
@@ -373,7 +373,7 @@ class MailToApp(object):
 
         query = self.args.query
         log.debug('Composing email to {}'.format(query))
-        client = Client()
+        client = Client(self.wf)
         emails = [s.strip() for s in query.split(',') if s.strip()]
         url = client.build_url(emails)
         log.debug('URL : {!r}'.format(url))
@@ -416,7 +416,7 @@ class MailToApp(object):
         from contacts import Contacts
         from client import Client
         Contacts().update(force=True)
-        Client().update(force=True)
+        Client(self.wf).update(force=True)
         self.notify('Refreshing contacts and app caches…')
         run_alfred('{} '.format(CONFIG_KEYWORD))
         return 0
@@ -537,7 +537,7 @@ class MailToApp(object):
     def get_config_items(self):
         """Return list of all configuration items"""
         from client import Client
-        client = Client()
+        client = Client(self.wf)
         items = []
         help_text = '  //  ↩ to change'
 
@@ -731,7 +731,7 @@ class MailToApp(object):
     def choose_client(self, query):
         """Select a new email client"""
         from client import Client
-        client = Client()
+        client = Client(self.wf)
         log.debug('Choosing email client')
         log.debug('query : {}'.format(query))
         # apps list a list of tuples [(name, path), ...]
@@ -815,7 +815,7 @@ class MailToApp(object):
     def do_setclient(self):
         """Change default email client"""
         from client import Client
-        client = Client()
+        client = Client(self.wf)
         app_path = self.args.query
         log.debug('Setting new client to : {}'.format(app_path))
 

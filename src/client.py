@@ -22,13 +22,11 @@ from time import time
 from urllib import quote
 
 from workflow.background import run_in_background, is_running
-from workflow import Workflow
 
 from common import ONE_DAY, appname, bundleid
 import verbose_json as json
 
-wf = Workflow()
-log = wf.logger
+log = None
 
 match_bundle_id = re.compile(r'kMDItemCFBundleIdentifier = "(.+)"').match
 
@@ -83,11 +81,14 @@ class Formatter(object):
     """
 
     def __init__(self, client):
+        global log
         self.client = client
+        self.wf = self.client.wf
+        log = self.wf.logger
         # Load rules
         client_rules = {}
-        for path in [wf.workflowfile('client_rules.json'),
-                     wf.datafile('client_rules.json')]:
+        for path in [self.wf.workflowfile('client_rules.json'),
+                     self.wf.datafile('client_rules.json')]:
             if not os.path.exists(path):
                 continue
             log.debug(
@@ -181,7 +182,10 @@ class Client(object):
     system default and which is the default for MailTo (if one is set)
     """
 
-    def __init__(self):
+    def __init__(self, wf):
+        global log
+        self.wf = wf
+        log = wf.logger
         self.all_email_apps = []
         self.system_default_app = {}
         self.update()
@@ -194,22 +198,24 @@ class Client(object):
 
         """
 
-        # return wf.settings.get('default_app') or self.system_default_app()
+        # return self.wf.settings.get('default_app') or self.system_default_app()
 
-        return wf.settings.get('default_app') or self.system_default_app
+        return self.wf.settings.get('default_app') or self.system_default_app
 
     def set_default_app(self, app_path):
         """Set default email client to application at ``app_path``"""
         d = {'path': app_path}
         d['name'] = appname(app_path)
         d['bundleid'] = bundleid(app_path)
-        wf.settings['default_app'] = d
+        self.wf.settings['default_app'] = d
+        # wf.settings.save()
+        log.debug('Set default app to : %r', d)
 
     default_app = property(get_default_app, set_default_app)
 
     def build_url(self, emails):
         """Return mailto: URL built with appropriate formatter"""
-        contacts = wf.cached_data('contacts', max_age=0)
+        contacts = self.wf.cached_data('contacts', max_age=0)
 
         if not contacts:
             raise ValueError('No contacts available')
@@ -229,13 +235,13 @@ class Client(object):
             bundleid = app
 
         formatter = Formatter(bundleid)
-        return formatter.get_url(recipients, wf.settings.get('use_name', True))
+        return formatter.get_url(recipients, self.wf.settings.get('use_name', True))
 
     def update(self, force=False):
         """Load apps from cache, update if required"""
-        self.all_email_apps = wf.cached_data('all_apps', max_age=0)
-        self.system_default_app = wf.cached_data('system_default_app',
-                                                 max_age=0)
+        self.all_email_apps = self.wf.cached_data('all_apps', max_age=0)
+        self.system_default_app = self.wf.cached_data('system_default_app',
+                                                      max_age=0)
         if self.all_email_apps is None:
             self.all_email_apps = []
         if self.system_default_app is None:
@@ -244,14 +250,15 @@ class Client(object):
         do_update = False
         if force:
             do_update = True
-        elif not wf.cached_data_fresh('all_apps', MAX_APP_CACHE_AGE):
+        elif not self.wf.cached_data_fresh('all_apps', MAX_APP_CACHE_AGE):
             do_update = True
-        elif not wf.cached_data_fresh('system_default_app', MAX_APP_CACHE_AGE):
+        elif not self.wf.cached_data_fresh('system_default_app',
+                                           MAX_APP_CACHE_AGE):
             do_update = True
         # Update if required
         if do_update:
             log.debug('Updating application caches ...')
-            cmd = ['/usr/bin/python', wf.workflowfile('update_apps.py')]
+            cmd = ['/usr/bin/python', self.wf.workflowfile('update_apps.py')]
             run_in_background('update-apps', cmd)
 
     @property
@@ -264,12 +271,16 @@ class Client(object):
 
 
 if __name__ == '__main__':
+    from workflow import Workflow
+    wf = Workflow()
+
     def timeit(func, *args, **kwargs):
         s = time()
         func(*args, **kwargs)
         d = time() - s
         log.debug('{} run in {:0.3f} seconds'.format(func.__name__, d))
-    c = Client()
+
+    c = Client(wf)
     wf.reset()
     log.info('First run')
     timeit(c.update)

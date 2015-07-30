@@ -111,6 +111,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>/usr/bin/python mailto.py {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -130,25 +149,6 @@
 			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
 			<string>8550C579-13D1-4CC6-984E-11A6ADEC72EA</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>script</key>
-				<string>/usr/bin/python mailto.py {query}</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -221,7 +221,7 @@ You can add multiple recipients or Groups from your Contacts and/or enter email 
 		<key>75819088-6422-47FD-8865-62A41152B307</key>
 		<dict>
 			<key>ypos</key>
-			<real>190</real>
+			<real>130</real>
 		</dict>
 		<key>8550C579-13D1-4CC6-984E-11A6ADEC72EA</key>
 		<dict>
@@ -236,7 +236,7 @@ You can add multiple recipients or Groups from your Contacts and/or enter email 
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
 			<key>ypos</key>
-			<real>70</real>
+			<real>10</real>
 		</dict>
 		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
 		<dict>
