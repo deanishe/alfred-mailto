@@ -80,10 +80,10 @@ class Formatter(object):
 
     """
 
-    def __init__(self, client):
+    def __init__(self, client, wf):
         global log
         self.client = client
-        self.wf = self.client.wf
+        self.wf = wf
         log = self.wf.logger
         # Load rules
         client_rules = {}
@@ -234,8 +234,9 @@ class Client(object):
         elif isinstance(app, basestring):
             bundleid = app
 
-        formatter = Formatter(bundleid)
-        return formatter.get_url(recipients, self.wf.settings.get('use_name', True))
+        formatter = Formatter(bundleid, self.wf)
+        return formatter.get_url(recipients,
+                                 self.wf.settings.get('use_name', True))
 
     def update(self, force=False):
         """Load apps from cache, update if required"""
