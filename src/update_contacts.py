@@ -87,10 +87,15 @@ _person_text_property_map = {
 }
 
 
+_address_book = AB.ABAddressBook.sharedAddressBook()
+_default_name_ordering = _address_book._.defaultNameOrdering
+
+
 # .d8888b. .d8888b. 88d888b. dP   .dP .d8888b. 88d888b. .d8888b. dP .d8888b. 88d888b.
 # 88'  `"" 88'  `88 88'  `88 88   d8' 88ooood8 88'  `88 Y8ooooo. 88 88'  `88 88'  `88
 # 88.  ... 88.  .88 88    88 88 .88'  88.  ... 88             88 88 88.  .88 88    88
 # `88888P' `88888P' dP    dP 8888P'   `88888P' dP       `88888P' dP `88888P' dP    dP
+
 
 def ab_person_to_dict(person):
     """Convert ABPerson to Python dict"""
@@ -105,7 +110,11 @@ def ab_person_to_dict(person):
             value = ''
         d[key] = value
 
-    name = '{} {}'.format(d['first_name'], d['last_name']).strip()
+    if _default_name_ordering == AB.kABLastNameFirst:
+        name = '{} {}'.format(d['last_name'], d['first_name']).strip()
+    else:
+        name = '{} {}'.format(d['first_name'], d['last_name']).strip()
+
     if not name and d.get('company'):
         # log.debug('first_name : {!r} last_name : {!r}'.format(d['first_name'],
         #                                                       d['last_name']))
@@ -154,15 +163,13 @@ def ab_group_to_dict(group):
 
 def iter_people():
     """Yield ABPerson objects for contacts in Address Book"""
-    address_book = AB.ABAddressBook.sharedAddressBook()
-    for person in address_book.people():
+    for person in _address_book.people():
         yield person
 
 
 def iter_groups():
     """Yield ABGroup objects for groups in Address Book"""
-    address_book = AB.ABAddressBook.sharedAddressBook()
-    for group in address_book.groups():
+    for group in _address_book.groups():
         yield group
 
 
