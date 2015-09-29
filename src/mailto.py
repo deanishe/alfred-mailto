@@ -15,7 +15,7 @@ Usage:
     mailto.py config [<query>]
     mailto.py edit_client_rules
     mailto.py setclient <app_path>
-    mailto.py toggle (format|notify_updates|help_text|notify_cache_updates)
+    mailto.py toggle (format|notify_updates|help_text|cache_notify_updates)
     mailto.py compose [<recipients>]
     mailto.py reload
     mailto.py update
@@ -67,7 +67,7 @@ DEFAULT_SETTINGS = {
     'use_name': True,  # Use contact names and emails by default
     'notify_updates': True,  # Show user when a new version is available
     'show_help': True,  # Show help text in subtitles
-    'notify_cache_updates': False,  # Show user when cache is updating
+    'cache_notify_updates': False,  # Show user when cache is updating
 }
 
 UPDATE_SETTINGS = {
@@ -146,7 +146,7 @@ class MailToApp(object):
     # `88888P' `88888P' `88888P8 dP       `88888P' dP    dP
 
     def do_search(self):
-        """Search contacts"""
+        """Search contacts."""
         from client import Client
         client = Client(self.wf)
 
@@ -284,7 +284,7 @@ class MailToApp(object):
         contacts = Contacts()
         warning = None
 
-        if contacts.updating and self.wf.settings.get('notify_cache_updates'):
+        if contacts.updating and self.wf.settings.get('cache_notify_updates'):
             self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
 
             if contacts.empty:
@@ -581,7 +581,7 @@ class MailToApp(object):
         )
 
         # Notify user when cache is updating
-        if self.wf.settings.get('notify_cache_updates'):
+        if self.wf.settings.get('cache_notify_updates'):
             title = 'Notify of cache update: ON'
             subtitle = "'Updating contacts' item will be shown in results"
             icon = ICON_ON
@@ -598,7 +598,7 @@ class MailToApp(object):
                 title=title,
                 subtitle=subtitle,
                 valid=True,
-                arg='toggle notify_cache_updates',
+                arg='toggle cache_notify_updates',
                 icon=icon,
             )
         )
@@ -894,7 +894,7 @@ class MailToApp(object):
         # Re-open settings
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
-    def toggle_notify_cache_updates(self):
+    def toggle_cache_notify_updates(self):
         """Turn cache update notifications on/off"""
         if self.wf.settings.get('cache_notify_updates', True):
             self.wf.settings['cache_notify_updates'] = False
