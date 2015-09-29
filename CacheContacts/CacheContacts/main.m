@@ -36,6 +36,9 @@ int main(int argc, const char * argv[]) {
         NSMutableDictionary *email_name_map = [NSMutableDictionary dictionary];
 
         NSLog(@"%lu people and %lu groups in Address Book", (unsigned long)[[AB people] count], [[AB groups] count]);
+        
+        // Name ordering
+        NSInteger defaultNameOrdering = AB.defaultNameOrdering;
 
         // Add people to cache
         for (ABPerson *person in [AB people]) {
@@ -75,11 +78,19 @@ int main(int argc, const char * argv[]) {
                 company = @"";
             }
 
-            NSString *name = [[[firstName stringByAppendingString:@" "]
-                               stringByAppendingString:lastName]
+            NSString *name = nil;
+            
+            if (defaultNameOrdering == kABLastNameFirst) {
+                name = [[[lastName stringByAppendingString:@", "]
+                               stringByAppendingString:firstName]
                               stringByTrimmingCharactersInSet:[NSCharacterSet
                                                                whitespaceAndNewlineCharacterSet]];
-
+            } else {
+                name = [[[firstName stringByAppendingString:@" "]
+                         stringByAppendingString:lastName]
+                        stringByTrimmingCharactersInSet:[NSCharacterSet
+                                                         whitespaceAndNewlineCharacterSet]];
+            }
             if ([name length] == 0) {
                 if (company != nil) {
                     name = company;
@@ -155,6 +166,8 @@ int main(int argc, const char * argv[]) {
         NSString *jsonString = [[NSString alloc] initWithData:encodedData encoding:NSUTF8StringEncoding];
         [jsonString writeToFile:@"/dev/stdout" atomically:NO encoding:NSUTF8StringEncoding error:nil];
 
+        NSLog(@"defaultNameOrdering %06o", (unsigned int)defaultNameOrdering);
+        
     }
     return 0;
 }
