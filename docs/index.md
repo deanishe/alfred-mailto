@@ -204,7 +204,8 @@ application:
    on your system.
 2. Search or scroll down the list to select the app you want.
 3. Hold `⌘` to display its bundle ID as the subtitle or press `⌘+C`
-   to copy the bundle ID to the pasteboard.
+   to copy the bundle ID to the pasteboard. `⌘+L` will also display the
+   bundle ID in Alfred's Large Text window.
 
 Alternatively, you can use the following command in Terminal to get the
 bundle ID of an application:

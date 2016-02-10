@@ -285,7 +285,6 @@ class MailToApp(object):
         warning = None
 
         if contacts.updating and self.wf.settings.get('cache_notify_updates'):
-
             self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
 
             if contacts.empty:
@@ -582,7 +581,6 @@ class MailToApp(object):
         )
 
         # Notify user when cache is updating
-
         if self.wf.settings.get('cache_notify_updates'):
             title = 'Notify of cache update: ON'
             subtitle = "'Updating contacts' item will be shown in results"
@@ -897,7 +895,7 @@ class MailToApp(object):
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
     def toggle_cache_notify_updates(self):
-        """Turn cache update notifications on/off."""
+        """Turn cache update notifications on/off"""
         if self.wf.settings.get('cache_notify_updates', True):
             self.wf.settings['cache_notify_updates'] = False
             msg = 'Turned cache update notifications off'
