@@ -8,6 +8,17 @@
 	<string>Communication</string>
 	<key>connections</key>
 	<dict>
+		<key>08BB8910-F75E-468F-8DFE-4B9C7ACD0E90</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>75819088-6422-47FD-8865-62A41152B307</key>
 		<array>
 			<dict>
@@ -74,6 +85,52 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>/usr/bin/python mailto.py {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>hotkey</key>
+				<integer>19</integer>
+				<key>hotmod</key>
+				<integer>1179648</integer>
+				<key>hotstring</key>
+				<string>2</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>08BB8910-F75E-468F-8DFE-4B9C7ACD0E90</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>escaping</key>
@@ -105,25 +162,6 @@
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>script</key>
-				<string>/usr/bin/python mailto.py {query}</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -218,6 +256,11 @@
 You can add multiple recipients or Groups from your Contacts and/or enter email addresses manually. Please see the built-in help (use "mailto" query) for more information.</string>
 	<key>uidata</key>
 	<dict>
+		<key>08BB8910-F75E-468F-8DFE-4B9C7ACD0E90</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
 		<key>75819088-6422-47FD-8865-62A41152B307</key>
 		<dict>
 			<key>ypos</key>
