@@ -132,7 +132,7 @@ def ab_person_to_dict(person):
 
 
 def ab_group_to_dict(group):
-    """Convert ABGroup to Python dict. Return None if group is empty"""
+    """Convert ABGroup to Python dict. Return None if group is empty."""
 
     d = {'name': '', 'emails': [], 'is_group': True, 'is_company': False}
     d['name'] = group.valueForProperty_(AB.kABGroupNameProperty)
@@ -199,6 +199,7 @@ def main(wf):
     group_count = 0
 
     # Load people
+    seen = set()
     for person in iter_people():
         person = ab_person_to_dict(person)
 
@@ -211,6 +212,12 @@ def main(wf):
                 email_name_map[email] = person['name']
 
         for email in person['emails']:
+            # Ignore duplicate name, email pairs
+            key = (person.get('name').lower(), email.lower())
+            if key in seen:
+                continue
+            seen.add(key)
+
             d = {}
             d['name'] = person.get('name')
             d['email'] = email

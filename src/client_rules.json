@@ -24,6 +24,14 @@
     "no_commas": false,
     "inline_to": true
   },
+  // Airmail 2
+  "it.bloop.airmail2": {
+    "spaces": false,
+    "names": false,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": true
+  },
   // Unibox
   "com.eightloops.Unibox": {
     "spaces": true,
@@ -63,5 +71,13 @@
     "mime": false,
     "no_commas": false,
     "inline_to": false
+  },
+  // MS Outlook 2016
+  "com.microsoft.Outlook": {
+    "spaces": false,
+    "names": true,
+    "mime": false,
+    "no_commas": false,
+    "inline_to": true
   }
 }
