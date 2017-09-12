@@ -17,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>75819088-6422-47FD-8865-62A41152B307</key>
@@ -28,6 +30,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
@@ -39,6 +43,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
@@ -50,6 +56,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
@@ -61,6 +69,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 			<dict>
 				<key>destinationuid</key>
@@ -69,6 +79,8 @@
 				<integer>1048576</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -85,29 +97,14 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>script</key>
-				<string>/usr/bin/python mailto.py {query}</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
 				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
 				<key>hotkey</key>
 				<integer>19</integer>
 				<key>hotmod</key>
@@ -126,11 +123,17 @@
 			<key>uid</key>
 			<string>08BB8910-F75E-468F-8DFE-4B9C7ACD0E90</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>escaping</key>
@@ -138,17 +141,21 @@
 				<key>keyword</key>
 				<string>@</string>
 				<key>queuedelaycustom</key>
-				<integer>1</integer>
+				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
 				<false/>
 				<key>queuedelaymode</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Searching Contacts …</string>
+				<string>Searching Contacts…</string>
 				<key>script</key>
-				<string>/usr/bin/python mailto.py search "{query}"</string>
+				<string>/usr/bin/python mailto.py search "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Hit ENTER to compose a new mail</string>
 				<key>title</key>
@@ -163,7 +170,30 @@
 			<key>uid</key>
 			<string>89A40786-12E8-4A60-B018-86009F3C0660</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>/usr/bin/python mailto.py $1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>CED507AD-5BAE-4B73-89F4-B5821D117157</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -172,11 +202,7 @@
 				<false/>
 				<key>onlyshowifquerypopulated</key>
 				<true/>
-				<key>output</key>
-				<integer>0</integer>
 				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
 				<false/>
 				<key>text</key>
 				<string>{query}</string>
@@ -188,11 +214,17 @@
 			<key>uid</key>
 			<string>8550C579-13D1-4CC6-984E-11A6ADEC72EA</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>escaping</key>
@@ -208,9 +240,13 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Loading settings …</string>
+				<string>Loading settings…</string>
 				<key>script</key>
-				<string>/usr/bin/python mailto.py config "{query}"</string>
+				<string>/usr/bin/python mailto.py config "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>View and alter your MailTo settings</string>
 				<key>title</key>
@@ -225,7 +261,7 @@
 			<key>uid</key>
 			<string>CF6D257B-1578-4C99-A089-2DBAA53E61F4</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -238,7 +274,11 @@
 				<string># This Action is a duplicate of the one above.
 # It exists purely to make the Show-Bundle ID-On-CMD feature work
 
-/usr/bin/python mailto.py {query}</string>
+/usr/bin/python mailto.py $1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -247,7 +287,7 @@
 			<key>uid</key>
 			<string>75819088-6422-47FD-8865-62A41152B307</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -258,35 +298,49 @@ You can add multiple recipients or Groups from your Contacts and/or enter email 
 	<dict>
 		<key>08BB8910-F75E-468F-8DFE-4B9C7ACD0E90</key>
 		<dict>
+			<key>xpos</key>
+			<integer>40</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>30</integer>
 		</dict>
 		<key>75819088-6422-47FD-8865-62A41152B307</key>
 		<dict>
+			<key>xpos</key>
+			<integer>440</integer>
 			<key>ypos</key>
-			<real>130</real>
+			<integer>190</integer>
 		</dict>
 		<key>8550C579-13D1-4CC6-984E-11A6ADEC72EA</key>
 		<dict>
+			<key>xpos</key>
+			<integer>640</integer>
 			<key>ypos</key>
-			<real>70</real>
+			<integer>90</integer>
 		</dict>
 		<key>89A40786-12E8-4A60-B018-86009F3C0660</key>
 		<dict>
+			<key>xpos</key>
+			<integer>240</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>30</integer>
 		</dict>
 		<key>CED507AD-5BAE-4B73-89F4-B5821D117157</key>
 		<dict>
+			<key>xpos</key>
+			<integer>440</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>30</integer>
 		</dict>
 		<key>CF6D257B-1578-4C99-A089-2DBAA53E61F4</key>
 		<dict>
+			<key>xpos</key>
+			<integer>240</integer>
 			<key>ypos</key>
-			<real>130</real>
+			<integer>190</integer>
 		</dict>
 	</dict>
+	<key>version</key>
+	<string>2.2</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>
