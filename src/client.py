@@ -1,16 +1,14 @@
 #!/usr/bin/python
 # encoding: utf-8
 #
-# Copyright © 2014 deanishe@deanishe.net
+# Copyright (c) 2014 deanishe@deanishe.net
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
 # Created on 2014-10-03
 #
 
-"""
-Manage email clients and their settings
-"""
+"""Manage email clients and their settings."""
 
 from __future__ import print_function, unicode_literals, absolute_import
 
