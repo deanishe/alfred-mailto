@@ -105,8 +105,9 @@ First non-beta release of v2.
 - Revert to using `{query}`
 
 
-### v2.2.2 (2017-12-01) ###
+### v2.3 (2017-12-01) ###
 
+- Use `rerun` to reload results after cache updates
 - Catch exceptions during group handling
 
 

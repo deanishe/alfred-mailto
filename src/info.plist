@@ -340,7 +340,7 @@ You can add multiple recipients or Groups from your Contacts and/or enter email 
 		</dict>
 	</dict>
 	<key>version</key>
-	<string>2.2.2</string>
+	<string>2.3</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>

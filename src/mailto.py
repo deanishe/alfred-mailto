@@ -32,7 +32,7 @@ import shutil
 import subprocess
 import sys
 
-from workflow import Workflow
+from workflow import Workflow3
 
 from common import run_alfred, reveal_in_finder
 
@@ -285,8 +285,10 @@ class MailToApp(object):
         contacts = Contacts()
         warning = None
 
-        if contacts.updating and self.wf.settings.get('cache_notify_updates'):
-            self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
+        if contacts.updating:
+            self.wf.rerun = 0.5
+            if self.wf.settings.get('cache_notify_updates'):
+                self.wf.add_item('Updating contacts …', icon=ICON_RELOAD)
 
             if contacts.empty:
                 warning = ('Contacts not yet cached',
@@ -967,7 +969,7 @@ class MailToApp(object):
 
 if __name__ == '__main__':
 
-    wf = Workflow(
+    wf = Workflow3(
         update_settings=UPDATE_SETTINGS,
         default_settings=DEFAULT_SETTINGS,
         # libraries=[os.path.join(os.path.dirname(__file__), 'libs')],
