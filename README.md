@@ -82,12 +82,12 @@ First non-beta release of v2.
 - Fix settings bug
 
 
-### v2.1.3 (2015-07-31) ###
+### v2.1.3 (2015-07-31) ###
 
 - Fix output bug
 
 
-### v2.1.4 (2016-02-10) ###
+### v2.1.4 (2016-02-10) ###
 
 - Add Airmail 2 support
 - Add MS Outlook support
@@ -98,6 +98,16 @@ First non-beta release of v2.
 
 - Update AW library for Sierra compatibility
 - Alfred 3-only
+
+
+### v2.2.1 (2017-09-21) ###
+
+- Revert to using `{query}`
+
+
+### v2.2.2 (2017-12-01) ###
+
+- Catch exceptions during group handling
 
 
 [alfred-workflow]: https://github.com/deanishe/alfred-workflow/
