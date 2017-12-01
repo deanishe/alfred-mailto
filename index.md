@@ -151,6 +151,7 @@ The following email clients currently work "out of the box":
 - Mailbox Beta (email addresses only)
 - Google Chrome (if you've [set a handler][chrome-handlers])
 - Fluid single-session browsers (see [note](#fluid-apps))
+- Outlook 2016
 
 
 ### Unsupported clients ###
