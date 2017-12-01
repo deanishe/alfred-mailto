@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding: utf-8
 #
-# Copyright © 2014 deanishe@deanishe.net
+# Copyright (c) 2014 deanishe@deanishe.net
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
@@ -120,6 +120,7 @@ class MailToApp(object):
     # dP       `88888P' dP    dP
 
     def run(self, wf):
+        """Run program."""
         self.wf = wf
         # Check if v1 was installed and delete its data if if was
         filepath = wf.datafile(V2_HAS_RUN_FILENAME)
@@ -132,7 +133,7 @@ class MailToApp(object):
         self.client_rules_path = wf.datafile('client_rules.json')
         self._create_client_rules()
         self.args = self._parse_args()
-        log.debug('args : {}'.format(self.args))
+        log.debug('args : %r', self.args)
         method_name = 'do_{}'.format(self.args.action)
         if not hasattr(self, method_name):
             raise ValueError('Invalid action : {}'.format(self.args.action))
@@ -207,7 +208,7 @@ class MailToApp(object):
         if query:
             hits = contacts.search(query)
 
-        log.debug('{} matches for `{}`'.format(len(hits), query))
+        log.debug('%d matches for "%s"', len(hits), query)
 
         # No matches, offer to compose message if there are valid recipients
         if not hits:
@@ -227,7 +228,7 @@ class MailToApp(object):
                     recipients.append(query)
 
             recipients = ', '.join(recipients)
-            log.debug('recipients : {}'.format(recipients))
+            log.debug('recipients : %r', recipients)
 
             subtitle = None
 
@@ -245,7 +246,7 @@ class MailToApp(object):
         for item in hits:
 
             if item['email'] in existing:
-                log.debug('Ignoring duplicate : {}'.format(item))
+                log.debug('Ignoring duplicate : %r', item)
                 continue
 
             icon = ICON_PERSON
@@ -279,7 +280,7 @@ class MailToApp(object):
     # ------------------------------------------------------------------
 
     def load_contacts(self):
-        """Load contacts from cache"""
+        """Load contacts from cache."""
         from contacts import Contacts
         contacts = Contacts()
         warning = None
@@ -304,9 +305,9 @@ class MailToApp(object):
         return contacts
 
     def parse_query(self, query):
-        """Extract existing valid and invalid email addresses from query
+        """Extract existing valid and invalid email addresses from query.
 
-        Return current query, invalid addresses and valid addresses
+        Return current query, invalid addresses and valid addresses.
         """
         query = query.lower()
         emails = []
@@ -328,14 +329,13 @@ class MailToApp(object):
 
                 query = emails[-1]
 
-        msg = ('existing : {!r} emails : {!r} '
-               'invalid_emails : {!r} query : {!r}')
-        log.debug(msg.format(existing, emails, invalid_emails, query))
+        log.debug('existing : %r emails : %r invalid_emails : %r query : %r',
+                  existing, emails, invalid_emails, query)
 
         return (query, invalid_emails, existing)
 
     def notify_of_update(self):
-        """Add notification to results list if newer version available"""
+        """Add notification to results list if newer version available."""
         if self.wf.settings.get('notify_updates', True):
             if self.wf.update_available:
                 version = wf.cached_data('__workflow_update_status',
@@ -366,23 +366,23 @@ class MailToApp(object):
     #                              dP
 
     def do_compose(self):
-        """Build mailto: URL and open with configured app"""
+        """Build mailto: URL and open with configured app."""
         log.debug('Composing email ...')
         from client import Client
         from common import command_output
 
         query = self.args.query
-        log.debug('Composing email to {}'.format(query))
+        log.debug('Composing email to %r', query)
         client = Client(self.wf)
         emails = [s.strip() for s in query.split(',') if s.strip()]
         url = client.build_url(emails)
-        log.debug('URL : {!r}'.format(url))
+        log.debug('URL : %r', url)
 
         cmd = ['open']
 
         app = client.default_app
 
-        log.debug('default_app : {}'.format(app))
+        log.debug('default_app : %r', app)
 
         if app:
             cmd += ['-b', app['bundleid']]
@@ -398,7 +398,7 @@ class MailToApp(object):
     # `88888P' `88888P8 dP   dP      dP       `88888P' dP `88888P' `88888P'
 
     def do_edit_client_rules(self):
-        """Open user's `client_rules.json` in Finder"""
+        """Open user's ``client_rules.json`` in Finder."""
         self._create_client_rules()
         reveal_in_finder(self.client_rules_path)
         self.notify('Revealing client rules file in Finder')
@@ -411,7 +411,7 @@ class MailToApp(object):
     # dP       `88888P' dP `88888P' `88888P8 `88888P8
 
     def do_reload(self):
-        """Force update of contacts cache"""
+        """Force update of contacts cache."""
         log.debug('Forcing cache update ...')
         from contacts import Contacts
         from client import Client
@@ -431,8 +431,7 @@ class MailToApp(object):
     #          dP
 
     def do_update(self):
-        """Check for new version of the workflow"""
-
+        """Check for new version of the workflow."""
         available = self.wf.start_update()
 
         if available:
@@ -451,8 +450,8 @@ class MailToApp(object):
     #                      dP
 
     def do_help(self):
-        """Open help file in browser"""
-        log.debug('Opening {} in browser ...'.format(HELP_URL))
+        """Open help file in browser."""
+        log.debug('Opening %r in browser ...', HELP_URL)
         subprocess.call(['open', HELP_URL])
 
     #                            .8888b oo
@@ -465,11 +464,11 @@ class MailToApp(object):
     #                                       d8888P
 
     def do_config(self):
-        """Show configuration"""
+        """Show configuration."""
         log.debug('Showing settings')
 
         query = self.args.query
-        log.debug('query : {}'.format(query))
+        log.debug('query : %s', query)
 
         # Go back
         # --------------------------------------------------------------
@@ -485,7 +484,7 @@ class MailToApp(object):
         # the first `<SEPARATOR>`
         if SEPARATOR in query:
             parts = [s.strip() for s in query.split(SEPARATOR) if s.strip()]
-            log.debug('parts : {}'.format(parts))
+            log.debug('parts : %r', parts)
 
             if parts:
                 action = parts[0]
@@ -535,7 +534,7 @@ class MailToApp(object):
         self.wf.send_feedback()
 
     def get_config_items(self):
-        """Return list of all configuration items"""
+        """Return list of all configuration items."""
         from client import Client
         client = Client(self.wf)
         items = []
@@ -729,15 +728,15 @@ class MailToApp(object):
     # `88888P' dP dP `88888P' dP    dP   dP
 
     def choose_client(self, query):
-        """Select a new email client"""
+        """Select a new email client."""
         from client import Client
         client = Client(self.wf)
         log.debug('Choosing email client')
-        log.debug('query : {}'.format(query))
+        log.debug('query : %s', query)
         # apps list a list of tuples [(name, path), ...]
         apps = [d for d in client.all_email_apps if os.path.exists(d['path'])]
 
-        log.debug('{} email clients on system'.format(len(apps)))
+        log.debug('%d email clients on system', len(apps))
 
         if client.empty:
             if not client.updating:
@@ -799,7 +798,6 @@ class MailToApp(object):
 
         for app in apps:
             arg = 'setclient {}'.format(quote(app['path']))
-            # log.debug('arg for `{}` : {}'.format(name, arg))
             self.wf.add_item(app['name'],
                              app['path'],
                              modifier_subtitles={'cmd': app['bundleid']},
@@ -813,11 +811,11 @@ class MailToApp(object):
         self.wf.send_feedback()
 
     def do_setclient(self):
-        """Change default email client"""
+        """Change default email client."""
         from client import Client
         client = Client(self.wf)
         app_path = self.args.query
-        log.debug('Setting new client to : {}'.format(app_path))
+        log.debug('Setting new client to : %s', app_path)
 
         if app_path == 'DEFAULT':  # Reset to system default
             del self.wf.settings['default_app']
@@ -848,9 +846,9 @@ class MailToApp(object):
     #                  d8888P   d8888P
 
     def do_toggle(self):
-        """Toggle settings. Dispatch to appropriate method"""
+        """Toggle settings. Dispatch to appropriate method."""
         what = self.args.query
-        log.debug('Toggling {} ...'.format(what))
+        log.debug('Toggling %r ...', what)
 
         methname = 'toggle_{}'.format(what)
 
@@ -863,7 +861,7 @@ class MailToApp(object):
         return meth()
 
     def toggle_format(self):
-        """Change format between name+email and email-only"""
+        """Change format between name+email and email-only."""
         if self.wf.settings.get('use_name', True):
             self.wf.settings['use_name'] = False
             msg = 'Changed format to Email Only'
@@ -879,7 +877,7 @@ class MailToApp(object):
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
     def toggle_notify_updates(self):
-        """Turn update notifications on/off"""
+        """Turn update notifications on/off."""
         if self.wf.settings.get('notify_updates', True):
             self.wf.settings['notify_updates'] = False
             msg = 'Turned update notifications off'
@@ -895,7 +893,7 @@ class MailToApp(object):
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
     def toggle_cache_notify_updates(self):
-        """Turn cache update notifications on/off"""
+        """Turn cache update notifications on/off."""
         if self.wf.settings.get('cache_notify_updates', True):
             self.wf.settings['cache_notify_updates'] = False
             msg = 'Turned cache update notifications off'
@@ -911,7 +909,7 @@ class MailToApp(object):
         run_alfred('{} '.format(CONFIG_KEYWORD))
 
     def toggle_help_text(self):
-        """Turn additional usage notes in subtitles on/off"""
+        """Turn additional usage notes in subtitles on/off."""
         if self.wf.settings.get('show_help', True):
             self.wf.settings['show_help'] = False
             msg = 'Turned additional help text off'
@@ -936,21 +934,21 @@ class MailToApp(object):
     #                        dP
 
     def _create_client_rules(self):
-        """Copy `client_rules.json.template` to datadir"""
+        """Copy ``client_rules.json.template`` to ``datadir``."""
         if not os.path.exists(self.client_rules_path):
             srcpath = self.wf.workflowfile('client_rules.json.template')
             shutil.copy(srcpath, self.client_rules_path)
-            log.debug('Created empty client rules file at {}'.format(
-                      self.client_rules_path))
+            log.debug('Created empty client rules file at %r',
+                      self.client_rules_path)
 
     def notify(self, message):
-        """Simple wrapper around ``print`` that encodes output"""
+        """Simple wrapper around ``print`` that encodes output."""
         if isinstance(message, unicode):
             message = message.encode('utf-8')
         print(message)
 
     def _parse_args(self):
-        """Parse command-line arguments with argparse"""
+        """Parse command-line arguments with argparse."""
         parser = ArgumentParser()
         parser.add_argument(
             'action',

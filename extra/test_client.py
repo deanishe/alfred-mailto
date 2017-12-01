@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 #
-# Copyright © 2013 deanishe@deanishe.net.
+# Copyright (c) 2013 deanishe@deanishe.net.
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
@@ -20,7 +20,7 @@ Options:
     -h, --help  Show this help message.
 """
 
-from __future__ import print_function  #, unicode_literals
+from __future__ import print_function
 
 
 from subprocess import check_call

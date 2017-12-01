@@ -1,15 +1,14 @@
 #!/usr/bin/python
 # encoding: utf-8
 #
-# Copyright © 2014 deanishe@deanishe.net
+# Copyright (c) 2014 deanishe@deanishe.net
 #
 # MIT Licence. See http://opensource.org/licenses/MIT
 #
 # Created on 2014-10-03
 #
 
-"""
-Read Contacts database and cache relevant information.
+"""Read Contacts database and cache relevant information.
 
 Generates a JSON dict:
 {
@@ -133,7 +132,6 @@ def ab_person_to_dict(person):
 
 def ab_group_to_dict(group):
     """Convert ABGroup to Python dict. Return None if group is empty."""
-
     d = {'name': '', 'emails': [], 'is_group': True, 'is_company': False}
     d['name'] = group.valueForProperty_(AB.kABGroupNameProperty)
 
@@ -236,7 +234,11 @@ def main(wf):
 
     # Load groups
     for group in iter_groups():
-        group = ab_group_to_dict(group)
+        try:
+            group = ab_group_to_dict(group)
+        except Exception as err:
+            log.error('exception processing group %r: %s', group, err)
+            continue
 
         if not group:
             continue
