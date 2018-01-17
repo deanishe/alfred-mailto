@@ -777,10 +777,9 @@ class MailToApp(object):
                 )
                 # Offer to reset
                 app = client.system_default_app
-                self.wf.add_item(
+                it = self.wf.add_item(
                     'System Default ({})'.format(app['name']),
                     app['path'],
-                    modifier_subtitles={'cmd': app['bundleid']},
                     arg='setclient DEFAULT',
                     valid=True,
                     copytext=app['bundleid'],
@@ -788,6 +787,7 @@ class MailToApp(object):
                     icon=app['path'],
                     icontype='fileicon'
                 )
+                it.add_modifier('cmd', subtitle=app['bundleid'])
 
         if query:
             apps = self.wf.filter(query, apps, lambda d: d['name'],
@@ -800,15 +800,17 @@ class MailToApp(object):
 
         for app in apps:
             arg = 'setclient {}'.format(quote(app['path']))
-            self.wf.add_item(app['name'],
-                             app['path'],
-                             modifier_subtitles={'cmd': app['bundleid']},
-                             valid=True,
-                             copytext=app['bundleid'],
-                             largetext=app['bundleid'],
-                             arg=arg,
-                             icon=app['path'],
-                             icontype='fileicon')
+            it = self.wf.add_item(
+                app['name'],
+                app['path'],
+                valid=True,
+                copytext=app['bundleid'],
+                largetext=app['bundleid'],
+                arg=arg,
+                icon=app['path'],
+                icontype='fileicon',
+            )
+            it.add_modifier('cmd', subtitle=app['bundleid'])
 
         self.wf.send_feedback()
 
