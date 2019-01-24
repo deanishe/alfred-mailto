@@ -16,33 +16,38 @@ Groups/Distribution Lists.
 
 ## Contents ##
 
-- [Download and installation](#downloadandinstallation)
+<!-- MarkdownTOC autolink="true" autoanchor="true" -->
+
+- [Download and installation](#download-and-installation)
 - [Usage](#usage)
     - [Quickstart](#quickstart)
-    - [All options](#alloptions)
-- [Email clients](#emailclients)
-    - [Supported email clients](#supportedemailclients)
-    - [Unsupported clients](#unsupportedclients)
-    - [Other clients](#otherclients)
-- [Supported account types](#supportedaccounttypes)
-    - [Google Contacts](#googlecontacts)
+    - [All options](#all-options)
+- [Email clients](#email-clients)
+    - [Supported email clients](#supported-email-clients)
+    - [Unsupported clients](#unsupported-clients)
+    - [Other clients](#other-clients)
+- [Supported account types](#supported-account-types)
+    - [Google Contacts](#google-contacts)
 - [Miscellany](#miscellany)
-    - [Configuring groups and distribution lists](#configuringgroupsanddistributionlists)
+    - [Configuring groups and distribution lists](#configuring-groups-and-distribution-lists)
     - [Fluid apps](#fluid-apps)
-    - [Roundcube webmail](#roundcubewebmail)
-    - [Updates, GitHub and Packal](#updatesgithubandpackal)
-- [Bugs, feature requests, suggestions](#bugsfeaturerequestssuggestions)
-- [Thanks, licensing etc.](#thankslicensingetc)
+        - [Roundcube webmail](#roundcube-webmail)
+    - [Updates](#updates)
+- [Bugs, feature requests, suggestions](#bugs-feature-requests-suggestions)
+- [Thanks, licensing etc.](#thanks-licensing-etc)
+
+<!-- /MarkdownTOC -->
 
 
+<a id="download-and-installation"></a>
 ## Download and installation ##
 
-You can install MailTo either from [GitHub releases][github-releases]
-or [the Packal website][packal-page].
+You can install MailTo from [GitHub releases][github-releases].
 
 Install by double-clicking `MailTo.alfredworkflow`.
 
 
+<a id="usage"></a>
 ## Usage ##
 
 **Note:** The first time you run MailTo, you will probably be asked to
@@ -50,6 +55,7 @@ grant access to your Contacts. Obviously enough, if you refuse access,
 MailTo won't work.
 
 
+<a id="quickstart"></a>
 ### Quickstart ###
 
 Use the `@` keyword in Alfred to access MailTo and search your Mac's
@@ -68,53 +74,55 @@ You can add multiple recipients by adding a comma between them.
 Use `mailto` to view/change settings.
 
 
+<a id="all-options"></a>
 ### All options ###
 
 - `@ <query>` — Search your Contacts by name, nickname, email address.
-  The search is fairly smart and will match "bs" to "Bob Smith". You
-  can also enter email addresses that aren't in your Contacts.
-    - `⇥` — Add selected contact to list of recipients and search for
-      another contact.
-    - `↩` or `⌘+NUM` — Add selected contact to list of recipients and
-      send to your email client.
+    The search is fairly smart and will match "bs" to "Bob Smith". You
+    can also enter email addresses that aren't in your Contacts.
+        - `⇥` — Add selected contact to list of recipients and search for
+            another contact.
+        - `↩` or `⌘+NUM` — Add selected contact to list of recipients and
+            send to your email client.
 - `mailto [<query>]` — Show, filter and edit configuration.
-    - `Version X.X.X is available` — Such a message will be shown
-      if a newer version of MailTo is available. `↩` to download and
-      install. Please see [Updates, GitHub and
-      Packal](#updates--github-and-packal), especially if you use the
-      [Packal updater][packal-updater].
-    - `Force Reload` — `↩` to force MailTo to update its cache of your
-      contacts and email clients on your system. By default, MailTo
-      will cache your contacts for one hour and the list of email
-      clients on your system for one day.
-    - `Email Client: …` — Displays your currently selected email
-      client. By default, MailTo uses your default system client, but
-      you can change to any app on your system that supports the
-      `mailto:` protocol. `↩` to view and search a list of your apps
-      and `↩` again to select one.
-    - `Format: (Name & Email | Email Only)` — How MailTo sends the
-      list of recipients to your email client. Default is `Name &
-      Email`, whereby MailTo will use email addresses only if the
-      selected client is known not to support names in `mailto:` URIs
-      (see [Supported email clients](#supported-email-clients)). `↩` to
-      toggle between the two formats.
-    - `Update Notifications: (ON | OFF)` — If `ON` (the default),
-      MailTo will show a notice of any available update at the top of
-      its search results list. If `OFF`, you'll have to go into the
-      Configuration (`mailto`) to see if a new version is available.
-      `↩` to toggle on/off.
-    - `Help Text: (ON | OFF)` — If `ON` (the default), additional help
-      text will be shown in the item subtitles in Alfred. Turning off
-      will make MailTo look a bit cleaner. `↩` to toggle on/off.
-    - `Edit Client Formatting Rules` — Edit the `client_rules.json`
-      file where you can add your own rules for a different client or
-      override the built-in defaults. See [Other
-      clients](#other-clients) for details. `↩` to reveal
-      `client_rules.json` in Finder.
-    - `View MailTo Help` — `↩` to open the MailTo help file in your
-      browser.
+        - `Version X.X.X is available` — Such a message will be shown
+            if a newer version of MailTo is available. `↩` to download and
+            install. Please see [Updates, GitHub and
+            Packal](#updates--github-and-packal), especially if you use the
+            [Packal updater][packal-updater].
+        - `Force Reload` — `↩` to force MailTo to update its cache of your
+            contacts and email clients on your system. By default, MailTo
+            will cache your contacts for one hour and the list of email
+            clients on your system for one day.
+        - `Email Client: …` — Displays your currently selected email
+            client. By default, MailTo uses your default system client, but
+            you can change to any app on your system that supports the
+            `mailto:` protocol. `↩` to view and search a list of your apps
+            and `↩` again to select one.
+        - `Format: (Name & Email | Email Only)` — How MailTo sends the
+            list of recipients to your email client. Default is `Name &
+            Email`, whereby MailTo will use email addresses only if the
+            selected client is known not to support names in `mailto:` URIs
+            (see [Supported email clients](#supported-email-clients)). `↩` to
+            toggle between the two formats.
+        - `Update Notifications: (ON | OFF)` — If `ON` (the default),
+            MailTo will show a notice of any available update at the top of
+            its search results list. If `OFF`, you'll have to go into the
+            Configuration (`mailto`) to see if a new version is available.
+            `↩` to toggle on/off.
+        - `Help Text: (ON | OFF)` — If `ON` (the default), additional help
+            text will be shown in the item subtitles in Alfred. Turning off
+            will make MailTo look a bit cleaner. `↩` to toggle on/off.
+        - `Edit Client Formatting Rules` — Edit the `client_rules.json`
+            file where you can add your own rules for a different client or
+            override the built-in defaults. See [Other
+            clients](#other-clients) for details. `↩` to reveal
+            `client_rules.json` in Finder.
+        - `View MailTo Help` — `↩` to open the MailTo help file in your
+            browser.
 
 
+<a id="email-clients"></a>
 ## Email clients ##
 
 In *theory*, any email client should work, as MailTo uses a
@@ -137,6 +145,7 @@ report][github-issues] or submit a [pull request][github-pulls] if
 you've [got it working yourself](#other-clients).
 
 
+<a id="supported-email-clients"></a>
 ### Supported email clients ###
 
 The following email clients currently work "out of the box":
@@ -154,6 +163,7 @@ The following email clients currently work "out of the box":
 - Outlook 2016
 
 
+<a id="unsupported-clients"></a>
 ### Unsupported clients ###
 
 The following do **not** work:
@@ -161,6 +171,7 @@ The following do **not** work:
 - Safari (it will open your system default mail client instead)
 
 
+<a id="other-clients"></a>
 ### Other clients ###
 
 Anything not listed above hasn't been tested because I don't own a copy
@@ -182,15 +193,15 @@ looks like this (this is the default configuration for
 
 ```javascript
 {
-    "com.freron.MailMate": {
-        "spaces": true,
-        "names": true,
-        "mime": false,
-        "no_commas": false,
-        "inline_to": false
-    },
-    // other apps here
-    // ...
+        "com.freron.MailMate": {
+                "spaces": true,
+                "names": true,
+                "mime": false,
+                "no_commas": false,
+                "inline_to": false
+        },
+        // other apps here
+        // ...
 }
 ```
 
@@ -201,12 +212,12 @@ You can use MailTo's configuration screen to get the bundle ID of an
 application:
 
 1. Use `mailto` to bring up the configuration menu, and choose
-   `Email Client: …`. This will display a list off all compatible apps
-   on your system.
+    `Email Client: …`. This will display a list off all compatible
+    apps on your system.
 2. Search or scroll down the list to select the app you want.
 3. Hold `⌘` to display its bundle ID as the subtitle or press `⌘+C`
-   to copy the bundle ID to the pasteboard. `⌘+L` will also display the
-   bundle ID in Alfred's Large Text window.
+    to copy the bundle ID to the pasteboard. `⌘+L` will also display
+    the bundle ID in Alfred's Large Text window.
 
 Alternatively, you can use the following command in Terminal to get the
 bundle ID of an application:
@@ -217,6 +228,7 @@ mdls -name kMDItemCFBundleIdentifier -raw /Applications/MailMate.app
 ```
 
 
+<a id="supported-account-types"></a>
 ## Supported account types ##
 
 MailTo uses the [official Address Book API][ab-api] to read your
@@ -237,6 +249,7 @@ Please let [me][deanishe] know if you have a different kind of account,
 e.g. Exchange or LDAP, and whether or not it works.
 
 
+<a id="google-contacts"></a>
 ### Google Contacts ###
 
 Groups are currently not synced properly between Google accounts and
@@ -247,14 +260,16 @@ Contacts are ignored by Contacts.app.
 This is a limitation of the Contacts.app–Google Contacts integration,
 not of MailTo.
 
+<a id="miscellany"></a>
 ## Miscellany ##
 
+<a id="configuring-groups-and-distribution-lists"></a>
 ### Configuring groups and distribution lists ###
 
-You can use groups in your Contacts database as mailing lists/distribution
-lists. When you add a contact to a group, their primary email address will
-be used when you send an email to that group (the primary email is the one
-listed first in Contacts.app).
+You can use groups in your Contacts database as mailing
+lists/distribution lists. When you add a contact to a group, their
+primary email address will be used when you send an email to that group
+(the primary email is the one listed first in Contacts.app).
 
 If you'd like to change the email address associated with a group, open
 Contacts.app and select the `Edit > Edit Distribution List…` menu item:
@@ -272,6 +287,7 @@ you can see that when I send an email to `Test Group`, that's the
 address that's used for Jürgen.
 
 
+<a id="fluid-apps"></a>
 ### Fluid apps ###
 
 [Fluid][fluidapp] is an application that turns web applications into
@@ -286,6 +302,7 @@ To add a different webmail service, first you need to figure out the
 URL to send the email address(es) to.
 
 
+<a id="roundcube-webmail"></a>
 #### Roundcube webmail ####
 
 For a [Roundcube][roundcube] installation, it would be something like:
@@ -301,28 +318,29 @@ For a Roundcube installation, it'd look like this:
 
 ```javascript
 function transform(inURLString) {
-        inURLString = inURLString.replace('mailto:', '');
-        inURLString = inURLString.replace('&amp;', '&');
+                inURLString = inURLString.replace('mailto:', '');
+                inURLString = inURLString.replace('&amp;', '&');
 
-        var argStr = '';
-        var splits = inURLString.split('?');
+                var argStr = '';
+                var splits = inURLString.split('?');
 
-        var emailAddr = null;
-        var args = {};
-        if (splits.length > 0) emailAddr = splits[0];
-        if (splits.length > 1) argStr = splits[1];
+                var emailAddr = null;
+                var args = {};
+                if (splits.length > 0) emailAddr = splits[0];
+                if (splits.length > 1) argStr = splits[1];
 
-        var outURLString = 'https://mail.example.com/?_task=mail&_action=compose&to=' + emailAddr;
+                var outURLString = 'https://mail.example.com/?_task=mail&_action=compose&to=' + emailAddr;
 
-        if (argStr.length > 0) outURLString += '&' + argStr;
-        return outURLString;
+                if (argStr.length > 0) outURLString += '&' + argStr;
+                return outURLString;
 }
 ```
 
 Don't forget to deactivate (uncheck) the `Gmail` `mailto:*` script!
 
 
-### Updates, GitHub and Packal ###
+<a id="updates"></a>
+### Updates ###
 
 MailTo has a built-in updater and will offer to update itself via
 GitHub if a newer version is available.
@@ -330,18 +348,8 @@ GitHub if a newer version is available.
 You can [turn off update notifications](#all-options) if you prefer (by
 default, MailTo will show an update notification in your results list).
 
-If you use the [Packal Updater][packal-updater], you should turn off
-update notifications and leave the updating to the Packal Updater. An
-update notification will still be shown in the configuration screen
-(keyword `mailto`), but it's much easier to avoid selecting that one by
-accident.
 
-Packal adds additional metadata to the workflows it distributes to
-enable updates. This metadata is missing in the GitHub version, so the
-Packal Updater will no longer update MailTo for you until you reinstall
-it from Packal.
-
-
+<a id="bugs-feature-requests-suggestions"></a>
 ## Bugs, feature requests, suggestions ##
 
 Please report any bugs and submit any feature requests via
@@ -349,17 +357,19 @@ Please report any bugs and submit any feature requests via
 [Alfred Forum][forum-thread].
 
 
+<a id="thanks-licensing-etc"></a>
 ## Thanks, licensing etc. ##
 
 - The MailTo code is released under the [MIT licence][mit-licence].
 - MailTo is heavily based on [Alfred-Workflow][alfred-workflow], also
-  released under the [MIT licence][mit-licence] and also by
-  [me][deanishe].
+    released under the [MIT licence][mit-licence] and also by
+    [me][deanishe].
 - The icons are almost all from [Dave Gandy][dave-gandy]'s
-  [Font Awesome][font-awesome] \([SIL Open Font License][sil-licence]\)
-  via [Seth Lilly][seth-lilly]'s also awesome [Font Awesome Symbols for
-  Sketch][font-awesome-sketch] \([MIT licence][mit-licence]\). Any
-  icons that are not from Font Awesome, you may do with as you please.
+    [Font Awesome][font-awesome]
+    \([SIL Open Font License][sil-licence]\) via
+    [Seth Lilly][seth-lilly]'s also awesome [Font Awesome Symbols for
+    Sketch][font-awesome-sketch] \([MIT licence][mit-licence]\). Any
+    icons that are not from Font Awesome, you may do with as you please.
 
 
 
@@ -379,8 +389,6 @@ Please report any bugs and submit any feature requests via
 [mailmate]: http://freron.com/
 [mailto-scheme]: http://en.wikipedia.org/wiki/Mailto
 [mit-licence]: http://opensource.org/licenses/MIT
-[packal-page]: http://www.packal.org/workflow/mailto
-[packal-updater]: http://www.packal.org/workflow/packal-updater
 [roundcube]: http://roundcube.net/
 [seth-lilly]: http://twitter.com/sethlilly
 [sil-licence]: http://scripts.sil.org/OFL
